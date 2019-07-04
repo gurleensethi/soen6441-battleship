@@ -4,6 +4,13 @@ import com.soen6441.battleship.data.model.Grid;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -11,15 +18,22 @@ import javax.inject.Singleton;
 /**
  * Hello world!
  */
-public class App {
+public class App extends Application {
     public static void main(String[] args) {
-        new GameController().start();
+        launch(args);
+    }
 
-        final GameGrid gameGrid = new GameGrid.Builder()
-                .setDimensions(8, 8)
-                .build();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Hello World!");
+        Button btn = new Button();
+        btn.setText("Say 'Hello World'");
+        btn.setOnAction(event -> System.out.println("Hello World!"));
 
-//        DaggerCoffeeShop.builder().build().maker().makeCoffee();
+        StackPane root = new StackPane();
+        root.getChildren().add(btn);
+        primaryStage.setScene(new Scene(root, 300, 250));
+        primaryStage.show();
     }
 }
 

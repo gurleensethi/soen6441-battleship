@@ -1,7 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bf20f3a0-0190-4a6b-9ed9-f736acc991c3" name="Default Changelist" comment="" />
+    <list default="true" id="bf20f3a0-0190-4a6b-9ed9-f736acc991c3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/App.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMachineModule.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMachineModule_HeaterProviderFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMachineModule_Proxy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMaker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMaker_Factory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeShop.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/DaggerCoffeeShop$Builder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/DaggerCoffeeShop.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/ElectricHeater.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/ElectricHeater_Factory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/GameController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/GameGrid$Builder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/GameGrid.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/Heater.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/Thermosiphon.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/Thermosiphon_Factory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/model/Coordinate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/model/Grid.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/model/Player.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/model/Ship.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/storage/IFileStorage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/enums/CoordinateState.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/CoffeeMachineModule_HeaterProviderFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/CoffeeMachineModule_Proxy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/CoffeeMaker_Factory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/DaggerCoffeeShop.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/ElectricHeater_Factory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/Thermosiphon_Factory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/soen6441-battleship-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.soen6441.battleship.AppTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.soen6441.battleship.AppTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/soen6441/battleship/AppTest.class" beforeDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -11,40 +54,29 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DefaultGradleProjectSettings">
-    <option name="testRunner" value="GRADLE" />
-    <option name="delegatedBuild" value="true" />
+    <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/enums/CoordinateState.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="-1404">
+              <caret line="15" column="30" selection-start-line="14" selection-start-column="27" selection-end-line="15" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#554#555#0" expanded="true" />
+                <element signature="e#582#583#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="210">
-                <caret line="10" column="28" lean-forward="true" selection-start-line="10" selection-start-column="28" selection-end-line="10" selection-end-column="28" />
-              </first_editor>
-              <second_editor />
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -69,15 +101,16 @@
         <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/GameGrid.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/storage/IFileStorage.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Cell.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/enums/CoordinateState.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Coordinate.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/GameController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Ship.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Grid.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/GameGrid.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -105,73 +138,6 @@
             <path>
               <item name="soen6441-battleship" type="b2602c69:ProjectViewProjectNode" />
               <item name="soen6441-battleship" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="soen6441-battleship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="soen6441-battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="soen6441-battleship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="soen6441-battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="soen6441-battleship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="soen6441-battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="soen6441-battleship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="soen6441-battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="soen6441-battleship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="soen6441-battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="soen6441" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="soen6441-battleship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="soen6441-battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="soen6441" type="462c0819:PsiDirectoryNode" />
-              <item name="battleship" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="soen6441-battleship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="soen6441-battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="soen6441" type="462c0819:PsiDirectoryNode" />
-              <item name="battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="soen6441-battleship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="soen6441-battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="soen6441" type="462c0819:PsiDirectoryNode" />
-              <item name="battleship" type="462c0819:PsiDirectoryNode" />
-              <item name="enums" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -222,6 +188,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Designer" order="0" />
       <window_info id="Build Variants" order="1" side_tool="true" />
@@ -230,14 +197,14 @@
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info id="Captures" order="5" />
       <window_info id="Capture Tool" order="6" />
-      <window_info content_ui="combo" id="Project" order="7" visible="true" weight="0.26068377" />
+      <window_info active="true" content_ui="combo" id="Project" order="7" visible="true" weight="0.26068377" />
       <window_info id="Structure" order="8" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.32919955" />
       <window_info anchor="bottom" id="Android Profiler" order="1" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Logcat" order="3" />
       <window_info anchor="bottom" id="Version Control" order="4" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="5" visible="true" weight="0.3216783" />
+      <window_info anchor="bottom" id="Terminal" order="5" visible="true" weight="0.3216783" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
       <window_info anchor="bottom" id="Run" order="8" weight="0.33866134" />
@@ -276,14 +243,6 @@
           <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="29" column="37" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
-        </state>
-      </provider>
-      <provider editor-type-id="MavenHelperPluginDependencyAnalyzer" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/GameController.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -338,6 +297,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="294">
+            <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/enums/CoordinateState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -345,23 +314,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="693">
+          <caret line="33" column="34" selection-start-line="33" selection-start-column="34" selection-end-line="33" selection-end-column="34" />
+        </state>
+      </provider>
+      <provider editor-type-id="MavenHelperPluginDependencyAnalyzer" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        <state relative-caret-position="-1404">
+          <caret line="15" column="30" selection-start-line="14" selection-start-column="27" selection-end-line="15" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#554#555#0" expanded="true" />
+            <element signature="e#582#583#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="210">
-            <caret line="10" column="28" lean-forward="true" selection-start-line="10" selection-start-column="28" selection-end-line="10" selection-end-column="28" />
-          </first_editor>
-          <second_editor />
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
         </state>
       </provider>
     </entry>
