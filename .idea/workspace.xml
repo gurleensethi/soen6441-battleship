@@ -1,80 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bf20f3a0-0190-4a6b-9ed9-f736acc991c3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.factorypath" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_9_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_9_9.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_9_9.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_dagger_dagger_2_23_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_inject_javax_inject_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_11.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.project" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.core.resources.prefs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.jdt.apt.core.prefs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.jdt.core.prefs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.m2e.core.prefs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/soen6441-battleship.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/GameController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/GameGrid.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Coordinate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Grid.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Ship.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/storage/IFileStorage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/soen6441/battleship/enums/CoordinateState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/soen6441/battleship/AppTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/App.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMachineModule.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMachineModule_HeaterProviderFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMachineModule_Proxy.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMaker.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeMaker_Factory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/CoffeeShop.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/DaggerCoffeeShop$Builder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/DaggerCoffeeShop.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/ElectricHeater.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/ElectricHeater_Factory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/GameController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/GameGrid$Builder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/GameGrid.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/Heater.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/Thermosiphon.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/Thermosiphon_Factory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/model/Coordinate.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/model/Grid.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/model/Player.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/model/Ship.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/data/storage/IFileStorage.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/soen6441/battleship/enums/CoordinateState.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/CoffeeMachineModule_HeaterProviderFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/CoffeeMachineModule_Proxy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/CoffeeMaker_Factory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/DaggerCoffeeShop.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/ElectricHeater_Factory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/generated-sources/annotations/com/soen6441/battleship/Thermosiphon_Factory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/soen6441-battleship-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.soen6441.battleship.AppTest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/surefire-reports/com.soen6441.battleship.AppTest.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/test-classes/com/soen6441/battleship/AppTest.class" afterDir="false" />
-    </list>
+    <list default="true" id="bf20f3a0-0190-4a6b-9ed9-f736acc991c3" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -93,7 +20,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/enums/CoordinateState.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
-              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -102,7 +29,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="300">
-              <caret line="22" column="5" lean-forward="true" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
+              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -148,7 +75,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="width" value="1920" />
     <option name="height" value="1080" />
   </component>
@@ -282,7 +209,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Designer" order="0" />
       <window_info id="Build Variants" order="1" side_tool="true" />
@@ -291,14 +217,14 @@
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info id="Captures" order="5" />
       <window_info id="Capture Tool" order="6" />
-      <window_info active="true" content_ui="combo" id="Project" order="7" visible="true" weight="0.22527473" />
+      <window_info content_ui="combo" id="Project" order="7" visible="true" weight="0.22527473" />
       <window_info id="Structure" order="8" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.32919955" />
       <window_info anchor="bottom" id="Android Profiler" order="1" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Logcat" order="3" />
       <window_info anchor="bottom" id="Version Control" order="4" />
-      <window_info anchor="bottom" id="Terminal" order="5" visible="true" weight="0.32967034" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="5" visible="true" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
       <window_info anchor="bottom" id="Run" order="8" weight="0.33866134" />
@@ -412,14 +338,14 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/enums/CoordinateState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
-          <caret line="22" column="5" lean-forward="true" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

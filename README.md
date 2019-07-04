@@ -1,5 +1,8 @@
 # SOEN 6441 Battleship
 
+## Import Project in IntelliJ
+`Open > pom.xml > Open as Project` 
+
 ## Run the project (direct)
 ```shell
 mvn exec:java -Dexec.mainClass="com.soen6441.battleship.App"
