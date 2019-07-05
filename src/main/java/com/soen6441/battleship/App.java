@@ -27,10 +27,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("This is nothing");
         Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(event -> System.out.println("Hello World!"));
+        btn.setText("I do nothing.'");
+        btn.setOnAction(event -> System.out.println("I do nothing as well."));
 
         StackPane root = new StackPane();
         root.getChildren().add(btn);
