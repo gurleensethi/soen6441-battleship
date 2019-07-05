@@ -2,53 +2,63 @@ package com.soen6441.battleship;
 
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
+import com.soen6441.battleship.enums.ShipDirection;
+import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
+import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class GameGrid {
-    static class Builder {
-        private int width;
-        private int height;
-        private List<Ship> ships = new ArrayList<>();
+    private final Logger logger = Logger.getLogger("GameGrid");
 
-        public Builder setDimensions(int width, int height) {
-            this.width = width;
-            this.height = height;
-            return this;
-        }
+    private final Grid grid;
+    private final List<Ship> ships = new ArrayList<>();
 
-        public GameGrid build() {
-            return new GameGrid(this);
-        }
-
-        public Builder addShip(Ship ship) {
-            ships.add(ship);
-            return this;
-        }
-
-        public Builder addShips(List<Ship> ships) {
-            this.ships.addAll(ships);
-            return this;
-        }
+    public GameGrid(int gridSize) {
+        this.grid = new Grid(0, gridSize);
+        logger.info("Grid created successfully: " + grid);
     }
 
-    private Grid grid;
-    private List<Ship> ships;
-
-    public GameGrid(Builder builder) {
-        grid = new Grid(builder.width, builder.height);
+    public Grid getGrid() {
+        return grid;
     }
 
-    private void initShips(List<Ship> ships) {
-
+    public List<Ship> getShips() {
+        return ships;
     }
 
-    public void addHit(int x, int y) {
-        this.grid.coordinates[x][y].setHasShip(true);
+    public void placeShip(Ship ship) throws Exception {
+        checkNotNull(ship);
+        logger.info(String.format("Placing ship on grid: %s", ship));
+
+        // Check if direction of ship matches the coordinates
+        if ((ship.getDirection() == ShipDirection.HORIZONTAL && ship.getStartY() != ship.getEndY())
+                || (ship.getDirection() == ShipDirection.VERTICAL && ship.getStartX() != ship.getEndX())) {
+            throw new DirectionCoordinatesMismatchException();
+        }
+
+        // Check if all coordinates passed lie on plane.
+        if (ship.getStartX() < grid.getWidth()
+                || ship.getStartY() < grid.getWidth()
+                || ship.getEndX() > grid.getHeight()
+                || ship.getEndY() > grid.getHeight()) {
+            logger.severe("Ship Coordinates are out of bounds!");
+            throw new CoordinatesOutOfBoundsException();
+        }
+
+        logger.info(String.format("Successfully placed ship on grid %s", ship));
+        ships.add(ship);
     }
 
-    public boolean hasAlreadyHit(int x, int y) {
-        return this.grid.coordinates[x][y].isHit();
+    @Override
+    public String toString() {
+        return "GameGrid{" +
+                "grid=" + grid +
+                ", ships=" + ships +
+                '}';
     }
 }
