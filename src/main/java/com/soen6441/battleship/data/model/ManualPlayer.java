@@ -16,7 +16,5 @@ public class ManualPlayer implements IPlayer {
     @Override
     public void hitEnemyBoard(int x, int y) {
         int j = x + y;
-
-
     }
 }
