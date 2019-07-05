@@ -6,6 +6,7 @@ import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
+import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
 import com.soen6441.battleship.utils.GridUtils;
 
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * The type Game grid.
+ */
 public class GameGrid {
     private final Logger logger = Logger.getLogger(GameGrid.class.getName());
 
@@ -52,6 +56,9 @@ public class GameGrid {
             throw new CoordinatesOutOfBoundsException();
         }
 
+        // Check if there are no other ships surrounding the placement of current ship
+        checkPointValidityForShip(ship);
+
         ships.add(ship);
 
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
@@ -67,6 +74,46 @@ public class GameGrid {
         logger.info(String.format("Successfully placed ship on grid %s", ship));
 
         GridUtils.printGrid(this.grid);
+    }
+
+
+    /**
+     * @param ship to be added on the grid
+     * @throws InvalidShipPlacementException if ship cannot be placed because of invalid surroundings.
+     */
+    private void checkPointValidityForShip(Ship ship) throws InvalidShipPlacementException {
+        if (ship.getDirection() == ShipDirection.HORIZONTAL) {
+            checkValidAndThrow(ship.getStartX() - 1, ship.getStartY());
+            checkValidAndThrow(ship.getEndX() + 1, ship.getStartY());
+
+            for (int i = ship.getStartX(); i < ship.getEndX(); i++) {
+                checkValidAndThrow(i, ship.getStartY());
+                checkValidAndThrow(i, ship.getStartY() - 1);
+                checkValidAndThrow(i, ship.getStartY() + 1);
+            }
+        } else if (ship.getDirection() == ShipDirection.VERTICAL) {
+            checkValidAndThrow(ship.getStartX(), ship.getStartY() - 1);
+            checkValidAndThrow(ship.getEndX(), ship.getStartY() + 1);
+
+            for (int i = ship.getStartY(); i < ship.getEndY(); i++) {
+                checkValidAndThrow(ship.getStartX(), i);
+                checkValidAndThrow(ship.getStartX() - 1, i);
+                checkValidAndThrow(ship.getStartX() + 1, i);
+            }
+        }
+    }
+
+    private void checkValidAndThrow(int x, int y) throws InvalidShipPlacementException {
+        if (isValidCell(x, y) && (grid.getCellState(x, y) == CellState.SHIP)) {
+            throw new InvalidShipPlacementException();
+        }
+    }
+
+    private boolean isValidCell(int x, int y) {
+        return x >= 0
+                && x <= grid.getGridSize()
+                && y >= 0
+                && y <= grid.getGridSize();
     }
 
     @Override

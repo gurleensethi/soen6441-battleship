@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 
 public class GridUtils {
     private static final Logger logger = Logger.getLogger(GridUtils.class.getName());
-    private static final String EMPTY_CHAR = " - ";
-    private static final String SHIP_CHAR = " \uD83D\uDEA2 ";
+    private static final String EMPTY_CHAR = " ---- ";
+    private static final String SHIP_CHAR = " ship ";
     private static final String HIT_CHAR = " ❌ ";
 
     public static void printGrid(Grid grid) {
@@ -16,7 +16,7 @@ public class GridUtils {
 
         for (int i = 0; i < grid.getGridSize(); i++) {
             for (int j = 0; j < grid.getGridSize(); j++) {
-                CellState state = grid.getCoordinates()[i][j];
+                CellState state = grid.getCellState(j, i);
 
                 switch (state) {
                     case EMPTY:
@@ -29,7 +29,7 @@ public class GridUtils {
                         break;
                 }
             }
-            stringBuilder.append("\n");
+            stringBuilder.append("\n\n");
         }
 
         logger.info("Game Grid: \n" + stringBuilder.toString());
