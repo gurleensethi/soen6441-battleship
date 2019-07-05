@@ -19,7 +19,10 @@ import javax.inject.Singleton;
 /**
  * Hello world!
  */
-public class App extends Application {
+public class App extends Application implements EventHandler<ActionEvent> {
+
+    Button btn = new Button("Click Me!");
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -27,16 +30,22 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Battleship Classic");
-        Button btn = new Button("Console print");
         btn.setLayoutX(250);
         btn.setLayoutY(220);
-        btn.setOnAction(event -> System.out.println("You pressed the button."));
+        btn.setOnAction(this);
 
         StackPane root = new StackPane();
         root.getChildren().add(btn);
         primaryStage.setScene(new Scene(root, 300, 250));
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    @Override
+    public void handle(ActionEvent event) {
+        if(event.getSource()==btn){
+            System.out.println("You pressed the button.");
+        }
     }
 }
 
