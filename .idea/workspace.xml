@@ -39,57 +39,29 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="327">
+              <caret line="50" column="32" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Coordinate.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="21" column="16" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Grid.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/enums/CoordinateState.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="40">
-              <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/GameController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/GameGrid.java">
-          <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="620">
               <caret line="37" selection-start-line="37" selection-end-line="37" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
 >>>>>>> Added Javafx button on main window
+=======
+            <state relative-caret-position="120">
+              <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+>>>>>>> Added scene2 for starting phase of the gamw, which will be used to place ships for players.
             </state>
           </provider>
         </entry>
@@ -122,6 +94,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -392,10 +369,18 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
+<<<<<<< HEAD
     <property name="settings.editor.selected.configurable" value="SonarLintApp" />
+=======
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+>>>>>>> Added scene2 for starting phase of the gamw, which will be used to place ships for players.
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RunDashboard">
@@ -529,7 +514,14 @@
       <option name="project" value="LOCAL" />
       <updated>1562287795839</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added Javafx button on main window">
+      <created>1562355713354</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1562355713354</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
 <<<<<<< HEAD
@@ -569,7 +561,7 @@
     <frame x="0" y="24" width="1680" height="1027" extended-state="6" />
 =======
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2963000" />
+    <option name="totallyTimeSpent" value="6903000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -585,6 +577,7 @@
       <window_info id="Capture Tool" order="6" />
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       <window_info active="true" content_ui="combo" id="Project" order="7" visible="true" weight="0.26678878" />
 =======
       <window_info content_ui="combo" id="Project" order="7" visible="true" weight="0.26752505" />
@@ -592,6 +585,9 @@
 =======
       <window_info active="true" content_ui="combo" id="Project" order="7" visible="true" weight="0.20386267" />
 >>>>>>> okok
+=======
+      <window_info content_ui="combo" id="Project" order="7" visible="true" weight="0.20386267" />
+>>>>>>> Added scene2 for starting phase of the gamw, which will be used to place ships for players.
       <window_info id="Structure" order="8" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="SonarLint" weight="0.3294979" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.32919955" />
@@ -616,8 +612,12 @@
       <window_info anchor="bottom" id="Terminal" order="5" weight="0.32048193" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
+<<<<<<< HEAD
       <window_info anchor="bottom" id="Run" order="8" weight="0.3385542" />
 >>>>>>> okok
+=======
+      <window_info active="true" anchor="bottom" id="Run" order="8" visible="true" weight="0.3385542" />
+>>>>>>> Added scene2 for starting phase of the gamw, which will be used to place ships for players.
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
@@ -698,6 +698,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/enums/ShipDirection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -734,6 +735,9 @@
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/28.0-jre/guava-28.0-jre.jar!/com/google/common/base/Preconditions.class">
+=======
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Ship.java">
+>>>>>>> Added scene2 for starting phase of the gamw, which will be used to place ships for players.
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="181">
           <caret line="316" column="25" lean-forward="true" selection-start-line="316" selection-start-column="25" selection-end-line="316" selection-end-column="25" />
@@ -945,10 +949,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/data/model/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/soen6441/battleship/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        <state relative-caret-position="327">
+          <caret line="50" column="32" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -956,9 +970,76 @@
   </component>
   <component name="masterDetails">
     <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectJDKs.UI">
         <settings>
           <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
           <splitter-proportions>
             <option name="proportions">
               <list>

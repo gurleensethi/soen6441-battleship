@@ -7,11 +7,16 @@ import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,9 +24,10 @@ import javax.inject.Singleton;
 /**
  * Hello world!
  */
-public class App extends Application implements EventHandler<ActionEvent> {
+public class App extends Application {
 
-    Button btn = new Button("Click Me!");
+    Stage window;
+    Scene scene1, scene2;
 
     public static void main(String[] args) {
         launch(args);
@@ -29,23 +35,30 @@ public class App extends Application implements EventHandler<ActionEvent> {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Battleship Classic");
-        btn.setLayoutX(250);
-        btn.setLayoutY(220);
-        btn.setOnAction(this);
+        window = primaryStage;
+        window.setTitle("Battleship Classic");
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 250));
-        primaryStage.setResizable(false);
-        primaryStage.show();
-    }
+        //Welcome Screen of the game
+        Label label1 =  new Label("Welcome to the BattleShip Game");
+        Button button = new Button("Start Game");
+        button.setOnAction(e -> window.setScene(scene2));
+        VBox layout1 = new VBox(20);
+        layout1.getChildren().addAll(label1, button);
+        scene1 = new Scene(layout1,300,250);
 
-    @Override
-    public void handle(ActionEvent event) {
-        if(event.getSource()==btn){
-            System.out.println("You pressed the button.");
-        }
+        Label label2 = new Label("Click on the place ships button to place ships!");
+        Button button2 = new Button("Place Ships");
+        Button exit = new Button("Exit");
+        exit.setAlignment(Pos.BOTTOM_RIGHT);
+        exit.setOnAction(e-> Platform.exit());
+        button2.setOnAction(e-> System.out.println("I do nothing for now"));
+        HBox layout2 = new HBox(30);
+        layout2.getChildren().addAll(label2, button2, exit);
+        scene2 = new Scene(layout2, 600, 400);
+
+        window.setScene(scene1);
+        window.setResizable(false);
+        window.show();
     }
 }
 
