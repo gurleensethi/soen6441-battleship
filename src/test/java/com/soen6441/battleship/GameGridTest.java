@@ -4,25 +4,28 @@ import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
+import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.UUID;
-
-import static org.junit.Assert.assertEquals;
 
 public class GameGridTest {
     private GameGrid gameGrid;
-    private Ship wrongShipHorizontal;
-    private Ship wrongShipVertical;
-    private Ship wrongShipStart;
-    private Ship wrongShipEnd;
-    private Ship correctShip;
+    private static Ship wrongShipHorizontal;
+    private static Ship wrongShipVertical;
+    private static Ship wrongShipStart;
+    private static Ship wrongShipEnd;
+    private static Ship correctShip;
+    private static Ship correctShip2;
+    private static Ship overlappingShip;
 
     @Before()
     public void setUp() {
         gameGrid = new GameGrid(8);
+    }
 
+    @BeforeClass()
+    public static void setUpBeforeClass() {
         wrongShipHorizontal = new Ship.Builder()
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 1)
@@ -45,16 +48,24 @@ public class GameGridTest {
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 1)
                 .setEndCoordinates(11, 1)
-                .setName("Wrong Ship from Y")
-                .setUniqueId(UUID.randomUUID().toString())
                 .build();
 
         correctShip = new Ship.Builder()
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 1)
                 .setEndCoordinates(6, 1)
-                .setName("Correct Ship")
-                .setUniqueId(UUID.randomUUID().toString())
+                .build();
+
+        correctShip2 = new Ship.Builder()
+                .setDirection(ShipDirection.VERTICAL)
+                .setStartCoordinates(0, 2)
+                .setEndCoordinates(0, 5)
+                .build();
+
+        overlappingShip = new Ship.Builder()
+                .setDirection(ShipDirection.VERTICAL)
+                .setStartCoordinates(0, 0)
+                .setEndCoordinates(0, 5)
                 .build();
     }
 
@@ -83,8 +94,19 @@ public class GameGridTest {
         gameGrid.placeShip(wrongShipVertical);
     }
 
+    @Test(expected = InvalidShipPlacementException.class)
+    public void throwsExceptionOnWrongShipPoint() throws Exception {
+        gameGrid.placeShip(correctShip);
+        gameGrid.placeShip(overlappingShip);
+    }
+
     @Test()
     public void placesShipCorrectly() throws Exception {
         gameGrid.placeShip(correctShip);
+    }
+
+    @Test()
+    public void places2ndShipCorrectly() throws Exception {
+        gameGrid.placeShip(correctShip2);
     }
 }

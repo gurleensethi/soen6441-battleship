@@ -24,13 +24,12 @@ public class Grid {
         return gridSize;
     }
 
-    public CellState[][] getCoordinates() {
-        return coordinates;
+    public CellState getCellState(int x, int y) {
+        return this.coordinates[y][x];
     }
 
     public void updateCellStatus(int x, int y, CellState newStatus) {
-        logger.info(" x: " + x + " y: " + y);
-        coordinates[x][y] = newStatus;
+        coordinates[y][x] = newStatus;
     }
 
     @Override
