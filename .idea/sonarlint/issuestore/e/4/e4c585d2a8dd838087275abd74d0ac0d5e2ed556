@@ -1,0 +1,24 @@
+
+gsquid:CommentedOutCodeLinel"<This block of commented-out lines of code should be removed.(Õ¾Á»þÿÿÿÿ
+gsquid:CommentedOutCodeLine3"<This block of commented-out lines of code should be removed.(±ã‰Æúÿÿÿÿ
+gsquid:CommentedOutCodeLine8"<This block of commented-out lines of code should be removed.(úÖœ—úÿÿÿÿ
+gsquid:CommentedOutCodeLinee"<This block of commented-out lines of code should be removed.(³·ä‚þÿÿÿÿ
+bsquid:CommentedOutCodeLineF"<This block of commented-out lines of code should be removed.(ý—¦«
+bsquid:CommentedOutCodeLineK"<This block of commented-out lines of code should be removed.(“Ôóÿ
+asquid:CommentedOutCodeLineP"<This block of commented-out lines of code should be removed.(‡‹˜l
+bsquid:CommentedOutCodeLinec"<This block of commented-out lines of code should be removed.(ºäÆ„
+bsquid:CommentedOutCodeLineU"<This block of commented-out lines of code should be removed.(–¿–ž
+O
+squid:S106!"9Replace this use of System.out or System.err by a logger.(¾ïð€
+gsquid:CommentedOutCodeLineB"<This block of commented-out lines of code should be removed.(•ö­¯úÿÿÿÿ
+gsquid:CommentedOutCodeLine?"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+gsquid:CommentedOutCodeLine\"<This block of commented-out lines of code should be removed.(ó¤ç ÿÿÿÿÿ
+gsquid:CommentedOutCodeLine:"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+bsquid:CommentedOutCodeLine="<This block of commented-out lines of code should be removed.(‚è©é
+gsquid:CommentedOutCodeLinei"<This block of commented-out lines of code should be removed.(ùãº°ýÿÿÿÿ
+Zsquid:UselessImportCheck	"6Remove this unused import 'javafx.event.EventHandler'.(º»û˜
+gsquid:CommentedOutCodeLine,"<This block of commented-out lines of code should be removed.(úºì°ÿÿÿÿÿ
+gsquid:CommentedOutCodeLine."<This block of commented-out lines of code should be removed.(ù­’žûÿÿÿÿ
+bsquid:CommentedOutCodeLine`"<This block of commented-out lines of code should be removed.(Ñã©Ž
+hsquid:UselessImportCheck"DRemove this unused import 'com.soen6441.battleship.data.model.Grid'.(©‹•
+^squid:UselessImportCheck"5Remove this unused import 'javafx.event.ActionEvent'.(î•¯¼ýÿÿÿÿ

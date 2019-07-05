@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -27,14 +26,16 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("This is nothing");
-        Button btn = new Button();
-        btn.setText("I do nothing.'");
-        btn.setOnAction(event -> System.out.println("I do nothing as well."));
+        primaryStage.setTitle("Battleship Classic");
+        Button btn = new Button("Console print");
+        btn.setLayoutX(250);
+        btn.setLayoutY(220);
+        btn.setOnAction(event -> System.out.println("You pressed the button."));
 
         StackPane root = new StackPane();
         root.getChildren().add(btn);
         primaryStage.setScene(new Scene(root, 300, 250));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 }
