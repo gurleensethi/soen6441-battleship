@@ -40,17 +40,15 @@ public class AppWithUI {
 
         public void createGame(Stage primaryStage) {
 
+            //Start screen button
             Button startButton = new Button();
-
-            Scene scene2 = new Scene(root, 700, 400);// starting page of the application
-
-            startButton.setAlignment(Pos.CENTER);
-            TextField gridSizeTxtField = new TextField();
-            gridSizeTxtField.setAlignment(Pos.BOTTOM_CENTER);
             startButton.setText("Start Game");
-            start.getChildren().addAll(new Label("Enter the grid size:"), gridSizeTxtField, startButton);
+            startButton.setAlignment(Pos.CENTER);
+
+            TextField gridSizeTxtField = new TextField();
+            gridSizeTxtField.setAlignment(Pos.TOP_CENTER);
             gridSizeTxtField.setMaxSize(100,10);
-            start.setAlignment(Pos.CENTER);
+
             gridSizeTxtField.textProperty().addListener((obs, oldText, newText) -> {
                 if (newText.matches("^(0|[1-9][0-9]*)$")) {
                     gridSizeTxtField.setText(newText);
@@ -58,16 +56,23 @@ public class AppWithUI {
                     gridSizeTxtField.setText("");
                 }
             });
+
+            //Adding Label,text-field and button to Start Scene
+            start.getChildren().addAll(new Label("Enter the grid size:"), gridSizeTxtField, startButton);
+            start.setAlignment(Pos.CENTER);
+
+            //Start button action
             startButton.setOnMouseClicked(e ->{
                 gridSize = Integer.parseInt(gridSizeTxtField.getText());
                 createGrids(gridSize);
                 createButtons();
+                Scene scene2 = new Scene(root, 1000, 800);// starting page of the application
                 primaryStage.setScene(scene2);
             });
 
 
             //Create scenes of the primary stage
-            Scene scene1 = new Scene(start, 700, 400);
+            Scene scene1 = new Scene(start, 1000, 800);
             primaryStage.setScene(scene1);
             primaryStage.show();
         }
@@ -93,34 +98,51 @@ public class AppWithUI {
 
         private void createButtons(){
 
+            //Initialize ship buttons
             carrierButton = new Button("Carrier");
             battleshipButton = new Button("Battleship");
             cruiserButton = new Button("Cruiser");
             submarineButton = new Button("Submarine");
             destroyerButton = new Button("Destroyer");
 
-            HBox shipBox = new HBox();
-
-            shipBox.getChildren().addAll(carrierButton,battleshipButton,cruiserButton,submarineButton,destroyerButton);
-            shipBox.setAlignment(Pos.CENTER);
-            shipBox.setPadding(new javafx.geometry.Insets(20, 0, 0, 0));
-
-
+            //Initialize option menu buttons
             clearLastButton = new Button("Clear Last");
             clearAllButton = new Button("Clear All");
             finalizeButton = new Button("Finalize");
             rotateButton = new Button("Rotate");
-            rollButton = new Button("Roll");
+            rollButton = new Button("Randomize");
 
-            HBox rotateBox = new HBox();
-            rotateBox.getChildren().addAll(rotateButton, clearLastButton, clearAllButton, finalizeButton, rollButton);
-            rotateBox.setAlignment(Pos.CENTER);
+            setButtonDimensions();
 
-            VBox combined = new VBox();
-            combined.getChildren().addAll(shipBox, rotateBox);
-            combined.setAlignment(Pos.BOTTOM_CENTER);
-            combined.setPadding(new javafx.geometry.Insets(0,200,0,0));
+            HBox shipBox = new HBox(); // Horizontal Box to hold ship buttons
 
-            root.getChildren().addAll(combined);
+            shipBox.getChildren().addAll(carrierButton,battleshipButton,cruiserButton,submarineButton,destroyerButton);
+            shipBox.setAlignment(Pos.BOTTOM_CENTER);
+
+
+            VBox allOptionBox = new VBox(); // Vertical Box to hold options
+
+            allOptionBox.getChildren().addAll(rotateButton, clearLastButton, clearAllButton, finalizeButton, rollButton);
+            allOptionBox.setAlignment(Pos.TOP_RIGHT);
+
+            root.getChildren().addAll(shipBox, allOptionBox);
+        }
+
+        private static void setButtonDimensions(){
+
+            //setting min heights
+            carrierButton.setMinWidth(80);
+            battleshipButton.setMinWidth(80);
+            cruiserButton.setMinWidth(80);
+            submarineButton.setMinWidth(80);
+            destroyerButton.setMinWidth(80);
+
+            //setting min heights
+            clearLastButton.setMinWidth(80);
+            clearAllButton.setMinWidth(80);
+            finalizeButton.setMinWidth(80);
+            rotateButton.setMinWidth(80);
+            rollButton.setMinWidth(80);
+
         }
 }
