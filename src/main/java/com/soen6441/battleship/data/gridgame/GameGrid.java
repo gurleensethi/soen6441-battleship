@@ -29,14 +29,17 @@ public class GameGrid implements IGridGame {
         logger.info("Grid created successfully: " + grid);
     }
 
+    @Override
     public Grid getGrid() {
         return grid;
     }
 
+    @Override
     public List<Ship> getShips() {
         return ships;
     }
 
+    @Override
     public void placeShip(Ship ship) throws Exception {
         checkNotNull(ship);
         logger.info(String.format("Placing ship on grid: %s", ship));
