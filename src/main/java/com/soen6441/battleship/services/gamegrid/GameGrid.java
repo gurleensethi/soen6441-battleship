@@ -1,4 +1,4 @@
-package com.soen6441.battleship.data.gridgame;
+package com.soen6441.battleship.services.gamegrid;
 
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
@@ -18,7 +18,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * The type Game grid.
  */
-public class GameGrid implements IGridGame {
+public class GameGrid implements IGameGrid {
     private final Logger logger = Logger.getLogger(GameGrid.class.getName());
 
     private final Grid grid;
