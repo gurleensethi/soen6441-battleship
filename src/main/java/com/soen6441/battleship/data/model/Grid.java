@@ -36,6 +36,10 @@ public class Grid {
         coordinates[y][x].setShip(ship);
     }
 
+    public CellInfo getCellInfo(int x, int y) {
+        return this.coordinates[y][x];
+    }
+
     @Override
     public String toString() {
         return "Grid{" +

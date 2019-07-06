@@ -1,8 +1,10 @@
 package com.soen6441.battleship.services.gamegrid;
 
+import com.soen6441.battleship.data.model.CellInfo;
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.CellState;
+import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
@@ -37,6 +39,22 @@ public class GameGrid implements IGameGrid {
     @Override
     public List<Ship> getShips() {
         return ships;
+    }
+
+    @Override
+    public HitResult hit(int x, int y) throws CoordinatesOutOfBoundsException {
+        // Check if the coordinates are correct
+        if (!isValidCell(x, y)) {
+            throw new CoordinatesOutOfBoundsException();
+        }
+
+        CellState state = grid.getCellState(x, y);
+
+        if (state == CellState.SHIP) {
+            return HitResult.HIT;
+        } else {
+            return HitResult.MISS;
+        }
     }
 
     @Override

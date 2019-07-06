@@ -1,5 +1,6 @@
 package com.soen6441.battleship;
 
+import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.ShipDirection;
@@ -9,6 +10,8 @@ import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class GameGridTest {
     private GameGrid gameGrid;
@@ -109,5 +112,34 @@ public class GameGridTest {
     @Test()
     public void places2ndShipCorrectly() throws Exception {
         gameGrid.placeShip(correctShip2);
+    }
+
+    @Test()
+    public void hitsOnAShip() throws Exception {
+        gameGrid.placeShip(correctShip);
+        HitResult result = gameGrid.hit(3, 1);
+        assertEquals(HitResult.HIT, result);
+    }
+
+    @Test()
+    public void hitMissOnAWrongCoordinate() throws Exception {
+        gameGrid.placeShip(correctShip);
+        HitResult result = gameGrid.hit(3, 2);
+        assertEquals(HitResult.MISS, result);
+    }
+
+    @Test(expected = CoordinatesOutOfBoundsException.class)
+    public void throwsExceptionOnWrongCoordinates() throws Exception {
+        gameGrid.placeShip(correctShip);
+        gameGrid.hit(-1, 0);
+    }
+
+    @Test()
+    public void detectsIfHitWasAlreadyMadeOnCoordinate() throws Exception {
+        gameGrid.placeShip(correctShip);
+        HitResult result1 = gameGrid.hit(0,0);
+        assertEquals(HitResult.MISS, result1);
+        HitResult result2 = gameGrid.hit(0,0);
+        assertEquals(HitResult.ALREADY_HIT, result2);
     }
 }
