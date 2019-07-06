@@ -1,16 +1,27 @@
 package com.soen6441.battleship;
 
+import com.soen6441.battleship.data.model.Grid;
+import com.soen6441.battleship.enums.CellState;
+import com.soen6441.battleship.enums.HitResult;
+import com.soen6441.battleship.services.gamegrid.GameGrid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
 import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
+import com.soen6441.battleship.services.gamegrid.IGameGrid;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import javafx.scene.control.Cell;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class GameGridTest {
-    private GameGrid gameGrid;
+    private IGameGrid gameGrid;
     private static Ship wrongShipHorizontal;
     private static Ship wrongShipVertical;
     private static Ship wrongShipStart;
@@ -22,10 +33,7 @@ public class GameGridTest {
     @Before()
     public void setUp() {
         gameGrid = new GameGrid(8);
-    }
 
-    @BeforeClass()
-    public static void setUpBeforeClass() {
         wrongShipHorizontal = new Ship.Builder()
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 1)
@@ -54,6 +62,7 @@ public class GameGridTest {
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 1)
                 .setEndCoordinates(6, 1)
+                .setLength(5)
                 .build();
 
         correctShip2 = new Ship.Builder()
@@ -64,8 +73,8 @@ public class GameGridTest {
 
         overlappingShip = new Ship.Builder()
                 .setDirection(ShipDirection.VERTICAL)
-                .setStartCoordinates(0, 0)
-                .setEndCoordinates(0, 5)
+                .setStartCoordinates(3, 0)
+                .setEndCoordinates(3, 5)
                 .build();
     }
 
@@ -95,7 +104,7 @@ public class GameGridTest {
     }
 
     @Test(expected = InvalidShipPlacementException.class)
-    public void throwsExceptionOnWrongShipPoint() throws Exception {
+    public void throwsExceptionIfOverlapping() throws Exception {
         gameGrid.placeShip(correctShip);
         gameGrid.placeShip(overlappingShip);
     }
@@ -108,5 +117,78 @@ public class GameGridTest {
     @Test()
     public void places2ndShipCorrectly() throws Exception {
         gameGrid.placeShip(correctShip2);
+    }
+
+    @Test()
+    public void hitsOnAShip() throws Exception {
+        gameGrid.placeShip(correctShip);
+        HitResult result = gameGrid.hit(3, 1);
+        assertEquals(HitResult.HIT, result);
+    }
+
+    @Test()
+    public void hitMissOnAWrongCoordinate() throws Exception {
+        gameGrid.placeShip(correctShip);
+        HitResult result = gameGrid.hit(3, 2);
+        assertEquals(HitResult.MISS, result);
+    }
+
+    @Test(expected = CoordinatesOutOfBoundsException.class)
+    public void throwsExceptionOnWrongCoordinates() throws Exception {
+        gameGrid.placeShip(correctShip);
+        gameGrid.hit(-1, 0);
+    }
+
+    @Test()
+    public void detectsIfHitWasAlreadyMadeOnCoordinate() throws Exception {
+        gameGrid.placeShip(correctShip);
+        HitResult result1 = gameGrid.hit(0, 0);
+        assertEquals(HitResult.MISS, result1);
+        HitResult result2 = gameGrid.hit(0, 0);
+        assertEquals(HitResult.ALREADY_HIT, result2);
+    }
+
+    @Test()
+    public void gridObservableUpdatesOnAddingShip() throws Exception {
+        Observable<Grid> gridObservable = gameGrid.getGridAsObservable();
+        TestObserver<Grid> testObserver = new TestObserver<>();
+        gameGrid.placeShip(correctShip);
+        gridObservable.subscribe(testObserver);
+        testObserver.assertValue(updatedGrid -> updatedGrid.getCellState(1, 1) == CellState.SHIP);
+    }
+
+    @Test()
+    public void gridObservableUpdatesOnHit() throws Exception {
+        Observable<Grid> gridObservable = gameGrid.getGridAsObservable();
+        TestObserver<Grid> testObserver = new TestObserver<>();
+        gridObservable.subscribe(testObserver);
+
+        gameGrid.placeShip(correctShip);
+        gameGrid.hit(1, 1);
+        gameGrid.hit(0, 0);
+
+        testObserver.assertValueAt(1, grid -> grid.getCellState(1, 1) == CellState.SHIP_WITH_HIT);
+        testObserver.assertValueAt(2, grid -> grid.getCellState(0, 0) == CellState.EMPTY_HIT);
+    }
+
+    @Test()
+    public void shipIsSunkIfAllHitsAreSuccessful() throws Exception {
+        gameGrid.placeShip(correctShip);
+        for (int i = 1; i <= 6; i++) {
+            gameGrid.hit(i, 1);
+        }
+        assertTrue(gameGrid.getShips().get(0).isSunk());
+    }
+
+    @Test()
+    public void cellUpdatesToShipDestroyed() throws Exception {
+        gameGrid.placeShip(correctShip);
+
+        // Place hits on the ship
+        for (int i = 1; i <= 6; i++) {
+            gameGrid.hit(i, 1);
+        }
+
+        assertEquals(CellState.DESTROYED_SHIP, gameGrid.getGrid().getCellState(1, 1));
     }
 }

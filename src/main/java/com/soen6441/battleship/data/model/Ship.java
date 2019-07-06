@@ -9,6 +9,8 @@ public class Ship {
     private final int startY;
     private final int endX;
     private final int endY;
+    private final int length;
+    private int hits = 0;
     private final ShipDirection direction;
 
     public static class Builder {
@@ -18,6 +20,7 @@ public class Ship {
         private int startY;
         private int endX;
         private int endY;
+        private int length;
         private ShipDirection direction;
 
         public Builder setStartCoordinates(int x, int y) {
@@ -47,6 +50,11 @@ public class Ship {
             return this;
         }
 
+        public Builder setLength(int length) {
+            this.length = length;
+            return this;
+        }
+
         public Ship build() {
             return new Ship(this);
         }
@@ -60,6 +68,7 @@ public class Ship {
         this.endX = builder.endX;
         this.endY = builder.endY;
         this.direction = builder.direction;
+        this.length = builder.length;
     }
 
     public String getName() {
@@ -86,6 +95,26 @@ public class Ship {
         return direction;
     }
 
+    public String getUniqueID() {
+        return uniqueID;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public int getHits() {
+        return hits;
+    }
+
+    public void setHits(int hits) {
+        this.hits = hits;
+    }
+
+    public boolean isSunk() {
+        return this.length == this.hits;
+    }
+
     @Override
     public String toString() {
         return "Ship{" +
@@ -95,6 +124,8 @@ public class Ship {
                 ", startY=" + startY +
                 ", endX=" + endX +
                 ", endY=" + endY +
+                ", length=" + length +
+                ", hits=" + hits +
                 ", direction=" + direction +
                 '}';
     }

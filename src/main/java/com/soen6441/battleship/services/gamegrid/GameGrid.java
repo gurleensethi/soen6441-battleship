@@ -1,13 +1,16 @@
-package com.soen6441.battleship;
+package com.soen6441.battleship.services.gamegrid;
 
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.CellState;
+import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
 import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
 import com.soen6441.battleship.utils.GridUtils;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,25 +21,78 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * The type Game grid.
  */
-public class GameGrid {
+public class GameGrid implements IGameGrid {
     private final Logger logger = Logger.getLogger(GameGrid.class.getName());
 
     private final Grid grid;
     private final List<Ship> ships = new ArrayList<>();
+    private final BehaviorSubject<Grid> gridBehaviorSubject = BehaviorSubject.create();
 
     public GameGrid(int gridSize) {
         this.grid = new Grid(gridSize);
+        gridBehaviorSubject.onNext(this.grid);
         logger.info("Grid created successfully: " + grid);
     }
 
+    @Override
     public Grid getGrid() {
         return grid;
     }
 
+    @Override
     public List<Ship> getShips() {
         return ships;
     }
 
+    @Override
+    public HitResult hit(int x, int y) throws CoordinatesOutOfBoundsException {
+        // Check if the coordinates are correct
+        if (!isValidCell(x, y)) {
+            throw new CoordinatesOutOfBoundsException();
+        }
+
+        CellState state = grid.getCellState(x, y);
+
+        HitResult result;
+
+        if (state == CellState.EMPTY_HIT || state == CellState.SHIP_WITH_HIT) {
+            result = HitResult.ALREADY_HIT;
+        } else if (state == CellState.SHIP) {
+            // TODO: Move this logic to a ship service
+            grid.updateCellStatus(x, y, CellState.SHIP_WITH_HIT);
+
+            Ship shipToHit = grid.getCellInfo(x, y).getShip();
+            shipToHit.setHits(shipToHit.getHits() + 1);
+
+            if (shipToHit.isSunk()) {
+                // TODO: Move this logic to a ship service
+                if (shipToHit.getDirection() == ShipDirection.HORIZONTAL) {
+                    for (int shipX = shipToHit.getStartX(); shipX <= shipToHit.getEndX(); shipX++) {
+                        grid.updateCellStatus(shipX, shipToHit.getStartY(), CellState.DESTROYED_SHIP);
+                    }
+                } else {
+                    for (int shipY = shipToHit.getStartY(); shipY <= shipToHit.getEndY(); shipY++) {
+                        grid.updateCellStatus(shipToHit.getStartX(), shipY, CellState.DESTROYED_SHIP);
+                    }
+                }
+            }
+
+            result = HitResult.HIT;
+        } else {
+            grid.updateCellStatus(x, y, CellState.EMPTY_HIT);
+            result = HitResult.MISS;
+        }
+
+        gridBehaviorSubject.onNext(this.grid);
+        return result;
+    }
+
+    @Override
+    public Observable<Grid> getGridAsObservable() {
+        return gridBehaviorSubject;
+    }
+
+    @Override
     public void placeShip(Ship ship) throws Exception {
         checkNotNull(ship);
         logger.info(String.format("Placing ship on grid: %s", ship));
@@ -64,12 +120,16 @@ public class GameGrid {
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
             for (int i = ship.getStartX(); i < ship.getEndX(); i++) {
                 grid.updateCellStatus(i, ship.getStartY(), CellState.SHIP);
+                grid.setShipOnCell(i, ship.getStartY(), ship);
             }
         } else if (ship.getDirection() == ShipDirection.VERTICAL) {
             for (int i = ship.getStartY(); i < ship.getEndY(); i++) {
                 grid.updateCellStatus(ship.getStartX(), i, CellState.SHIP);
+                grid.setShipOnCell(ship.getStartX(), i, ship);
             }
         }
+
+        gridBehaviorSubject.onNext(this.grid);
 
         logger.info(String.format("Successfully placed ship on grid %s", ship));
 
@@ -83,22 +143,12 @@ public class GameGrid {
      */
     private void checkPointValidityForShip(Ship ship) throws InvalidShipPlacementException {
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
-            checkValidAndThrow(ship.getStartX() - 1, ship.getStartY());
-            checkValidAndThrow(ship.getEndX() + 1, ship.getStartY());
-
             for (int i = ship.getStartX(); i < ship.getEndX(); i++) {
                 checkValidAndThrow(i, ship.getStartY());
-                checkValidAndThrow(i, ship.getStartY() - 1);
-                checkValidAndThrow(i, ship.getStartY() + 1);
             }
         } else if (ship.getDirection() == ShipDirection.VERTICAL) {
-            checkValidAndThrow(ship.getStartX(), ship.getStartY() - 1);
-            checkValidAndThrow(ship.getEndX(), ship.getStartY() + 1);
-
             for (int i = ship.getStartY(); i < ship.getEndY(); i++) {
                 checkValidAndThrow(ship.getStartX(), i);
-                checkValidAndThrow(ship.getStartX() - 1, i);
-                checkValidAndThrow(ship.getStartX() + 1, i);
             }
         }
     }
