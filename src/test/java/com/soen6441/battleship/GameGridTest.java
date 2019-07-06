@@ -9,16 +9,19 @@ import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
 import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
+import com.soen6441.battleship.services.gamegrid.IGameGrid;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
+import javafx.scene.control.Cell;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GameGridTest {
-    private GameGrid gameGrid;
+    private IGameGrid gameGrid;
     private static Ship wrongShipHorizontal;
     private static Ship wrongShipVertical;
     private static Ship wrongShipStart;
@@ -30,10 +33,7 @@ public class GameGridTest {
     @Before()
     public void setUp() {
         gameGrid = new GameGrid(8);
-    }
 
-    @BeforeClass()
-    public static void setUpBeforeClass() {
         wrongShipHorizontal = new Ship.Builder()
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 1)
@@ -62,6 +62,7 @@ public class GameGridTest {
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 1)
                 .setEndCoordinates(6, 1)
+                .setLength(5)
                 .build();
 
         correctShip2 = new Ship.Builder()
@@ -168,5 +169,26 @@ public class GameGridTest {
 
         testObserver.assertValueAt(1, grid -> grid.getCellState(1, 1) == CellState.SHIP_WITH_HIT);
         testObserver.assertValueAt(2, grid -> grid.getCellState(0, 0) == CellState.EMPTY_HIT);
+    }
+
+    @Test()
+    public void shipIsSunkIfAllHitsAreSuccessful() throws Exception {
+        gameGrid.placeShip(correctShip);
+        for (int i = 1; i <= 6; i++) {
+            gameGrid.hit(i, 1);
+        }
+        assertTrue(gameGrid.getShips().get(0).isSunk());
+    }
+
+    @Test()
+    public void cellUpdatesToShipDestroyed() throws Exception {
+        gameGrid.placeShip(correctShip);
+
+        // Place hits on the ship
+        for (int i = 1; i <= 6; i++) {
+            gameGrid.hit(i, 1);
+        }
+
+        assertEquals(CellState.DESTROYED_SHIP, gameGrid.getGrid().getCellState(1, 1));
     }
 }

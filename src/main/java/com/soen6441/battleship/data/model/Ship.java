@@ -124,6 +124,8 @@ public class Ship {
                 ", startY=" + startY +
                 ", endX=" + endX +
                 ", endY=" + endY +
+                ", length=" + length +
+                ", hits=" + hits +
                 ", direction=" + direction +
                 '}';
     }

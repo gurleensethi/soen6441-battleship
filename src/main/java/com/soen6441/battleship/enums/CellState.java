@@ -18,4 +18,8 @@ public enum CellState {
      * Cell is hit, and there is ship on it.
      */
     SHIP_WITH_HIT,
+    /**
+     * Cell contains a ship that has been destroyed.
+     */
+    DESTROYED_SHIP,
 }

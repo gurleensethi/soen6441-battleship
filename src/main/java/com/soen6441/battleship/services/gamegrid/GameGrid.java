@@ -58,7 +58,25 @@ public class GameGrid implements IGameGrid {
         if (state == CellState.EMPTY_HIT || state == CellState.SHIP_WITH_HIT) {
             result = HitResult.ALREADY_HIT;
         } else if (state == CellState.SHIP) {
+            // TODO: Move this logic to a ship service
             grid.updateCellStatus(x, y, CellState.SHIP_WITH_HIT);
+
+            Ship shipToHit = grid.getCellInfo(x, y).getShip();
+            shipToHit.setHits(shipToHit.getHits() + 1);
+
+            if (shipToHit.isSunk()) {
+                // TODO: Move this logic to a ship service
+                if (shipToHit.getDirection() == ShipDirection.HORIZONTAL) {
+                    for (int shipX = shipToHit.getStartX(); shipX <= shipToHit.getEndX(); shipX++) {
+                        grid.updateCellStatus(shipX, shipToHit.getStartY(), CellState.DESTROYED_SHIP);
+                    }
+                } else {
+                    for (int shipY = shipToHit.getStartY(); shipY <= shipToHit.getEndY(); shipY++) {
+                        grid.updateCellStatus(shipToHit.getStartX(), shipY, CellState.DESTROYED_SHIP);
+                    }
+                }
+            }
+
             result = HitResult.HIT;
         } else {
             grid.updateCellStatus(x, y, CellState.EMPTY_HIT);
