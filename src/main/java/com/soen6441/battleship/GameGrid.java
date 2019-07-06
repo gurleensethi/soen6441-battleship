@@ -83,22 +83,12 @@ public class GameGrid {
      */
     private void checkPointValidityForShip(Ship ship) throws InvalidShipPlacementException {
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
-            checkValidAndThrow(ship.getStartX() - 1, ship.getStartY());
-            checkValidAndThrow(ship.getEndX() + 1, ship.getStartY());
-
             for (int i = ship.getStartX(); i < ship.getEndX(); i++) {
                 checkValidAndThrow(i, ship.getStartY());
-                checkValidAndThrow(i, ship.getStartY() - 1);
-                checkValidAndThrow(i, ship.getStartY() + 1);
             }
         } else if (ship.getDirection() == ShipDirection.VERTICAL) {
-            checkValidAndThrow(ship.getStartX(), ship.getStartY() - 1);
-            checkValidAndThrow(ship.getEndX(), ship.getStartY() + 1);
-
             for (int i = ship.getStartY(); i < ship.getEndY(); i++) {
                 checkValidAndThrow(ship.getStartX(), i);
-                checkValidAndThrow(ship.getStartX() - 1, i);
-                checkValidAndThrow(ship.getStartX() + 1, i);
             }
         }
     }

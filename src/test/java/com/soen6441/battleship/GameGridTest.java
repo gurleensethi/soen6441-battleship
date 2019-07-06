@@ -64,8 +64,8 @@ public class GameGridTest {
 
         overlappingShip = new Ship.Builder()
                 .setDirection(ShipDirection.VERTICAL)
-                .setStartCoordinates(0, 0)
-                .setEndCoordinates(0, 5)
+                .setStartCoordinates(3, 0)
+                .setEndCoordinates(3, 5)
                 .build();
     }
 
@@ -95,7 +95,7 @@ public class GameGridTest {
     }
 
     @Test(expected = InvalidShipPlacementException.class)
-    public void throwsExceptionOnWrongShipPoint() throws Exception {
+    public void throwsExceptionIfOverlapping() throws Exception {
         gameGrid.placeShip(correctShip);
         gameGrid.placeShip(overlappingShip);
     }
