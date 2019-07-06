@@ -1,7 +1,9 @@
 package com.soen6441.battleship;
 
 import com.soen6441.battleship.common.Constants;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,10 +23,12 @@ import java.net.URL;
 
 public class AppWithUI {
 
-        HBox root = new HBox(50);
+        Stage primaryStageApp;
+        Group root = new Group();
         VBox start = new VBox();
         GridPane enemyBoard = new GridPane();
         GridPane playerBoard = new GridPane();
+        HBox mainBoard = new HBox(20);
         int gridSize ;
 
         private static Button carrierButton;
@@ -40,6 +44,7 @@ public class AppWithUI {
 
         public void createGame(Stage primaryStage) {
 
+            primaryStageApp = primaryStage;
             //Start screen button
             Button startButton = new Button();
             startButton.setText("Start Game");
@@ -66,8 +71,7 @@ public class AppWithUI {
                 gridSize = Integer.parseInt(gridSizeTxtField.getText());
                 createGrids(gridSize);
                 createButtons();
-                Scene scene2 = new Scene(root, 1000, 800);// starting page of the application
-                primaryStage.setScene(scene2);
+
             });
 
 
@@ -93,7 +97,9 @@ public class AppWithUI {
         private void createGrids(int gridSize){
             enemyBoard = getGrid(gridSize);
             playerBoard = getGrid(gridSize);
-            root.getChildren().addAll(playerBoard, enemyBoard);
+
+
+            mainBoard.getChildren().addAll(playerBoard,enemyBoard);
         }
 
         private void createButtons(){
@@ -118,14 +124,21 @@ public class AppWithUI {
 
             shipBox.getChildren().addAll(carrierButton,battleshipButton,cruiserButton,submarineButton,destroyerButton);
             shipBox.setAlignment(Pos.BOTTOM_CENTER);
+            shipBox.setPadding(new Insets(10,0,5,0));
 
-
-            VBox allOptionBox = new VBox(); // Vertical Box to hold options
+            HBox allOptionBox = new HBox(); // Vertical Box to hold options
 
             allOptionBox.getChildren().addAll(rotateButton, clearLastButton, clearAllButton, finalizeButton, rollButton);
-            allOptionBox.setAlignment(Pos.TOP_RIGHT);
+            allOptionBox.setAlignment(Pos.BOTTOM_CENTER);
 
-            root.getChildren().addAll(shipBox, allOptionBox);
+            VBox combined = new VBox();
+            combined.getChildren().addAll(mainBoard, shipBox, allOptionBox);
+            combined.setAlignment(Pos.CENTER);
+
+            root.getChildren().addAll(combined);
+
+            Scene scene2 = new Scene(root, 1000, 800);// starting page of the application
+            primaryStageApp.setScene(scene2);
         }
 
         private static void setButtonDimensions(){
