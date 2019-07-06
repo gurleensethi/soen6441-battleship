@@ -50,9 +50,13 @@ public class GameGrid implements IGameGrid {
 
         CellState state = grid.getCellState(x, y);
 
-        if (state == CellState.SHIP) {
+        if (state == CellState.EMPTY_HIT || state == CellState.SHIP_WITH_HIT) {
+            return HitResult.ALREADY_HIT;
+        } else if (state == CellState.SHIP) {
+            grid.updateCellStatus(x, y, CellState.SHIP_WITH_HIT);
             return HitResult.HIT;
         } else {
+            grid.updateCellStatus(x, y, CellState.EMPTY_HIT);
             return HitResult.MISS;
         }
     }
