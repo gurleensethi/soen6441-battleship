@@ -22,6 +22,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+
         primaryStage.setTitle("Battleship");
         HBox root = new HBox(50);
         StackPane start = new StackPane();
@@ -30,33 +32,37 @@ public class App extends Application {
 
         for (int rows = 0; rows < 10; rows++) {
             for (int columns = 0; columns < 10; columns++) {
-                Button button = new Button();
-                button.setText(" ");
-                button.setOnMouseClicked(e -> button.setStyle("-fx-background-color: #ff0040"));
-                enemyBoard.add(button, columns, rows);
-
+                Button enemyCell = new Button();
+                enemyCell.setText(" ");
+                enemyCell.setOnMouseClicked(e -> enemyCell.setStyle("-fx-background-color: #ff0040"));
+                enemyBoard.add(enemyCell, columns, rows);
             }
         }
 
         for (int rows = 0; rows < 10; rows++) {
             for (int columns = 0; columns < 10; columns++) {
-                Button button1 = new Button();
-                button1.setText(" ");
-                button1.setOnMouseClicked(e -> button1.setStyle("-fx-background-color: #ff0040"));
-                playerBoard.add(button1, columns, rows);
+                Button playerCell = new Button();
+                playerCell.setText(" ");
+                playerCell.setOnMouseClicked(e -> playerCell.setStyle("-fx-background-color: #ff0040"));
+                playerBoard.add(playerCell, columns, rows);
 
             }
         }
         root.getChildren().addAll(playerBoard, enemyBoard);
 
-
+        // Display start scene
         Scene scene1 = new Scene(start, 700, 400);
+
+        // Display Game-Play scene
         Scene scene2 = new Scene(root, 700, 400);
+
+
         Button startButton = new Button();
         startButton.setOnAction(e -> primaryStage.setScene(scene2));
         startButton.setText("Start Game");
         startButton.setAlignment(Pos.CENTER);
         start.getChildren().add(startButton);
+
         primaryStage.setScene(scene1);
         primaryStage.show();
 
