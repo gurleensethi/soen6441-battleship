@@ -26,7 +26,7 @@ public class GameGrid implements IGameGrid {
 
     private final Grid grid;
     private final List<Ship> ships = new ArrayList<>();
-    private BehaviorSubject<Grid> gridBehaviorSubject = BehaviorSubject.create();
+    private final BehaviorSubject<Grid> gridBehaviorSubject = BehaviorSubject.create();
 
     public GameGrid(int gridSize) {
         this.grid = new Grid(gridSize);
