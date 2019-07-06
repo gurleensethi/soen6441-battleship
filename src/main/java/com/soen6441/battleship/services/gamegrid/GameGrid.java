@@ -1,6 +1,5 @@
 package com.soen6441.battleship.services.gamegrid;
 
-import com.soen6441.battleship.data.model.CellInfo;
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.CellState;
@@ -10,6 +9,8 @@ import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
 import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
 import com.soen6441.battleship.utils.GridUtils;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,11 @@ public class GameGrid implements IGameGrid {
 
     private final Grid grid;
     private final List<Ship> ships = new ArrayList<>();
+    private BehaviorSubject<Grid> gridBehaviorSubject = BehaviorSubject.create();
 
     public GameGrid(int gridSize) {
         this.grid = new Grid(gridSize);
+        gridBehaviorSubject.onNext(this.grid);
         logger.info("Grid created successfully: " + grid);
     }
 
@@ -59,6 +62,11 @@ public class GameGrid implements IGameGrid {
             grid.updateCellStatus(x, y, CellState.EMPTY_HIT);
             return HitResult.MISS;
         }
+    }
+
+    @Override
+    public Observable<Grid> getGridAsObservable() {
+        return gridBehaviorSubject;
     }
 
     @Override
@@ -97,6 +105,8 @@ public class GameGrid implements IGameGrid {
                 grid.setShipOnCell(ship.getStartX(), i, ship);
             }
         }
+
+        gridBehaviorSubject.onNext(this.grid);
 
         logger.info(String.format("Successfully placed ship on grid %s", ship));
 
