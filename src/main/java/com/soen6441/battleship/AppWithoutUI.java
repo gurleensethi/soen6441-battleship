@@ -1,11 +1,8 @@
 package com.soen6441.battleship;
 
+import com.soen6441.battleship.data.gridgame.GameGrid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.ShipDirection;
-
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 
 public class AppWithoutUI {
