@@ -1,7 +1,7 @@
 # SOEN 6441 Battleship
 
 ### Installing Maven (Mac Only)
-```
+```shell
 brew install maven
 ```
 
@@ -9,7 +9,7 @@ brew install maven
 `Open > pom.xml > Open as Project`
 
  Run:
- ```
+ ```shell
  mvn install
  ```
 
