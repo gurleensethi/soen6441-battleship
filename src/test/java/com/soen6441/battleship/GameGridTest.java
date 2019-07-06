@@ -148,7 +148,7 @@ public class GameGridTest {
     }
 
     @Test()
-    public void gridObservableUpdatesGridOnAddingShip() throws Exception {
+    public void gridObservableUpdatesOnAddingShip() throws Exception {
         Observable<Grid> gridObservable = gameGrid.getGridAsObservable();
         TestObserver<Grid> testObserver = new TestObserver<>();
         gameGrid.placeShip(correctShip);
@@ -156,5 +156,17 @@ public class GameGridTest {
         testObserver.assertValue(updatedGrid -> updatedGrid.getCellState(1, 1) == CellState.SHIP);
     }
 
+    @Test()
+    public void gridObservableUpdatesOnHit() throws Exception {
+        Observable<Grid> gridObservable = gameGrid.getGridAsObservable();
+        TestObserver<Grid> testObserver = new TestObserver<>();
+        gridObservable.subscribe(testObserver);
 
+        gameGrid.placeShip(correctShip);
+        gameGrid.hit(1, 1);
+        gameGrid.hit(0, 0);
+
+        testObserver.assertValueAt(1, grid -> grid.getCellState(1, 1) == CellState.SHIP_WITH_HIT);
+        testObserver.assertValueAt(2, grid -> grid.getCellState(0, 0) == CellState.EMPTY_HIT);
+    }
 }
