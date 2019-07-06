@@ -32,6 +32,10 @@ public class Grid {
         coordinates[y][x].setState(state);
     }
 
+    public void setShipOnCell(int x, int y, Ship ship) {
+        coordinates[y][x].setShip(ship);
+    }
+
     @Override
     public String toString() {
         return "Grid{" +

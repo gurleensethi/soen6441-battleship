@@ -67,10 +67,12 @@ public class GameGrid implements IGameGrid {
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
             for (int i = ship.getStartX(); i < ship.getEndX(); i++) {
                 grid.updateCellStatus(i, ship.getStartY(), CellState.SHIP);
+                grid.setShipOnCell(i, ship.getStartY(), ship);
             }
         } else if (ship.getDirection() == ShipDirection.VERTICAL) {
             for (int i = ship.getStartY(); i < ship.getEndY(); i++) {
                 grid.updateCellStatus(ship.getStartX(), i, CellState.SHIP);
+                grid.setShipOnCell(ship.getStartX(), i, ship);
             }
         }
 
