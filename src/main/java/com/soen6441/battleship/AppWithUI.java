@@ -45,16 +45,12 @@ public class AppWithUI {
         Button startButton = new Button();
         Scene scene2 = new Scene(root, 700, 400);// Staging area to place ships
 
-
         startButton.setOnAction(e -> primaryStage.setScene(scene2));
         startButton.setText("Start Game");
         startButton.setAlignment(Pos.CENTER);
-        start.getChildren().add(startButton);
-        start.getChildren().add(new Label("Enter the grid size:"));
         TextField gridSize = new TextField();
         gridSize.setAlignment(Pos.BOTTOM_CENTER);
-        start.getChildren().add(gridSize);
-
+        start.getChildren().addAll(startButton, gridSize, new Label("Enter the grid size:"));
 
         primaryStage.setScene(scene1);
         primaryStage.show();
