@@ -1,30 +1,29 @@
 package com.soen6441.battleship;
 
-
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.geometry.Pos;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
 
-/**
- * Hello world!
- */
+import java.io.File;
+import java.net.URL;
+import java.util.logging.Logger;
+
 public class App extends Application {
+    final private Logger logger = Logger.getLogger(App.class.getName());
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
+
     public void start(Stage primaryStage) throws Exception {
+        File file = new File("src/main/resources/WelcomeScreen.fxml");
+        Parent root = FXMLLoader.load(file.toURI().toURL());
         primaryStage.setTitle("Battleship");
-        AppWithUI uiObject = new AppWithUI();
-        uiObject.createGame(primaryStage);
-
-
-
+        primaryStage.setScene(new Scene(root, 700, 400));
+        primaryStage.show();
     }
 }
