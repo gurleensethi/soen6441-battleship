@@ -10,6 +10,7 @@ public class Ship {
     private final int endX;
     private final int endY;
     private final int length;
+    private int hits = 0;
     private final ShipDirection direction;
 
     public static class Builder {
@@ -100,6 +101,18 @@ public class Ship {
 
     public int getLength() {
         return length;
+    }
+
+    public int getHits() {
+        return hits;
+    }
+
+    public void setHits(int hits) {
+        this.hits = hits;
+    }
+
+    public boolean isSunk() {
+        return this.length == this.hits;
     }
 
     @Override
