@@ -1,8 +1,11 @@
 package com.soen6441.battleship.view.console;
 
+import com.soen6441.battleship.data.model.Ship;
+import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.utils.GridUtils;
 import com.soen6441.battleship.view.IView;
 import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
+import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -10,13 +13,19 @@ import java.util.logging.Logger;
 public class ConsoleView implements IView {
     private static final Logger logger = Logger.getLogger(ConsoleView.class.getName());
     private IGameViewModel gameViewModel;
+    private IShipPlacementViewModel shipPlacementViewModel;
+    private Scanner scanner;
 
-    public ConsoleView(IGameViewModel gameViewModel) {
+    public ConsoleView(IGameViewModel gameViewModel, IShipPlacementViewModel shipPlacementViewModel) {
         this.gameViewModel = gameViewModel;
+        this.shipPlacementViewModel = shipPlacementViewModel;
+        this.scanner = new Scanner(System.in);
     }
 
     @Override
     public void start() {
+        getShipPlacementFromPlayer();
+
         gameViewModel.getPlayerGrid().subscribe(grid -> {
             logger.info("Player Grid:");
             GridUtils.printGrid(grid);
@@ -30,8 +39,71 @@ public class ConsoleView implements IView {
         beginGame();
     }
 
+    private void getShipPlacementFromPlayer() {
+        while (true) {
+            logger.info("Select an options:");
+            logger.info("1. Add ship.");
+            logger.info("2. Complete.");
+
+            String input = scanner.nextLine();
+
+            if (input.equals("1")) {
+                try {
+                    logger.info("Enter start coordinates (x y):");
+                    input = scanner.nextLine();
+                    String[] startCoordinates = input.split(" ");
+                    int shipStartX = Integer.parseInt(startCoordinates[0]);
+                    int shipStartY = Integer.parseInt(startCoordinates[1]);
+
+                    logger.info("Enter end coordinates (x y):");
+                    input = scanner.nextLine();
+                    String[] endCoordinates = input.split(" ");
+                    int shipEndX = Integer.parseInt(endCoordinates[0]);
+                    int shipEndY = Integer.parseInt(endCoordinates[1]);
+
+                    logger.info("Enter ship direction (h or y):");
+                    input = scanner.nextLine();
+                    ShipDirection shipDirection;
+                    if (input.equals("h")) {
+                        shipDirection = ShipDirection.HORIZONTAL;
+                    } else if (input.equals("y")) {
+                        shipDirection = ShipDirection.VERTICAL;
+                    } else {
+                        throw new Exception("Invalid Direction");
+                    }
+
+                    int shipLength = 0;
+
+                    if (shipDirection == ShipDirection.HORIZONTAL) {
+                        shipLength = shipEndX - shipStartX;
+                    } else {
+                        shipLength = shipEndY - shipStartY;
+                    }
+
+                    Ship ship = new Ship.Builder()
+                            .setStartCoordinates(shipStartX, shipStartY)
+                            .setEndCoordinates(shipEndX, shipEndY)
+                            .setLength(shipLength)
+                            .setDirection(shipDirection)
+                            .setName("New Ship")
+                            .setUniqueId("OK")
+                            .build();
+
+                    shipPlacementViewModel.placeShip(ship);
+
+                } catch (Exception e) {
+                    logger.warning("Invalid input!");
+                    logger.warning(e.getMessage());
+                }
+            } else if (input.equals("2")) {
+                break;
+            } else {
+                logger.info("Please select a valid option!");
+            }
+        }
+    }
+
     private void beginGame() {
-        Scanner scanner = new Scanner(System.in);
         while (true) {
             String input = scanner.nextLine();
 
