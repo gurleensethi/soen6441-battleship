@@ -19,10 +19,6 @@ public class App extends Application {
     @Override
 
     public void start(Stage primaryStage) throws Exception {
-        File file = new File("src/main/resources/WelcomeScreen.fxml");
-        Parent root = FXMLLoader.load(file.toURI().toURL());
-        primaryStage.setTitle("Battleship");
-        primaryStage.setScene(new Scene(root, 700, 400));
-        primaryStage.show();
+
     }
 }

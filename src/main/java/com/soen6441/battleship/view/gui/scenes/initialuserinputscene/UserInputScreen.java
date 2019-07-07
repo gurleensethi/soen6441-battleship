@@ -1,4 +1,4 @@
-package com.soen6441.battleship;
+package com.soen6441.battleship.view.gui.scenes.initialuserinputscene;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -6,23 +6,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.stage.Window;
 
 import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class UserInputScreen {
-
     final private Logger logger = Logger.getLogger(UserInputScreen.class.getName());
-
     private int gridSize;
     private String playerName;
     @FXML
@@ -63,20 +56,5 @@ public class UserInputScreen {
             playerName = nameField.getText();
             logger.info("Values from input:" + " Player Name = " + playerName + " Grid Size : " + gridSize);
         }
-        try {
-            loadScreen(event);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-        }
-    }
-
-    private void loadScreen(ActionEvent event) throws Exception {
-        File file = new File("src/main/resources/WelcomeScreen.fxml");
-        Parent root = FXMLLoader.load(file.toURI().toURL());
-        Scene userInputScreen = new Scene(root, 700, 400);
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(userInputScreen);
-        window.show();
-
     }
 }
