@@ -9,4 +9,6 @@ public interface IGameViewModel {
     Observable<Grid> getEnemyGrid();
 
     void sendHit(int x, int y);
+
+    Observable<String> playerTurnChange();
 }

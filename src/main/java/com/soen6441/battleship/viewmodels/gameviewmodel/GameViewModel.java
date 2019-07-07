@@ -30,4 +30,9 @@ public class GameViewModel implements IGameViewModel {
     public void sendHit(int x, int y) {
         gameController.hit(x, y);
     }
+
+    @Override
+    public Observable<String> playerTurnChange() {
+        return gameController.turnChange();
+    }
 }

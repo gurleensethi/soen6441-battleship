@@ -5,10 +5,13 @@ import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 public class GameController implements IGameController {
     private static GameController sGameController;
     private String currentPlayerName;
+    private PublishSubject<String> turnChangePublishSubject = PublishSubject.create();
     private IPlayer player;
     private IPlayer enemy;
 
@@ -35,6 +38,7 @@ public class GameController implements IGameController {
         } else {
             currentPlayerName = "player";
         }
+        turnChangePublishSubject.onNext(currentPlayerName);
     }
 
     @Override
@@ -58,13 +62,16 @@ public class GameController implements IGameController {
 
         try {
             HitResult result = playerToHit.getGameGrid().hit(x, y);
-
             if (result == HitResult.MISS) {
-                currentPlayerName = "enemy";
+                nextPlayerTurn();
             }
-
         } catch (CoordinatesOutOfBoundsException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Observable<String> turnChange() {
+        return turnChangePublishSubject;
     }
 }

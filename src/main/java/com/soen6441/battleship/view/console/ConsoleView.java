@@ -36,6 +36,10 @@ public class ConsoleView implements IView {
             GridUtils.printGrid(grid);
         });
 
+        gameViewModel.playerTurnChange().subscribe(name -> {
+            logger.info("Player turn changed to: " + name.toUpperCase());
+        });
+
         beginGame();
     }
 
@@ -61,23 +65,23 @@ public class ConsoleView implements IView {
                     int shipEndX = Integer.parseInt(endCoordinates[0]);
                     int shipEndY = Integer.parseInt(endCoordinates[1]);
 
-                    logger.info("Enter ship direction (h or y):");
+                    logger.info("Enter ship direction (h or v):");
                     input = scanner.nextLine();
                     ShipDirection shipDirection;
                     if (input.equals("h")) {
                         shipDirection = ShipDirection.HORIZONTAL;
-                    } else if (input.equals("y")) {
+                    } else if (input.equals("v")) {
                         shipDirection = ShipDirection.VERTICAL;
                     } else {
                         throw new Exception("Invalid Direction");
                     }
 
-                    int shipLength = 0;
+                    int shipLength;
 
                     if (shipDirection == ShipDirection.HORIZONTAL) {
-                        shipLength = shipEndX - shipStartX;
+                        shipLength = shipEndX - shipStartX + 1;
                     } else {
-                        shipLength = shipEndY - shipStartY;
+                        shipLength = shipEndY - shipStartY + 1;
                     }
 
                     Ship ship = new Ship.Builder()
