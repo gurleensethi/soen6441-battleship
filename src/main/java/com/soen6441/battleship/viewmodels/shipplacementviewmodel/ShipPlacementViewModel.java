@@ -19,6 +19,7 @@ public class ShipPlacementViewModel implements IShipPlacementViewModel {
     @Override
     public void placeShip(Ship ship) {
         try {
+            logger.info("Pacing ship...");
             player.getGameGrid().placeShip(ship);
         } catch (Exception e) {
             logger.warning("Unable to place ship!");

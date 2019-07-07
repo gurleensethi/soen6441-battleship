@@ -1,6 +1,7 @@
 package com.soen6441.battleship.view.gui.scenes.shipplacement;
 
 import com.soen6441.battleship.view.gui.scenes.IScene;
+import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 import io.reactivex.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,13 +14,24 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class ShipPlacementScene implements IScene {
+
+    private final IShipPlacementViewModel shipPlacementViewModel;
+
+    public ShipPlacementScene(IShipPlacementViewModel shipPlacementViewModel) {
+        checkNotNull(shipPlacementViewModel);
+        this.shipPlacementViewModel = shipPlacementViewModel;
+    }
 
     @Override
     public Scene buildScene() {
         ShipPlacementGrid shipPlacementGrid = new ShipPlacementGrid(8);
-        VBox vBox = new VBox();
 
+        shipPlacementGrid.getShipAddedObservable().subscribe(shipPlacementViewModel::placeShip);
+
+        // TODO: Move this to a separate Node class, maybe even fxml file.
         Node toolbar = buildToolbar(
                 event -> shipPlacementGrid.cancelShipSelection(),
                 null,
@@ -27,10 +39,12 @@ public class ShipPlacementScene implements IScene {
                 shipPlacementGrid.getSelectedShipCountObservable()
         );
 
+        // TODO: Move this to a separate Node class, maybe even fxml file.
         Node infoBar = buildInfoBar(
                 shipPlacementGrid.getSelectedShipCountObservable()
         );
 
+        VBox vBox = new VBox();
         vBox.getChildren().addAll(infoBar, toolbar, shipPlacementGrid);
 
         return new Scene(vBox);

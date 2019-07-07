@@ -14,7 +14,7 @@ public class AppWithGUI {
         IGameController gameController = GameController.getInstance();
         IGameViewModel gameViewModel = new GameViewModel(gameController);
         IShipPlacementViewModel shipPlacementViewModel = new ShipPlacementViewModel(gameController);
-        IView view = new GUIView();
+        GUIView view = new GUIView();
         view.start();
     }
 }

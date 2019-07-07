@@ -118,12 +118,12 @@ public class GameGrid implements IGameGrid {
         ships.add(ship);
 
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
-            for (int i = ship.getStartX(); i < ship.getEndX(); i++) {
+            for (int i = ship.getStartX(); i <= ship.getEndX(); i++) {
                 grid.updateCellStatus(i, ship.getStartY(), CellState.SHIP);
                 grid.setShipOnCell(i, ship.getStartY(), ship);
             }
         } else if (ship.getDirection() == ShipDirection.VERTICAL) {
-            for (int i = ship.getStartY(); i < ship.getEndY(); i++) {
+            for (int i = ship.getStartY(); i <= ship.getEndY(); i++) {
                 grid.updateCellStatus(ship.getStartX(), i, CellState.SHIP);
                 grid.setShipOnCell(ship.getStartX(), i, ship);
             }
@@ -142,6 +142,7 @@ public class GameGrid implements IGameGrid {
      * @throws InvalidShipPlacementException if ship cannot be placed because of invalid surroundings.
      */
     private void checkPointValidityForShip(Ship ship) throws InvalidShipPlacementException {
+        logger.info("Checking Ship validity...");
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
             for (int i = ship.getStartX(); i < ship.getEndX(); i++) {
                 checkValidAndThrow(i, ship.getStartY());
@@ -151,6 +152,7 @@ public class GameGrid implements IGameGrid {
                 checkValidAndThrow(ship.getStartX(), i);
             }
         }
+        logger.info("Ship validity check complete!");
     }
 
     private void checkValidAndThrow(int x, int y) throws InvalidShipPlacementException {
