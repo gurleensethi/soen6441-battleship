@@ -25,6 +25,15 @@ public class GridUtils {
                     case SHIP:
                         stringBuilder.append(SHIP_CHAR);
                         break;
+                    case SHIP_WITH_HIT:
+                        stringBuilder.append(" **** ");
+                        break;
+                    case DESTROYED_SHIP:
+                        stringBuilder.append(" $$$$ ");
+                        break;
+                    case EMPTY_HIT:
+                        stringBuilder.append(" xxxx ");
+                        break;
                     default:
                         break;
                 }
