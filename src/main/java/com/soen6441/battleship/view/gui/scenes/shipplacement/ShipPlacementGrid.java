@@ -1,6 +1,8 @@
 package com.soen6441.battleship.view.gui.scenes.shipplacement;
 
 import com.soen6441.battleship.data.model.Coordinate;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -10,20 +12,36 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
+    private static final Logger logger = Logger.getLogger(ShipPlacementGrid.class.getName());
     private static final String GRID_BUTTON = "GridButton:";
+    private static final int MAX_SHIPS = 5;
 
+    private int numOfShipsPlaced = 0;
     private final int gridSize;
     private Map<String, Button> buttons = new HashMap<>();
     private Map<String, Coordinate> buttonCoordinates = new HashMap<>();
     private Set<String> shipButtonsIds = new HashSet<>();
     private boolean isSelectingShip = false;
     private Coordinate prevSelectedBtnCoordinate;
+    private PublishSubject<Boolean> isSelectingShipSubject = PublishSubject.create();
+    private PublishSubject<Integer> numShipPlacedSubject = PublishSubject.create();
 
     public ShipPlacementGrid(int gridSize) {
         this.gridSize = gridSize;
+        isSelectingShipSubject.onNext(this.isSelectingShip);
+        numShipPlacedSubject.onNext(this.numOfShipsPlaced);
         initUI();
+    }
+
+    public Observable<Boolean> getShipSelectionObservable() {
+        return this.isSelectingShipSubject;
+    }
+
+    public Observable<Integer> getSelectedShipCountObservable() {
+        return this.numShipPlacedSubject;
     }
 
     private void initUI() {
@@ -33,7 +51,7 @@ public class ShipPlacementGrid extends GridPane implements EventHandler<ActionEv
 
                 Button button = new Button();
                 button.setId(id);
-                button.setText(x + " " + y);
+                button.setText(x + ", " + y);
                 button.setPrefHeight(50);
                 button.setPrefWidth(50);
                 button.setOnAction(this);
@@ -49,8 +67,12 @@ public class ShipPlacementGrid extends GridPane implements EventHandler<ActionEv
     }
 
     private void updateUI() {
-        // Disable all the buttons that have been selected for a ship.
-        buttons.forEach((buttonId, button) -> button.setDisable(shipButtonsIds.contains(buttonId)));
+        if (numOfShipsPlaced < MAX_SHIPS) {
+            // Disable all the buttons that have been selected for a ship.
+            buttons.forEach((buttonId, button) -> button.setDisable(shipButtonsIds.contains(buttonId)));
+        } else {
+            buttons.forEach((buttonId, button) -> button.setDisable(true));
+        }
     }
 
 
@@ -65,6 +87,7 @@ public class ShipPlacementGrid extends GridPane implements EventHandler<ActionEv
                 if (!isSelectingShip) {
                     final Coordinate clickedButtonCoordinate = buttonCoordinates.get(clickedButtonId);
                     prevSelectedBtnCoordinate = clickedButtonCoordinate;
+                    logger.info("User selected initial coordinates: " + clickedButtonCoordinate.toString());
 
                     disableAllButtons();
                     enableButtonsOnAxisOfCoordinate(clickedButtonCoordinate);
@@ -72,12 +95,12 @@ public class ShipPlacementGrid extends GridPane implements EventHandler<ActionEv
                     isSelectingShip = true;
                 } else {
                     final Coordinate coordinate = buttonCoordinates.get(clickedButtonId);
+                    logger.info("User selected final coordinates: " + coordinate.toString());
 
                     // Ship is only of size 1
                     if (coordinate.equals(prevSelectedBtnCoordinate)) {
                         shipButtonsIds.add(clickedButtonId);
                     } else {
-                        System.out.println("Unequal coordinate!");
                         if (prevSelectedBtnCoordinate.getY() == coordinate.getY()) {
                             // Direction is horizontal
                             int startX = prevSelectedBtnCoordinate.getX() < coordinate.getX()
@@ -103,10 +126,15 @@ public class ShipPlacementGrid extends GridPane implements EventHandler<ActionEv
                         }
                     }
 
-                    updateUI();
+                    numOfShipsPlaced++;
 
                     isSelectingShip = false;
+
+                    updateUI();
                 }
+
+                this.numShipPlacedSubject.onNext(numOfShipsPlaced);
+                this.isSelectingShipSubject.onNext(this.isSelectingShip);
             }
         }
     }
@@ -162,5 +190,11 @@ public class ShipPlacementGrid extends GridPane implements EventHandler<ActionEv
 
     private String buildButtonId(int x, int y) {
         return GRID_BUTTON + x + " " + y;
+    }
+
+    public void cancelShipSelection() {
+        this.isSelectingShip = false;
+        this.isSelectingShipSubject.onNext(this.isSelectingShip);
+        updateUI();
     }
 }
