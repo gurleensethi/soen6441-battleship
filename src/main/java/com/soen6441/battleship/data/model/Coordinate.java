@@ -1,29 +1,35 @@
 package com.soen6441.battleship.data.model;
 
+import java.util.Objects;
+
 public class Coordinate {
-    final int x;
-    final int y;
-    private boolean isHit = false;
-    private boolean hasShip = false;
+    private final int x;
+    private final int y;
 
     public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public boolean isHit() {
-        return isHit;
+    public int getX() {
+        return x;
     }
 
-    public void setHit(boolean hit) {
-        isHit = hit;
+    public int getY() {
+        return y;
     }
 
-    public boolean isHasShip() {
-        return hasShip;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coordinate that = (Coordinate) o;
+        return x == that.x &&
+                y == that.y;
     }
 
-    public void setHasShip(boolean hasShip) {
-        this.hasShip = hasShip;
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }
