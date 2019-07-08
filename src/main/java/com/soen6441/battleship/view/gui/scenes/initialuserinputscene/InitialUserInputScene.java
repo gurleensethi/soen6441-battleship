@@ -1,6 +1,5 @@
 package com.soen6441.battleship.view.gui.scenes.initialuserinputscene;
 
-import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

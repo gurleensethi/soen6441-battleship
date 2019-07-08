@@ -2,10 +2,10 @@ package com.soen6441.battleship.view.gui.scenes.initialuserinputscene;
 
 import com.soen6441.battleship.common.SceneRoutes;
 import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.event.ActionEvent;
 
 import java.util.logging.Logger;
 import java.util.regex.Pattern;

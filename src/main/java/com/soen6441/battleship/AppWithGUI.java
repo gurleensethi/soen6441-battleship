@@ -2,7 +2,6 @@ package com.soen6441.battleship;
 
 import com.soen6441.battleship.services.gamecontroller.GameController;
 import com.soen6441.battleship.services.gamecontroller.IGameController;
-import com.soen6441.battleship.view.IView;
 import com.soen6441.battleship.view.gui.GUIView;
 import com.soen6441.battleship.viewmodels.gameviewmodel.GameViewModel;
 import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;

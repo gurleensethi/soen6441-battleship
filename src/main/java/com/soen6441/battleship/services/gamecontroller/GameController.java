@@ -15,17 +15,17 @@ public class GameController implements IGameController {
     private IPlayer player;
     private IPlayer enemy;
 
+    private GameController() {
+        currentPlayerName = "player";
+        player = new GamePlayer("Player", new GameGrid(8));
+        enemy = new GamePlayer("Enemy", new GameGrid(8));
+    }
+
     public static GameController getInstance() {
         if (sGameController == null) {
             sGameController = new GameController();
         }
         return sGameController;
-    }
-
-    private GameController() {
-        currentPlayerName = "player";
-        player = new GamePlayer("Player", new GameGrid(8));
-        enemy = new GamePlayer("Enemy", new GameGrid(8));
     }
 
     private boolean isPlayerPlaying() {

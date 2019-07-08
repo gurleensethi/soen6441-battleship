@@ -10,55 +10,8 @@ public class Ship {
     private final int endX;
     private final int endY;
     private final int length;
-    private int hits = 0;
     private final ShipDirection direction;
-
-    public static class Builder {
-        private String uniqueId;
-        private String name;
-        private int startX;
-        private int startY;
-        private int endX;
-        private int endY;
-        private int length;
-        private ShipDirection direction;
-
-        public Builder setStartCoordinates(int x, int y) {
-            this.startX = x;
-            this.startY = y;
-            return this;
-        }
-
-        public Builder setEndCoordinates(int x, int y) {
-            this.endX = x;
-            this.endY = y;
-            return this;
-        }
-
-        public Builder setDirection(ShipDirection direction) {
-            this.direction = direction;
-            return this;
-        }
-
-        public Builder setUniqueId(String uniqueId) {
-            this.uniqueId = uniqueId;
-            return this;
-        }
-
-        public Builder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder setLength(int length) {
-            this.length = length;
-            return this;
-        }
-
-        public Ship build() {
-            return new Ship(this);
-        }
-    }
+    private int hits = 0;
 
     private Ship(Builder builder) {
         this.uniqueID = builder.uniqueId;
@@ -128,5 +81,52 @@ public class Ship {
                 ", hits=" + hits +
                 ", direction=" + direction +
                 '}';
+    }
+
+    public static class Builder {
+        private String uniqueId;
+        private String name;
+        private int startX;
+        private int startY;
+        private int endX;
+        private int endY;
+        private int length;
+        private ShipDirection direction;
+
+        public Builder setStartCoordinates(int x, int y) {
+            this.startX = x;
+            this.startY = y;
+            return this;
+        }
+
+        public Builder setEndCoordinates(int x, int y) {
+            this.endX = x;
+            this.endY = y;
+            return this;
+        }
+
+        public Builder setDirection(ShipDirection direction) {
+            this.direction = direction;
+            return this;
+        }
+
+        public Builder setUniqueId(String uniqueId) {
+            this.uniqueId = uniqueId;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setLength(int length) {
+            this.length = length;
+            return this;
+        }
+
+        public Ship build() {
+            return new Ship(this);
+        }
     }
 }

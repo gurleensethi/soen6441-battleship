@@ -17,9 +17,8 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     private static final Logger logger = Logger.getLogger(ShipPlacementGrid.class.getName());
     private static final String GRID_BUTTON = "GridButton:";
     private static final int MAX_SHIPS = 5;
-
-    private int numOfShipsPlaced = 0;
     private final int gridSize;
+    private int numOfShipsPlaced = 0;
     private Map<String, Button> buttons = new HashMap<>();
     private Map<String, Coordinate> buttonCoordinates = new HashMap<>();
     private Set<String> shipButtonsIds = new HashSet<>();

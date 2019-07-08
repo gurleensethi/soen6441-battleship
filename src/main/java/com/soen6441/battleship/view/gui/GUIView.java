@@ -11,8 +11,6 @@ import com.soen6441.battleship.viewmodels.shipplacementviewmodel.ShipPlacementVi
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 public class GUIView extends Application implements IView {
 
     private IShipPlacementViewModel shipPlacementViewModel;

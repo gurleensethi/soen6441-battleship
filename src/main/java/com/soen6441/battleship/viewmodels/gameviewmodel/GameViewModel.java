@@ -1,8 +1,8 @@
 package com.soen6441.battleship.viewmodels.gameviewmodel;
 
-import com.soen6441.battleship.services.gamecontroller.IGameController;
 import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.data.model.Grid;
+import com.soen6441.battleship.services.gamecontroller.IGameController;
 import io.reactivex.Observable;
 
 public class GameViewModel implements IGameViewModel {

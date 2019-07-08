@@ -2,7 +2,6 @@ package com.soen6441.battleship.view.gui.navigator;
 
 import com.soen6441.battleship.exceptions.InvalidRouteException;
 import com.soen6441.battleship.exceptions.NavigatorNotInitialisedException;
-import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.view.gui.scenes.ISceneBuilder;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -19,6 +18,10 @@ public class SceneNavigator {
     private Stage primaryStage;
     private Map<String, ISceneBuilder> routes = new HashMap<>();
 
+    private SceneNavigator(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
     public static void init(Stage primaryStage) {
         checkNotNull(primaryStage);
         sInstance = new SceneNavigator(primaryStage);
@@ -29,10 +32,6 @@ public class SceneNavigator {
             throw new NavigatorNotInitialisedException();
         }
         return sInstance;
-    }
-
-    private SceneNavigator(Stage primaryStage) {
-        this.primaryStage = primaryStage;
     }
 
     public void registerRoute(String routeName, ISceneBuilder sceneBuilder) {
