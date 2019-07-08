@@ -1,21 +1,17 @@
 package com.soen6441.battleship.view.gui.scenes.initialuserinputscene;
 
+import com.soen6441.battleship.common.SceneRoutes;
+import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
-import java.io.File;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-public class UserInputScreen {
-    final private Logger logger = Logger.getLogger(UserInputScreen.class.getName());
+public class UserInputSceneController {
+    final private Logger logger = Logger.getLogger(UserInputSceneController.class.getName());
     private int gridSize;
     private String playerName;
     @FXML
@@ -55,6 +51,7 @@ public class UserInputScreen {
             gridSize = Integer.parseInt(gridSizeField.getText());
             playerName = nameField.getText();
             logger.info("Values from input:" + " Player Name = " + playerName + " Grid Size : " + gridSize);
+            SceneNavigator.getInstance().navigate(SceneRoutes.SHIP_PLACEMENT);
         }
     }
 }
