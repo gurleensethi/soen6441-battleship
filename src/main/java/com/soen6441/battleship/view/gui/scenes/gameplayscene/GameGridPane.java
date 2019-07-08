@@ -9,11 +9,9 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,7 +20,7 @@ import java.util.Set;
 class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
     private static final String GRID_BUTTON = "GridButton:";
     private final int gridSize;
-    private final boolean isManualPlayer;
+    private final boolean isEnemyPlayer;
 
     private final GridPane buttonsGridPane = new GridPane();
     private final StackPane overlayPane = new StackPane();
@@ -31,9 +29,9 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
     private Map<String, Coordinate> buttonCoordinates = new HashMap<>();
     private Set<String> shipButtonsIds = new HashSet<>();
 
-    GameGridPane(int gridSize, boolean isManualPlayer) {
+    GameGridPane(int gridSize, boolean isEnemyPlayer) {
         this.gridSize = gridSize;
-        this.isManualPlayer = isManualPlayer;
+        this.isEnemyPlayer = isEnemyPlayer;
         initStack();
         initGrid();
     }
