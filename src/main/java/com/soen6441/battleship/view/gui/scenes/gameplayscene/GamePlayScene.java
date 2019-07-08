@@ -26,6 +26,7 @@ public class GamePlayScene implements IScene {
         Text enemyTitleText = new Text("Enemy Board");
         enemyTitleText.setFont(new Font(30));
         GameGridPane enemyGameGrid = new GameGridPane(8, false);
+        enemyGameGrid.setOnCoordinateHit(coordinate -> gameViewModel.sendHit(coordinate.getX(), coordinate.getY()));
         enemyBoardVBox.getChildren().addAll(enemyTitleText, enemyGameGrid);
 
         gameViewModel.getEnemyGrid().subscribe(enemyGameGrid::updateGrid);
@@ -36,14 +37,7 @@ public class GamePlayScene implements IScene {
         playerTitleText.setFont(new Font(30));
 
         GameGridPane playerGameGrid = new GameGridPane(8, true);
-        playerGameGrid.setOnCoordinateHit(coordinate -> gameViewModel.sendHit(coordinate.getX(), coordinate.getY()));
         gameViewModel.getPlayerGrid().subscribe(playerGameGrid::updateGrid);
-
-
-        gameViewModel.playerTurnChange().subscribe(player -> {
-            enemyGameGrid.setOverlayEnabled(player.equals("player"));
-            playerGameGrid.setOverlayEnabled(player.equals("enemy"));
-        });
 
         playerBoardVBox.getChildren().addAll(playerTitleText, playerGameGrid);
 

@@ -42,7 +42,7 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
         this.getChildren().add(buttonsGridPane);
 
         overlayPane.setStyle("-fx-background-color: rgba(100, 100, 100, 0.3);");
-        Text overlayText = new Text("Other player's turn");
+        Text overlayText = new Text("Your Turn!");
         overlayText.setFont(new Font(20));
         overlayText.setFill(Color.WHITE);
         overlayPane.getChildren().add(overlayText);
