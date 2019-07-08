@@ -1,5 +1,6 @@
 package com.soen6441.battleship.view.gui;
 
+import com.soen6441.battleship.common.SceneRoutes;
 import com.soen6441.battleship.services.gamecontroller.GameController;
 import com.soen6441.battleship.view.IView;
 import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
@@ -28,12 +29,14 @@ public class GUIView extends Application implements IView {
     @Override
     public void start(Stage primaryStage) throws Exception {
         SceneNavigator.init(primaryStage);
-
-        InitialUserInputScene initialUserInputScene = new InitialUserInputScene();
+        // TODO: Initialise routes somewhere else
+        SceneNavigator.getInstance().registerRoute(SceneRoutes.INITIAL_USER_INPUT, InitialUserInputScene::new);
+        SceneNavigator.getInstance().registerRoute(SceneRoutes.SHIP_PLACEMENT,
+                () -> new ShipPlacementScene(new ShipPlacementViewModel(GameController.getInstance())));
 
         // TODO: Get ShipPlacementViewModel from somewhere else, ideally use DI to inject it.
-        ShipPlacementScene scene = new ShipPlacementScene(new ShipPlacementViewModel(GameController.getInstance()));
-        primaryStage.setScene(initialUserInputScene.buildScene());
         primaryStage.show();
+
+        SceneNavigator.getInstance().navigate(SceneRoutes.INITIAL_USER_INPUT);
     }
 }
