@@ -4,6 +4,8 @@ import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
+import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
+import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
 import io.reactivex.Observable;
 
 import java.util.List;
@@ -13,8 +15,11 @@ public interface IGameGrid {
      * Places a ship on the grid.
      *
      * @param ship The ship to be placed
-     *             TODO: Describe all the exceptions that will be thrown.
-     * @throws Exception thrown if the ship cannot be placed or error in ship data.
+     * @throws DirectionCoordinatesMismatchException If the starting and ending coordinates in ship
+     *                                               don't match with the provided direction.
+     * @throws CoordinatesOutOfBoundsException       If any coordinate of the ship is not on the plane.
+     * @throws InvalidShipPlacementException         If there is other ship already on one of the coordinates that
+     *                                               the ship is being placed on.
      */
     void placeShip(Ship ship) throws Exception;
 
