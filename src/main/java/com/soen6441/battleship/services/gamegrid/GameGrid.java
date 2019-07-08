@@ -31,7 +31,7 @@ public class GameGrid implements IGameGrid {
     public GameGrid(int gridSize) {
         this.grid = new Grid(gridSize);
         gridBehaviorSubject.onNext(this.grid);
-        logger.info("Grid created successfully: " + grid);
+        logger.info(() -> String.format("Grid created successfully: %s", grid));
     }
 
     @Override
