@@ -1,22 +1,32 @@
 package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
+import com.soen6441.battleship.data.model.CellInfo;
 import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.Grid;
+import com.soen6441.battleship.enums.CellState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-class GameGridPane extends GridPane implements EventHandler<ActionEvent> {
+class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
     private static final String GRID_BUTTON = "GridButton:";
     private final int gridSize;
     private final boolean isManualPlayer;
 
+    private final GridPane buttonsGridPane = new GridPane();
+    private final StackPane overlayPane = new StackPane();
+    private IOnCoordinateHit onCoordinateHit;
     private Map<String, Button> buttons = new HashMap<>();
     private Map<String, Coordinate> buttonCoordinates = new HashMap<>();
     private Set<String> shipButtonsIds = new HashSet<>();
@@ -24,7 +34,18 @@ class GameGridPane extends GridPane implements EventHandler<ActionEvent> {
     GameGridPane(int gridSize, boolean isManualPlayer) {
         this.gridSize = gridSize;
         this.isManualPlayer = isManualPlayer;
+        initStack();
         initGrid();
+    }
+
+    private void initStack() {
+        this.getChildren().add(buttonsGridPane);
+
+        overlayPane.setStyle("-fx-background-color: rgba(100, 100, 100, 0.3);");
+        Text overlayText = new Text("Other player's turn");
+        overlayText.setFont(new Font(20));
+        overlayText.setFill(Color.WHITE);
+        overlayPane.getChildren().add(overlayText);
     }
 
     private void initGrid() {
@@ -36,7 +57,6 @@ class GameGridPane extends GridPane implements EventHandler<ActionEvent> {
                 button.setId(id);
                 button.setPrefHeight(50);
                 button.setPrefWidth(50);
-                button.setDisable(this.isManualPlayer);
                 button.setOnAction(this);
                 buttons.put(id, button);
 
@@ -44,7 +64,7 @@ class GameGridPane extends GridPane implements EventHandler<ActionEvent> {
                 buttonCoordinates.put(id, coordinate);
 
                 // Add button to grid
-                add(button, x, y);
+                this.buttonsGridPane.add(button, x, y);
             }
         }
     }
@@ -53,16 +73,60 @@ class GameGridPane extends GridPane implements EventHandler<ActionEvent> {
         return GRID_BUTTON + x + " " + y;
     }
 
-    public void updateGrid(Grid grid) {
+    void updateGrid(Grid grid) {
         for (int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
+                CellInfo info = grid.getCellInfo(x, y);
+                CellState cellState = info.getState();
 
+                Button button = buttons.get(buildButtonId(x, y));
+
+                switch (cellState) {
+                    case EMPTY:
+                        button.setText("");
+                        break;
+                    case SHIP:
+                        button.setText("Ship");
+                        break;
+                    case EMPTY_HIT:
+                        button.setText("Hit");
+                        break;
+                    case SHIP_WITH_HIT:
+                        button.setText("ShipHit");
+                        break;
+                    case DESTROYED_SHIP:
+                        button.setText("Destroyed");
+                        break;
+                }
             }
+        }
+    }
+
+    void setOnCoordinateHit(IOnCoordinateHit onCoordinateHit) {
+        this.onCoordinateHit = onCoordinateHit;
+    }
+
+    void setOverlayEnabled(boolean isEnabled) {
+        if (isEnabled) {
+            this.getChildren().add(overlayPane);
+        } else {
+            this.getChildren().remove(overlayPane);
         }
     }
 
     @Override
     public void handle(ActionEvent event) {
+        if (event.getTarget() instanceof Button) {
+            Button button = (Button) event.getTarget();
+            String clickedButtonId = button.getId();
 
+            // Check if the button clicked is button on grid
+            if (clickedButtonId.startsWith(GRID_BUTTON)) {
+                Coordinate coordinate = buttonCoordinates.get(clickedButtonId);
+                if (this.onCoordinateHit != null) {
+                    this.onCoordinateHit.onHit(coordinate);
+                }
+            }
+        }
     }
 }

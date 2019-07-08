@@ -6,12 +6,13 @@ import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
 import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 
 public class GameController implements IGameController {
     private static GameController sGameController;
     private String currentPlayerName;
-    private PublishSubject<String> turnChangePublishSubject = PublishSubject.create();
+    private BehaviorSubject<String> turnChangePublishSubject = BehaviorSubject.create();
     private IPlayer player;
     private IPlayer enemy;
 
@@ -24,6 +25,7 @@ public class GameController implements IGameController {
 
     private GameController() {
         currentPlayerName = "player";
+        turnChangePublishSubject.onNext(currentPlayerName);
         player = new GamePlayer("Player", new GameGrid(8));
         enemy = new GamePlayer("Enemy", new GameGrid(8));
     }
