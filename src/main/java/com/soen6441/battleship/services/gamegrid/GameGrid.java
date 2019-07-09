@@ -137,6 +137,24 @@ public class GameGrid implements IGameGrid {
         GridUtils.printGrid(this.grid);
     }
 
+    @Override
+    public boolean areAllShipsDestroyed() {
+        // If no ships then all are are destroyed
+        if (ships.isEmpty()) {
+            return true;
+        }
+
+        boolean areShipsDestroyed = true;
+
+        for (Ship ship : ships) {
+            if (!ship.isSunk()) {
+                areShipsDestroyed = false;
+                break;
+            }
+        }
+
+        return areShipsDestroyed;
+    }
 
     /**
      * @param ship to be added on the grid

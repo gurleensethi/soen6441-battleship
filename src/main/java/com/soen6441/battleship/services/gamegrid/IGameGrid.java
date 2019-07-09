@@ -44,4 +44,11 @@ public interface IGameGrid {
      * @return Grid wrapped inside an RxObservable.
      */
     Observable<Grid> getGridAsObservable();
+
+    /**
+     * Checks if all the ships are destroyed on the board.
+     *
+     * @return boolean if all the ships are destroyed on the board.
+     */
+    boolean areAllShipsDestroyed();
 }

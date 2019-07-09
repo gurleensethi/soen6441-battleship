@@ -2,6 +2,7 @@ package com.soen6441.battleship.services.gamecontroller;
 
 import com.soen6441.battleship.GamePlayer;
 import com.soen6441.battleship.data.interfaces.IPlayer;
+import com.soen6441.battleship.data.model.GameOverInfo;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.enums.ShipDirection;
@@ -17,7 +18,9 @@ public class GameController implements IGameController {
     private static final Logger logger = Logger.getLogger(GameController.class.getName());
     private static GameController sGameController;
     private String currentPlayerName;
-    private BehaviorSubject<String> turnChangePublishSubject = BehaviorSubject.create();
+    private BehaviorSubject<String> turnChangeBehaviourSubject = BehaviorSubject.create();
+    private boolean isGameOver = false;
+    private BehaviorSubject<GameOverInfo> isGameOverBehaviourSubject = BehaviorSubject.create();
     private IPlayer player;
     private IPlayer enemy;
 
@@ -30,7 +33,7 @@ public class GameController implements IGameController {
 
     private GameController() {
         currentPlayerName = "player";
-        turnChangePublishSubject.onNext(currentPlayerName);
+        turnChangeBehaviourSubject.onNext(currentPlayerName);
         player = new GamePlayer("Player", new GameGrid(8));
         enemy = new GamePlayer("Enemy", new GameGrid(8));
         try {
@@ -54,7 +57,7 @@ public class GameController implements IGameController {
     }
 
     private void initPlayerTurnChangeListener() {
-        this.turnChangePublishSubject.subscribe(player -> {
+        this.turnChangeBehaviourSubject.subscribe(player -> {
             if (player.equals("enemy")) {
                 Random random = new Random();
                 int x = random.nextInt(8);
@@ -87,7 +90,12 @@ public class GameController implements IGameController {
 
     @Override
     public void hit(int x, int y) {
-        logger.info(String.format("%s has sent a hit on x: %d, y: %d", this.currentPlayerName, x, y));
+        // Return if game is over
+        if (isGameOver) {
+            return;
+        }
+
+        logger.info(() -> String.format("%s has sent a hit on x: %d, y: %d", this.currentPlayerName, x, y));
 
         IPlayer playerToHit;
 
@@ -104,14 +112,30 @@ public class GameController implements IGameController {
                 nextPlayerTurn();
             }
 
-            turnChangePublishSubject.onNext(this.currentPlayerName);
+            turnChangeBehaviourSubject.onNext(this.currentPlayerName);
         } catch (CoordinatesOutOfBoundsException e) {
             e.printStackTrace();
         }
+
+        handleIsGameOver();
+    }
+
+    private void handleIsGameOver() {
+        boolean areAllShipsOnEnemyHit = enemy.getGameGrid().areAllShipsDestroyed();
+        boolean areAllShipsOnPlayerHit = enemy.getGameGrid().areAllShipsDestroyed();
+        this.isGameOver = areAllShipsOnEnemyHit || areAllShipsOnPlayerHit;
+
+        GameOverInfo gameOverInfo = new GameOverInfo(this.isGameOver, areAllShipsOnPlayerHit);
+        this.isGameOverBehaviourSubject.onNext(gameOverInfo);
     }
 
     @Override
     public Observable<String> turnChange() {
-        return turnChangePublishSubject;
+        return turnChangeBehaviourSubject;
+    }
+
+    @Override
+    public Observable<GameOverInfo> isGameOver() {
+        return this.isGameOverBehaviourSubject;
     }
 }

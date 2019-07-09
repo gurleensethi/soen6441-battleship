@@ -1,5 +1,6 @@
 package com.soen6441.battleship.viewmodels.gameviewmodel;
 
+import com.soen6441.battleship.data.model.GameOverInfo;
 import com.soen6441.battleship.data.model.Grid;
 import io.reactivex.Observable;
 
@@ -11,4 +12,6 @@ public interface IGameViewModel {
     void sendHit(int x, int y);
 
     Observable<String> playerTurnChange();
+
+    Observable<GameOverInfo> isGameOver();
 }
