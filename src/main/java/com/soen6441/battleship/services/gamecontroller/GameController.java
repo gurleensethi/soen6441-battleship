@@ -7,6 +7,8 @@ import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
+import com.soen6441.battleship.services.aiplayer.AIPlayer;
+import com.soen6441.battleship.services.aiplayer.IAIPlayer;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
 import com.soen6441.battleship.utils.BoardGeneratorUtil;
 import io.reactivex.Observable;
@@ -24,6 +26,7 @@ public class GameController implements IGameController {
     private BehaviorSubject<GameOverInfo> isGameOverBehaviourSubject = BehaviorSubject.create();
     private IPlayer player;
     private IPlayer enemy;
+    private IAIPlayer aiPlayer;
 
     public static GameController getInstance() {
         if (sGameController == null) {
@@ -38,6 +41,7 @@ public class GameController implements IGameController {
 
         player = new GamePlayer("Player", new GameGrid(8));
         enemy = new GamePlayer("Enemy", new GameGrid(8));
+        aiPlayer = new AIPlayer(player);
 
         // Place random ships on board
         BoardGeneratorUtil boardGeneratorUtil = new BoardGeneratorUtil();
@@ -49,10 +53,7 @@ public class GameController implements IGameController {
     private void initPlayerTurnChangeListener() {
         this.turnChangeBehaviourSubject.subscribe(player -> {
             if (player.equals("enemy")) {
-                Random random = new Random();
-                int x = random.nextInt(8);
-                int y = random.nextInt(8);
-                this.hit(x, y);
+
             }
         });
     }
@@ -87,24 +88,20 @@ public class GameController implements IGameController {
 
         logger.info(() -> String.format("%s has sent a hit on x: %d, y: %d", this.currentPlayerName, x, y));
 
-        IPlayer playerToHit;
-
         if (isPlayerPlaying()) {
-            playerToHit = enemy;
-        } else {
-            playerToHit = player;
-        }
+            try {
+                HitResult result = enemy.getGameGrid().hit(x, y);
 
-        try {
-            HitResult result = playerToHit.getGameGrid().hit(x, y);
+                if (result == HitResult.MISS || result == HitResult.ALREADY_HIT) {
+                    aiPlayer.takeHit();
+                }
 
-            if (result == HitResult.MISS || result == HitResult.ALREADY_HIT) {
-                nextPlayerTurn();
+                turnChangeBehaviourSubject.onNext(this.currentPlayerName);
+            } catch (CoordinatesOutOfBoundsException e) {
+                e.printStackTrace();
             }
+        } else {
 
-            turnChangeBehaviourSubject.onNext(this.currentPlayerName);
-        } catch (CoordinatesOutOfBoundsException e) {
-            e.printStackTrace();
         }
 
         handleIsGameOver();
@@ -112,10 +109,11 @@ public class GameController implements IGameController {
 
     private void handleIsGameOver() {
         boolean areAllShipsOnEnemyHit = enemy.getGameGrid().areAllShipsDestroyed();
-        boolean areAllShipsOnPlayerHit = enemy.getGameGrid().areAllShipsDestroyed();
+        boolean areAllShipsOnPlayerHit = player.getGameGrid().areAllShipsDestroyed();
+
         this.isGameOver = areAllShipsOnEnemyHit || areAllShipsOnPlayerHit;
 
-        GameOverInfo gameOverInfo = new GameOverInfo(this.isGameOver, areAllShipsOnPlayerHit);
+        GameOverInfo gameOverInfo = new GameOverInfo(this.isGameOver, areAllShipsOnEnemyHit);
         this.isGameOverBehaviourSubject.onNext(gameOverInfo);
     }
 

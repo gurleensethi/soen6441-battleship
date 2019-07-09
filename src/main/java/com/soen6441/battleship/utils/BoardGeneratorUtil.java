@@ -46,13 +46,12 @@ public class BoardGeneratorUtil {
 
                 try {
                     gameGrid.placeShip(ship);
+                    shipLength--;
                     break;
                 } catch (Exception e) {
                     logger.warning(() -> "Wrong coordinates. Trying again");
                 }
             }
-
-            shipLength--;
         }
 
         logger.info(() -> "Enemy ship placement successfully!");
