@@ -7,7 +7,8 @@ import com.soen6441.battleship.enums.CellState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -56,6 +57,7 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
                 button.setPrefHeight(50);
                 button.setPrefWidth(50);
                 button.setOnAction(this);
+                button.setStyle("-fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: black; -fx-border-width: 0.2");
                 buttons.put(id, button);
 
                 Coordinate coordinate = new Coordinate(x, y);
@@ -79,25 +81,26 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
 
                 Button button = buttons.get(buildButtonId(x, y));
 
+                // TODO: Move this to a separate css class
                 switch (cellState) {
                     case EMPTY:
-                        button.setStyle("-fx-background-color: lightgrey");
+                        button.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                         break;
                     case SHIP:
                         button.setText("S");
-                        button.setStyle("-fx-background-color: lightblue");
+                        button.setStyle("-fx-background-color: lightblue; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                         break;
                     case EMPTY_HIT:
                         button.setText("*");
-                        button.setStyle("-fx-background-color: black");
+                        button.setStyle("-fx-background-color: black; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                         break;
                     case SHIP_WITH_HIT:
                         button.setText("O");
-                        button.setStyle("-fx-background-color: #ffc23e");
+                        button.setStyle("-fx-background-color: #ffc23e; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                         break;
                     case DESTROYED_SHIP:
                         button.setText("X");
-                        button.setStyle("-fx-background-color: red");
+                        button.setStyle("-fx-background-color: red; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                         break;
                 }
             }
