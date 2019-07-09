@@ -111,6 +111,9 @@ public class Ship {
         this.hits = hits;
     }
 
+    /**
+     * @return boolean if the ship has been destroyed or not.
+     */
     public boolean isSunk() {
         return this.length == this.hits;
     }

@@ -8,6 +8,7 @@ import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
+import com.soen6441.battleship.utils.BoardGeneratorUtil;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -34,25 +35,14 @@ public class GameController implements IGameController {
     private GameController() {
         currentPlayerName = "player";
         turnChangeBehaviourSubject.onNext(currentPlayerName);
+
         player = new GamePlayer("Player", new GameGrid(8));
         enemy = new GamePlayer("Enemy", new GameGrid(8));
-        try {
-            enemy.getGameGrid().placeShip(new Ship.Builder()
-                    .setLength(3)
-                    .setStartCoordinates(0, 0)
-                    .setEndCoordinates(0, 2)
-                    .setDirection(ShipDirection.VERTICAL)
-                    .build());
 
-            enemy.getGameGrid().placeShip(new Ship.Builder()
-                    .setLength(4)
-                    .setStartCoordinates(1, 1)
-                    .setEndCoordinates(4, 1)
-                    .setDirection(ShipDirection.HORIZONTAL)
-                    .build());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Place random ships on board
+        BoardGeneratorUtil boardGeneratorUtil = new BoardGeneratorUtil();
+        boardGeneratorUtil.placeRandomShips(enemy.getGameGrid());
+
         initPlayerTurnChangeListener();
     }
 

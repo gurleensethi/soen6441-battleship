@@ -24,8 +24,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class GameGrid implements IGameGrid {
     private final Logger logger = Logger.getLogger(GameGrid.class.getName());
 
+    /**
+     * Grid Model
+     */
     private final Grid grid;
+
+    /**
+     * List of all the ships successfully added to the grid.
+     */
     private final List<Ship> ships = new ArrayList<>();
+
+
     private final BehaviorSubject<Grid> gridBehaviorSubject = BehaviorSubject.create();
 
     public GameGrid(int gridSize) {
@@ -34,16 +43,30 @@ public class GameGrid implements IGameGrid {
         logger.info(() -> String.format("Grid created successfully: %s", grid));
     }
 
+    /**
+     * @return Grid model
+     */
     @Override
     public Grid getGrid() {
         return grid;
     }
 
+    /**
+     * @return List of all ships currently on the grid.
+     */
     @Override
     public List<Ship> getShips() {
         return ships;
     }
 
+    /**
+     * Try to hit a particular cell on the grid, with the provided coordinates.
+     *
+     * @param x coordinate
+     * @param y coordinate
+     * @return HitResult of the attempted hit.
+     * @throws CoordinatesOutOfBoundsException if coordinates are out of grid bounds.
+     */
     @Override
     public HitResult hit(int x, int y) throws CoordinatesOutOfBoundsException {
         // Check if the coordinates are correct
@@ -58,7 +81,7 @@ public class GameGrid implements IGameGrid {
         // If cell has already been hit!
         if (state == CellState.EMPTY_HIT || state == CellState.SHIP_WITH_HIT || state == CellState.DESTROYED_SHIP) {
             result = HitResult.ALREADY_HIT;
-        } else if (state == CellState.SHIP) {
+        } else if (state == CellState.SHIP) {  // If there is no hit, but there is ship.
             // TODO: Move this logic to a ship service
             grid.updateCellStatus(x, y, CellState.SHIP_WITH_HIT);
 
@@ -79,7 +102,7 @@ public class GameGrid implements IGameGrid {
             }
 
             result = HitResult.HIT;
-        } else {
+        } else {  // If the cell is empty i.e. not ship or hit on it.
             grid.updateCellStatus(x, y, CellState.EMPTY_HIT);
             result = HitResult.MISS;
         }
@@ -93,6 +116,16 @@ public class GameGrid implements IGameGrid {
         return gridBehaviorSubject;
     }
 
+    /**
+     * Places a ship on the board with the provided Ship object.
+     *
+     * @param ship The ship to be placed
+     * @throws DirectionCoordinatesMismatchException If the starting and ending coordinates in ship
+     *                                               don't match with the provided direction.
+     * @throws CoordinatesOutOfBoundsException       If any coordinate of the ship is not on the plane.
+     * @throws InvalidShipPlacementException         If there is other ship already on one of the coordinates that
+     *                                               the ship is being placed on.
+     */
     @Override
     public void placeShip(Ship ship) throws Exception {
         checkNotNull(ship);
@@ -116,6 +149,7 @@ public class GameGrid implements IGameGrid {
         // Check if there are no other ships surrounding the placement of current ship
         checkPointValidityForShip(ship);
 
+        // Add to ship list
         ships.add(ship);
 
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
@@ -163,11 +197,11 @@ public class GameGrid implements IGameGrid {
     private void checkPointValidityForShip(Ship ship) throws InvalidShipPlacementException {
         logger.info("Checking Ship validity...");
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
-            for (int i = ship.getStartX(); i < ship.getEndX(); i++) {
+            for (int i = ship.getStartX(); i <= ship.getEndX(); i++) {
                 checkValidAndThrow(i, ship.getStartY());
             }
         } else if (ship.getDirection() == ShipDirection.VERTICAL) {
-            for (int i = ship.getStartY(); i < ship.getEndY(); i++) {
+            for (int i = ship.getStartY(); i <= ship.getEndY(); i++) {
                 checkValidAndThrow(ship.getStartX(), i);
             }
         }
