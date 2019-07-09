@@ -17,7 +17,8 @@ public class BoardGeneratorUtilTest {
 
     @Test
     public void shipsArePlaceOnBoard() {
-        BoardGeneratorUtil.placeRandomShips(gameGrid);
+        BoardGeneratorUtil boardGeneratorUtil = new BoardGeneratorUtil();
+        boardGeneratorUtil.placeRandomShips(gameGrid);
         assertEquals(5, gameGrid.getShips().size());
     }
 }
