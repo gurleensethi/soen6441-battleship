@@ -31,7 +31,7 @@ public class GameGrid implements IGameGrid {
     public GameGrid(int gridSize) {
         this.grid = new Grid(gridSize);
         gridBehaviorSubject.onNext(this.grid);
-        logger.info("Grid created successfully: " + grid);
+        logger.info(() -> String.format("Grid created successfully: %s", grid));
     }
 
     @Override
@@ -55,7 +55,8 @@ public class GameGrid implements IGameGrid {
 
         HitResult result;
 
-        if (state == CellState.EMPTY_HIT || state == CellState.SHIP_WITH_HIT) {
+        // If cell has already been hit!
+        if (state == CellState.EMPTY_HIT || state == CellState.SHIP_WITH_HIT || state == CellState.DESTROYED_SHIP) {
             result = HitResult.ALREADY_HIT;
         } else if (state == CellState.SHIP) {
             // TODO: Move this logic to a ship service

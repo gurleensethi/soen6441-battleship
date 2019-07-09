@@ -1,5 +1,7 @@
 package com.soen6441.battleship.view.gui.scenes.shipplacement;
 
+import com.soen6441.battleship.common.SceneRoutes;
+import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 import io.reactivex.Observable;
@@ -34,7 +36,7 @@ public class ShipPlacementScene implements IScene {
         // TODO: Move this to a separate Node class, maybe even fxml file.
         Node toolbar = buildToolbar(
                 event -> shipPlacementGrid.cancelShipSelection(),
-                null,
+                event -> SceneNavigator.getInstance().navigate(SceneRoutes.GAME_PLAY),
                 shipPlacementGrid.getShipSelectionObservable(),
                 shipPlacementGrid.getSelectedShipCountObservable()
         );
