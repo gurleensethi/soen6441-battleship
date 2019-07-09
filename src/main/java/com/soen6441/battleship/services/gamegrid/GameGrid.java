@@ -216,9 +216,9 @@ public class GameGrid implements IGameGrid {
 
     private boolean isValidCell(int x, int y) {
         return x >= 0
-                && x <= grid.getGridSize()
+                && x < grid.getGridSize()
                 && y >= 0
-                && y <= grid.getGridSize();
+                && y < grid.getGridSize();
     }
 
     @Override
