@@ -14,17 +14,49 @@ import io.reactivex.subjects.BehaviorSubject;
 
 import java.util.logging.Logger;
 
+
+/**
+ * <p>GameController is the entity which drives the game.
+ * <p>Major controls include:
+ * <ul>
+ *     <li>Creating grids -  {@link com.soen6441.battleship.services.gamecontroller.GameController#GameController}
+ *     <li>Tracking hits - {@link com.soen6441.battleship.services.gamecontroller.GameController#initPlayerTurnChangeListener}
+ *     <li>Tracking turns - {@link com.soen6441.battleship.services.gamecontroller.GameController#hit}
+ *     <li>Handle game winner - {@link GameController#handleIsGameOver}
+ * </ul>
+ *
+ *
+ * Implements {@link com.soen6441.battleship.services.gamecontroller.IGameController} interface.
+ *
+ *
+ */
 public class GameController implements IGameController {
     private static final Logger logger = Logger.getLogger(GameController.class.getName());
+    /**
+     *  GameController static instance
+     */
     private static GameController sGameController;
+
+    /**
+     * Player with active turn.
+     */
     private String currentPlayerName;
+    /**
+     * Observer object to track turns
+     */
     private BehaviorSubject<String> turnChangeBehaviourSubject = BehaviorSubject.create();
     private boolean isGameOver = false;
+    /**
+     * Observer object to track game status
+     */
     private BehaviorSubject<GameOverInfo> isGameOverBehaviourSubject = BehaviorSubject.create();
     private IPlayer player;
     private IPlayer enemy;
     private IAIPlayer aiPlayer;
 
+    /**
+     *Generates(if null) and returns GameController instance.
+     */
     public static GameController getInstance() {
         if (sGameController == null) {
             sGameController = new GameController();
@@ -32,6 +64,9 @@ public class GameController implements IGameController {
         return sGameController;
     }
 
+    /**
+     * Constructor method to the class
+     */
     private GameController() {
         currentPlayerName = "player";
         turnChangeBehaviourSubject.onNext(currentPlayerName);
@@ -47,6 +82,9 @@ public class GameController implements IGameController {
         initPlayerTurnChangeListener();
     }
 
+    /**
+     * Listener method for enemy to hit
+     */
     private void initPlayerTurnChangeListener() {
         this.turnChangeBehaviourSubject.subscribe(player -> {
             if (player.equals("enemy")) {
@@ -55,10 +93,17 @@ public class GameController implements IGameController {
         });
     }
 
+    /**
+     *
+     * @return - true if it's players turn
+     */
     private boolean isPlayerPlaying() {
         return currentPlayerName.equals("player");
     }
 
+    /**
+     * Sets {@link GameController#currentPlayerName} variable
+     */
     private void nextPlayerTurn() {
         if (currentPlayerName.equals("player")) {
             currentPlayerName = "enemy";
@@ -67,6 +112,11 @@ public class GameController implements IGameController {
         }
     }
 
+    /**
+     * Interface {@link IGameController} method
+     *
+     * @return enemy ot player object
+     */
     @Override
     public IPlayer createOrGetPlayer(String playerName) {
         if (playerName.equals("player")) {
@@ -75,6 +125,13 @@ public class GameController implements IGameController {
             return enemy;
         }
     }
+
+    /**
+     * Interface method : {@link com.soen6441.battleship.services.gamecontroller.IGameController}
+     * <p>Calls {@link GameController#handleIsGameOver()} to check if a player has won.
+     * @param x - x coordinate to hit on grid
+     * @param y - y coordinate to hit on grid
+     */
 
     @Override
     public void hit(int x, int y) {
@@ -104,6 +161,10 @@ public class GameController implements IGameController {
         handleIsGameOver();
     }
 
+    /**
+     * Declares a winner by checking if all ships of either side are destroyed
+     */
+
     private void handleIsGameOver() {
         boolean areAllShipsOnEnemyHit = enemy.getGameGrid().areAllShipsDestroyed();
         boolean areAllShipsOnPlayerHit = player.getGameGrid().areAllShipsDestroyed();
@@ -114,11 +175,19 @@ public class GameController implements IGameController {
         this.isGameOverBehaviourSubject.onNext(gameOverInfo);
     }
 
+    /**
+     * Observer method to change turns
+     * @return - Observer object
+     */
     @Override
     public Observable<String> turnChange() {
         return turnChangeBehaviourSubject;
     }
 
+    /**
+     * Observer method to check if game is over
+     * @return - Observer object
+     */
     @Override
     public Observable<GameOverInfo> isGameOver() {
         return this.isGameOverBehaviourSubject;
