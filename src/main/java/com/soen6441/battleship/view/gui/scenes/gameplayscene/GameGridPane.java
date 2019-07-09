@@ -81,19 +81,23 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
 
                 switch (cellState) {
                     case EMPTY:
-                        button.setText("");
+                        button.setStyle("-fx-background-color: lightgrey");
                         break;
                     case SHIP:
-                        button.setText("Ship");
+                        button.setText("S");
+                        button.setStyle("-fx-background-color: lightblue");
                         break;
                     case EMPTY_HIT:
-                        button.setText("Hit");
+                        button.setText("*");
+                        button.setStyle("-fx-background-color: black");
                         break;
                     case SHIP_WITH_HIT:
-                        button.setText("ShipHit");
+                        button.setText("O");
+                        button.setStyle("-fx-background-color: #ffc23e");
                         break;
                     case DESTROYED_SHIP:
-                        button.setText("Destroyed");
+                        button.setText("X");
+                        button.setStyle("-fx-background-color: red");
                         break;
                 }
             }
