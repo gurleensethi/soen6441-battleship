@@ -18,6 +18,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This class GameGridPane :
+ */
 class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
     private static final String GRID_BUTTON = "GridButton:";
     private final int gridSize;
