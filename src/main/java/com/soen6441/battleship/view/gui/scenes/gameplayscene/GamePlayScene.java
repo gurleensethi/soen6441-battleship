@@ -25,7 +25,7 @@ public class GamePlayScene implements IScene {
         VBox enemyBoardVBox = new VBox();
         Text enemyTitleText = new Text("Enemy Board");
         enemyTitleText.setFont(new Font(30));
-        GameGridPane enemyGameGrid = new GameGridPane(8, false);
+        GameGridPane enemyGameGrid = new GameGridPane(8, true);
         enemyGameGrid.setOnCoordinateHit(coordinate -> gameViewModel.sendHit(coordinate.getX(), coordinate.getY()));
         enemyBoardVBox.getChildren().addAll(enemyTitleText, enemyGameGrid);
 
@@ -36,7 +36,7 @@ public class GamePlayScene implements IScene {
         Text playerTitleText = new Text("Player Board");
         playerTitleText.setFont(new Font(30));
 
-        GameGridPane playerGameGrid = new GameGridPane(8, true);
+        GameGridPane playerGameGrid = new GameGridPane(8, false);
         gameViewModel.getPlayerGrid().subscribe(playerGameGrid::updateGrid);
 
         playerBoardVBox.getChildren().addAll(playerTitleText, playerGameGrid);

@@ -87,8 +87,13 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
                         button.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                         break;
                     case SHIP:
-                        button.setText("S");
-                        button.setStyle("-fx-background-color: lightblue; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
+                        // Hide the ship cell if the grid belong to enemy.
+                        if (this.isEnemyPlayer) {
+                            button.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
+                        } else {
+                            button.setText("S");
+                            button.setStyle("-fx-background-color: lightblue; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
+                        }
                         break;
                     case EMPTY_HIT:
                         button.setText("*");
