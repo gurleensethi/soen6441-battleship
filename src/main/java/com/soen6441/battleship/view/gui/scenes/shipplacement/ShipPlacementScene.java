@@ -18,15 +18,27 @@ import javafx.scene.text.Text;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * The type Ship placement scene: This class has is the GUI of the Ship placement scene, it contains a grid
+ * which has buttons of gridsize^2.
+ */
 public class ShipPlacementScene implements IScene {
 
     private final IShipPlacementViewModel shipPlacementViewModel;
 
+    /**
+     * Instantiates a new Ship placement scene.
+     * @param shipPlacementViewModel the ship placement view model
+     */
     public ShipPlacementScene(IShipPlacementViewModel shipPlacementViewModel) {
         checkNotNull(shipPlacementViewModel);
         this.shipPlacementViewModel = shipPlacementViewModel;
     }
 
+    /**
+     * This method build scene is an overridden method to build scene for ship placement.
+     * @return scene
+     */
     @Override
     public Scene buildScene() {
         ShipPlacementGrid shipPlacementGrid = new ShipPlacementGrid(8);
@@ -52,6 +64,15 @@ public class ShipPlacementScene implements IScene {
         return new Scene(vBox);
     }
 
+    /**
+     * This method buildtoolbar is the GUI which gives two selections to user
+     * Cancel selection and Done, once the 5 ships are placed the done button works as navigator to game play scene.
+     * @param onCancelSelectionHandler
+     * @param onDoneHandler
+     * @param selectionObservable
+     * @param shipPlacedCountObservable
+     * @return Node Hbox
+     */
     private Node buildToolbar(
             EventHandler<ActionEvent> onCancelSelectionHandler,
             EventHandler<ActionEvent> onDoneHandler,
@@ -85,6 +106,11 @@ public class ShipPlacementScene implements IScene {
         return hBox;
     }
 
+    /**
+     * This method buildInfoBar displays the status of ship placement.
+     * @param shipPlacedCountObservable
+     * @return hBox
+     */
     private Node buildInfoBar(
             Observable<Integer> shipPlacedCountObservable
     ) {

@@ -18,6 +18,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The type Game grid pane.
+ * This class GameGridPane is main frame of GUI where when player makes any hot or enemy makes a move
+ * is updated on GUI by changing the colors of the buttons in the gridPane. It responds to the mouse clicks or events,
+ */
 class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
     private static final String GRID_BUTTON = "GridButton:";
     private final int gridSize;
@@ -30,6 +35,12 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
     private Map<String, Coordinate> buttonCoordinates = new HashMap<>();
     private Set<String> shipButtonsIds = new HashSet<>();
 
+    /**
+     * Instantiates a new Game grid pane.
+     *
+     * @param gridSize      the grid size
+     * @param isEnemyPlayer the is enemy player
+     */
     GameGridPane(int gridSize, boolean isEnemyPlayer) {
         this.gridSize = gridSize;
         this.isEnemyPlayer = isEnemyPlayer;
@@ -37,6 +48,11 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
         initGrid();
     }
 
+    /**
+     * This method initStack adds overlay functionality to the grid,
+     * when player one has played its move then the player one's grid will be locked until player two
+     * has made its move.
+     */
     private void initStack() {
         this.getChildren().add(buttonsGridPane);
 
@@ -47,6 +63,10 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
         overlayPane.getChildren().add(overlayText);
     }
 
+    /**
+     * This method initGrid is the method takes the grid size and places all the buttons on the grid pane,
+     * to be displayed on GUI.
+     */
     private void initGrid() {
         for (int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
@@ -69,10 +89,23 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
         }
     }
 
+    /**
+     * This method buildButton takes coordinates and and returns a string for to be split and make a button with the
+     * coordinates associated.
+     * @param x
+     * @param y
+     * @return
+     */
     private String buildButtonId(int x, int y) {
         return GRID_BUTTON + x + " " + y;
     }
 
+    /**
+     * Update grid: This method update grid updates the colors of the grid each time the player makes a move
+     * and player 2 makes a move.
+     *
+     * @param grid the grid
+     */
     void updateGrid(Grid grid) {
         for (int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
@@ -112,10 +145,20 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
         }
     }
 
+    /**
+     * Sets on coordinate hit.
+     *
+     * @param onCoordinateHit the on coordinate hit
+     */
     void setOnCoordinateHit(IOnCoordinateHit onCoordinateHit) {
         this.onCoordinateHit = onCoordinateHit;
     }
 
+    /**
+     * Sets overlay enabled.
+     *
+     * @param isEnabled the is enabled
+     */
     void setOverlayEnabled(boolean isEnabled) {
         if (isEnabled) {
             this.getChildren().add(overlayPane);

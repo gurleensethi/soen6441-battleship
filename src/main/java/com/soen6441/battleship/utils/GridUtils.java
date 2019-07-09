@@ -5,12 +5,20 @@ import com.soen6441.battleship.enums.CellState;
 
 import java.util.logging.Logger;
 
+/**
+ * The type Grid utils.
+ */
 public class GridUtils {
     private static final Logger logger = Logger.getLogger(GridUtils.class.getName());
     private static final String EMPTY_CHAR = " ---- ";
     private static final String SHIP_CHAR = " ship ";
     private static final String HIT_CHAR = " ❌ ";
 
+    /**
+     * Print grid.
+     *
+     * @param grid the grid
+     */
     public static void printGrid(Grid grid) {
         StringBuilder stringBuilder = new StringBuilder();
 

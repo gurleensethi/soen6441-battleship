@@ -6,9 +6,18 @@ import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.data.model.Grid;
 import io.reactivex.Observable;
 
+/**
+ * The type Game view model: This class takes data from model and passes over to observer.
+ * The view model takes data from this class and displays on GUI.
+ */
 public class GameViewModel implements IGameViewModel {
     private IGameController gameController;
 
+    /**
+     * Instantiates a new Game view model.
+     *
+     * @param gameController the game controller
+     */
     public GameViewModel(IGameController gameController) {
         this.gameController = gameController;
     }

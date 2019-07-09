@@ -1,12 +1,17 @@
 package com.soen6441.battleship.enums;
 
+/**
+ * The enum Cell state is the cell properties which are empty, ship empty hit, ship with hit and destroyed ship.
+ */
 public enum CellState {
-    /*
+    /**
+     * The Empty.
      * When cell has nothing on it,
      * no hit or ship whatsoever.
      * */
     EMPTY,
-    /*
+    /**
+     * The Ship.
      * When a cell has ship on it.
      * */
     SHIP,

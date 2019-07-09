@@ -20,6 +20,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * The type Game grid test.
+ */
 public class GameGridTest {
     private IGameGrid gameGrid;
     private static Ship wrongShipHorizontal;
@@ -30,6 +33,9 @@ public class GameGridTest {
     private static Ship correctShip2;
     private static Ship overlappingShip;
 
+    /**
+     * Sets up.
+     */
     @Before()
     public void setUp() {
         gameGrid = new GameGrid(8);
@@ -78,47 +84,92 @@ public class GameGridTest {
                 .build();
     }
 
+    /**
+     * Throws exception if ship is null.
+     *
+     * @throws Exception the exception
+     */
     @Test(expected = NullPointerException.class)
     public void throwsExceptionIfShipIsNull() throws Exception {
         gameGrid.placeShip(null);
     }
 
+    /**
+     * Throws exception on wrong coordinates x.
+     *
+     * @throws Exception the exception
+     */
     @Test(expected = CoordinatesOutOfBoundsException.class)
     public void throwsExceptionOnWrongCoordinatesX() throws Exception {
         gameGrid.placeShip(wrongShipStart);
     }
 
+    /**
+     * Throws exception on wrong coordinates y.
+     *
+     * @throws Exception the exception
+     */
     @Test(expected = CoordinatesOutOfBoundsException.class)
     public void throwsExceptionOnWrongCoordinatesY() throws Exception {
         gameGrid.placeShip(wrongShipEnd);
     }
 
+    /**
+     * Throws exception on wrong direction horizontal.
+     *
+     * @throws Exception the exception
+     */
     @Test(expected = DirectionCoordinatesMismatchException.class)
     public void throwsExceptionOnWrongDirectionHorizontal() throws Exception {
         gameGrid.placeShip(wrongShipHorizontal);
     }
 
+    /**
+     * Throws exception on wrong direction vertical.
+     *
+     * @throws Exception the exception
+     */
     @Test(expected = DirectionCoordinatesMismatchException.class)
     public void throwsExceptionOnWrongDirectionVertical() throws Exception {
         gameGrid.placeShip(wrongShipVertical);
     }
 
+    /**
+     * Throws exception if overlapping.
+     *
+     * @throws Exception the exception
+     */
     @Test(expected = InvalidShipPlacementException.class)
     public void throwsExceptionIfOverlapping() throws Exception {
         gameGrid.placeShip(correctShip);
         gameGrid.placeShip(overlappingShip);
     }
 
+    /**
+     * Places ship correctly.
+     *
+     * @throws Exception the exception
+     */
     @Test()
     public void placesShipCorrectly() throws Exception {
         gameGrid.placeShip(correctShip);
     }
 
+    /**
+     * Places 2 nd ship correctly.
+     *
+     * @throws Exception the exception
+     */
     @Test()
     public void places2ndShipCorrectly() throws Exception {
         gameGrid.placeShip(correctShip2);
     }
 
+    /**
+     * Hits on a ship.
+     *
+     * @throws Exception the exception
+     */
     @Test()
     public void hitsOnAShip() throws Exception {
         gameGrid.placeShip(correctShip);
@@ -126,6 +177,11 @@ public class GameGridTest {
         assertEquals(HitResult.HIT, result);
     }
 
+    /**
+     * Hit miss on a wrong coordinate.
+     *
+     * @throws Exception the exception
+     */
     @Test()
     public void hitMissOnAWrongCoordinate() throws Exception {
         gameGrid.placeShip(correctShip);
@@ -133,12 +189,22 @@ public class GameGridTest {
         assertEquals(HitResult.MISS, result);
     }
 
+    /**
+     * Throws exception on wrong coordinates.
+     *
+     * @throws Exception the exception
+     */
     @Test(expected = CoordinatesOutOfBoundsException.class)
     public void throwsExceptionOnWrongCoordinates() throws Exception {
         gameGrid.placeShip(correctShip);
         gameGrid.hit(-1, 0);
     }
 
+    /**
+     * Detects if hit was already made on coordinate.
+     *
+     * @throws Exception the exception
+     */
     @Test()
     public void detectsIfHitWasAlreadyMadeOnCoordinate() throws Exception {
         gameGrid.placeShip(correctShip);
@@ -148,6 +214,11 @@ public class GameGridTest {
         assertEquals(HitResult.ALREADY_HIT, result2);
     }
 
+    /**
+     * Grid observable updates on adding ship.
+     *
+     * @throws Exception the exception
+     */
     @Test()
     public void gridObservableUpdatesOnAddingShip() throws Exception {
         Observable<Grid> gridObservable = gameGrid.getGridAsObservable();
@@ -157,6 +228,11 @@ public class GameGridTest {
         testObserver.assertValue(updatedGrid -> updatedGrid.getCellState(1, 1) == CellState.SHIP);
     }
 
+    /**
+     * Grid observable updates on hit.
+     *
+     * @throws Exception the exception
+     */
     @Test()
     public void gridObservableUpdatesOnHit() throws Exception {
         Observable<Grid> gridObservable = gameGrid.getGridAsObservable();
@@ -171,6 +247,11 @@ public class GameGridTest {
         testObserver.assertValueAt(2, grid -> grid.getCellState(0, 0) == CellState.EMPTY_HIT);
     }
 
+    /**
+     * Ship is sunk if all hits are successful.
+     *
+     * @throws Exception the exception
+     */
     @Test()
     public void shipIsSunkIfAllHitsAreSuccessful() throws Exception {
         gameGrid.placeShip(correctShip);
@@ -180,6 +261,11 @@ public class GameGridTest {
         assertTrue(gameGrid.getShips().get(0).isSunk());
     }
 
+    /**
+     * Cell updates to ship destroyed.
+     *
+     * @throws Exception the exception
+     */
     @Test()
     public void cellUpdatesToShipDestroyed() throws Exception {
         gameGrid.placeShip(correctShip);

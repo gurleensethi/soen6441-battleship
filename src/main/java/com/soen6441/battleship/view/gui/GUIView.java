@@ -15,10 +15,18 @@ import javafx.stage.Stage;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * The type Gui view: The class GUIview is the starting class of the application
+ * It loads all the scenes from intial user input to game play scene.
+ * The scenes gives instances to this class to load into application.
+ */
 public class GUIView extends Application implements IView {
 
     private IShipPlacementViewModel shipPlacementViewModel;
 
+    /**
+     * Instantiates a new Gui view.
+     */
     public GUIView() {
 
     }
