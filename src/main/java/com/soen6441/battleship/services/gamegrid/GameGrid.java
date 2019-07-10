@@ -123,7 +123,7 @@ public class GameGrid implements IGameGrid {
      * @throws DirectionCoordinatesMismatchException If the starting and ending coordinates in ship
      *                                               don't match with the provided direction.
      * @throws CoordinatesOutOfBoundsException       If any coordinate of the ship is not on the plane.
-     * @throws InvalidShipPlacementException         If there is other ship already on one of the coordinates that
+     * @throws InvalidShipPlacementException         If there is another ship already on one of the coordinates that
      *                                               the ship is being placed on.
      */
     @Override
