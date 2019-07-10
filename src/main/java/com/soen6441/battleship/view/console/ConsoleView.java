@@ -17,8 +17,19 @@ import java.util.logging.Logger;
  */
 public class ConsoleView implements IView {
     private static final Logger logger = Logger.getLogger(ConsoleView.class.getName());
+    /**
+     * ViewModel representing a game view.
+     */
     private IGameViewModel gameViewModel;
+
+    /**
+     * ViewModel representing ship placement view.
+     */
     private IShipPlacementViewModel shipPlacementViewModel;
+
+    /**
+     * Scanner to get input from user.
+     */
     private Scanner scanner;
 
     /**

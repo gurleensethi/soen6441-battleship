@@ -6,7 +6,7 @@ import com.soen6441.battleship.enums.CellState;
 import java.util.logging.Logger;
 
 /**
- * The type Grid utils.
+ * Utility functions related to {@link Grid} class.
  */
 public class GridUtils {
     private static final Logger logger = Logger.getLogger(GridUtils.class.getName());
@@ -15,9 +15,9 @@ public class GridUtils {
     private static final String HIT_CHAR = " ❌ ";
 
     /**
-     * Print grid.
+     * Print the grid on console in a more understandable form.
      *
-     * @param grid the grid
+     * @param grid Grid to be printed.
      */
     public static void printGrid(Grid grid) {
         StringBuilder stringBuilder = new StringBuilder();

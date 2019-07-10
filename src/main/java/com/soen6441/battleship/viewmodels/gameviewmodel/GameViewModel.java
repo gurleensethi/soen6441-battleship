@@ -10,6 +10,9 @@ import io.reactivex.Observable;
  * The view model takes data from this class and displays on GUI.
  */
 public class GameViewModel implements IGameViewModel {
+    /**
+     * Instance of GameController.
+     */
     private IGameController gameController;
 
     /**
@@ -21,11 +24,17 @@ public class GameViewModel implements IGameViewModel {
         this.gameController = gameController;
     }
 
+    /**
+     * @return Player grid as an observable.
+     */
     @Override
     public Observable<Grid> getPlayerGrid() {
         return gameController.createOrGetPlayer("player").getGameGrid().getGridAsObservable();
     }
 
+    /**
+     * @return Enemy grid as an observable.
+     */
     @Override
     public Observable<Grid> getEnemyGrid() {
         return gameController.createOrGetPlayer("enemy").getGameGrid().getGridAsObservable();
@@ -36,11 +45,17 @@ public class GameViewModel implements IGameViewModel {
         gameController.hit(x, y);
     }
 
+    /**
+     * @return Observable that fires when player turn changes.
+     */
     @Override
     public Observable<String> playerTurnChange() {
         return gameController.turnChange();
     }
 
+    /**
+     * @return Observable that fires when game is over.
+     */
     @Override
     public Observable<GameOverInfo> isGameOver() {
         return gameController.isGameOver();

@@ -16,7 +16,7 @@ brew install maven
 
 ## Run the project (direct)
 ```shell
-mvn exec:java -Dexec.mainClass="com.soen6441.battleship.App"
+mvn exec:java -Dexec.mainClass="com.soen6441.battleship.app.App"
 ```
 
 ## Run the project (compile)
@@ -27,5 +27,5 @@ mvn clean package
 ```
 - Run jar file.
 ```shell
-java -cp target/soen6441-battleship-1.0-SNAPSHOT.jar com.soen6441.battleship.App
+java -cp target/soen6441-battleship-1.0-SNAPSHOT.jar com.soen6441.battleship.app.App
 ```

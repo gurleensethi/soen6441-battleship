@@ -9,21 +9,21 @@ import io.reactivex.Observable;
  */
 public interface IGameViewModel {
     /**
-     * Gets player grid.
+     * Get the player grid as an observable.
      *
      * @return the player grid
      */
     Observable<Grid> getPlayerGrid();
 
     /**
-     * Gets enemy grid.
+     * Get the enemy grid as an overvable.
      *
      * @return the enemy grid
      */
     Observable<Grid> getEnemyGrid();
 
     /**
-     * Send hit.
+     * Send a hit to the board of enemy.
      *
      * @param x the x
      * @param y the y
@@ -38,7 +38,7 @@ public interface IGameViewModel {
     Observable<String> playerTurnChange();
 
     /**
-     * Is game over observable.
+     * Get observable that fires when the game is over.
      *
      * @return the observable
      */
