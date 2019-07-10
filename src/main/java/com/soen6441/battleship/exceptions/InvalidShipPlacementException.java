@@ -1,13 +1,10 @@
 package com.soen6441.battleship.exceptions;
 
 /**
- * The type Invalid ship placement exception.
+ * Trying to place ship on coordinates that are either invalid or already
+ * have a ship on it.
  */
 public class InvalidShipPlacementException extends Exception {
-
-    /**
-     * Instantiates a new Invalid ship placement exception.
-     */
     public InvalidShipPlacementException() {
         super("Ship cannot be placed at these coordinate!");
     }

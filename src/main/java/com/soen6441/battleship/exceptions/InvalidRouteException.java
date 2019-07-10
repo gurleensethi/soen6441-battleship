@@ -1,12 +1,10 @@
 package com.soen6441.battleship.exceptions;
 
 /**
- * The type Invalid route exception.
+ * Invalid route passed in {@link com.soen6441.battleship.view.gui.navigator.SceneNavigator}.
+ * No route is registered with this name.
  */
 public class InvalidRouteException extends RuntimeException {
-    /**
-     * Instantiates a new Invalid route exception.
-     */
     public InvalidRouteException() {
         super("Passed route is invalid!");
     }

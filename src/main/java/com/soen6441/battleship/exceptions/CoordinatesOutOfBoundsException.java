@@ -1,13 +1,9 @@
 package com.soen6441.battleship.exceptions;
 
 /**
- * The type Coordinates out of bounds exception.
+ * The pair of x,y coordinate are out of bounds of a plane.
  */
 public class CoordinatesOutOfBoundsException extends Exception {
-
-    /**
-     * Instantiates a new Coordinates out of bounds exception.
-     */
     public CoordinatesOutOfBoundsException() {
         super("Coordinates are out of bounds!");
     }
