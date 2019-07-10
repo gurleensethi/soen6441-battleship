@@ -18,6 +18,11 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     private static final String GRID_BUTTON = "GridButton:";
     private static final int MAX_SHIPS = 5;
 
+    /**
+     * Size of the ship currently allowed to be placed.
+     */
+    private int currentShipLength = 5;
+
     private int numOfShipsPlaced = 0;
     private final int gridSize;
     private Map<String, Button> buttons = new HashMap<>();
@@ -152,7 +157,6 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                         }
                     }
 
-
                     // Create new ship and add
                     Ship ship = new Ship.Builder()
                             .setUniqueId(UUID.randomUUID().toString())
@@ -166,6 +170,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                     this.shipAddedPublishSubject.onNext(ship);
 
                     numOfShipsPlaced++;
+                    currentShipLength--;
 
                     isSelectingShip = false;
 
@@ -184,51 +189,130 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
         });
     }
 
+    private boolean isCellValid(Coordinate coordinate) {
+        return coordinate.getX() >= 0
+                && coordinate.getY() >= 0
+                && coordinate.getX() < gridSize
+                && coordinate.getY() < gridSize;
+    }
+
     private void enableButtonsOnAxisOfCoordinate(Coordinate coordinate) {
-        for (int x = coordinate.getX(); x < gridSize; x++) {
-            final String buttonId = buildButtonId(x, coordinate.getY());
+        // Check if top coordinate can be enabled
+        Coordinate topCoordinates = new Coordinate(coordinate.getX(), coordinate.getY() - currentShipLength + 1);
 
-            if (shipButtonsIds.contains(buttonId)) {
-                break;
+        if (isCellValid(topCoordinates)) {
+            boolean shouldPlace = true;
+
+            for (int y = prevSelectedBtnCoordinate.getY(); y >= topCoordinates.getY(); y--) {
+                if (shipButtonsIds.contains(buildButtonId(topCoordinates.getX(), y))) {
+                    shouldPlace = false;
+                }
             }
 
-            buttons.get(buttonId).setDisable(false);
+            if (shouldPlace) {
+                buttons.get(buildButtonId(topCoordinates.getX(), topCoordinates.getY())).setDisable(false);
+            }
         }
 
-        for (int x = coordinate.getX(); x >= 0; x--) {
-            final String buttonId = buildButtonId(x, coordinate.getY());
+        // Check if down coordinates can be enabled
+        Coordinate downCoordinates = new Coordinate(coordinate.getX(), coordinate.getY() + currentShipLength - 1);
 
-            if (shipButtonsIds.contains(buttonId)) {
-                break;
+        if (isCellValid(downCoordinates)) {
+            boolean shouldPlace = true;
+
+            for (int y = prevSelectedBtnCoordinate.getY(); y <= downCoordinates.getY(); y++) {
+                if (shipButtonsIds.contains(buildButtonId(downCoordinates.getX(), y))) {
+                    shouldPlace = false;
+                }
             }
 
-            buttons.get(buttonId).setDisable(false);
+            if (shouldPlace) {
+                buttons.get(buildButtonId(downCoordinates.getX(), downCoordinates.getY())).setDisable(false);
+            }
         }
 
-        for (int y = coordinate.getY(); y < gridSize; y++) {
-            final String buttonId = buildButtonId(coordinate.getX(), y);
+        // Check if left coordinates can be enabled
+        Coordinate leftCoordinates = new Coordinate(coordinate.getX() - currentShipLength + 1, coordinate.getY());
 
-            if (shipButtonsIds.contains(buttonId)) {
-                break;
+        if (isCellValid(leftCoordinates) && !shipButtonsIds.contains(buildButtonId(leftCoordinates))) {
+            boolean shouldPlace = true;
+
+            for (int x = prevSelectedBtnCoordinate.getX(); x >= leftCoordinates.getX(); x--) {
+                if (shipButtonsIds.contains(buildButtonId(x, leftCoordinates.getY()))) {
+                    shouldPlace = false;
+                }
             }
 
-            buttons.get(buttonId).setDisable(false);
+            if (shouldPlace) {
+                buttons.get(buildButtonId(leftCoordinates.getX(), leftCoordinates.getY())).setDisable(false);
+            }
         }
 
-        for (int y = coordinate.getY(); y >= 0; y--) {
-            final String buttonId = buildButtonId(coordinate.getX(), y);
+        // Check if up coordinates can be enabled
+        Coordinate rightCoordinates = new Coordinate(coordinate.getX() + currentShipLength - 1, coordinate.getY());
 
-            if (shipButtonsIds.contains(buttonId)) {
-                break;
+        if (isCellValid(rightCoordinates) && !shipButtonsIds.contains(buildButtonId(rightCoordinates))) {
+            boolean shouldPlace = true;
+
+            for (int x = prevSelectedBtnCoordinate.getX(); x <= rightCoordinates.getX(); x++) {
+                if (shipButtonsIds.contains(buildButtonId(x, rightCoordinates.getY()))) {
+                    shouldPlace = false;
+                }
             }
 
-            buttons.get(buttonId).setDisable(false);
+            if (shouldPlace) {
+                buttons.get(buildButtonId(rightCoordinates.getX(), rightCoordinates.getY())).setDisable(false);
+            }
         }
+
+//        for (int x = coordinate.getX(); x < gridSize; x++) {
+//            final String buttonId = buildButtonId(x, coordinate.getY());
+//
+//            if (shipButtonsIds.contains(buttonId)) {
+//                break;
+//            }
+//
+//            buttons.get(buttonId).setDisable(false);
+//        }
+//
+//        for (int x = coordinate.getX(); x >= 0; x--) {
+//            final String buttonId = buildButtonId(x, coordinate.getY());
+//
+//            if (shipButtonsIds.contains(buttonId)) {
+//                break;
+//            }
+//
+//            buttons.get(buttonId).setDisable(false);
+//        }
+//
+//        for (int y = coordinate.getY(); y < gridSize; y++) {
+//            final String buttonId = buildButtonId(coordinate.getX(), y);
+//
+//            if (shipButtonsIds.contains(buttonId)) {
+//                break;
+//            }
+//
+//            buttons.get(buttonId).setDisable(false);
+//        }
+//
+//        for (int y = coordinate.getY(); y >= 0; y--) {
+//            final String buttonId = buildButtonId(coordinate.getX(), y);
+//
+//            if (shipButtonsIds.contains(buttonId)) {
+//                break;
+//            }
+//
+//            buttons.get(buttonId).setDisable(false);
+//        }
 
     }
 
     private String buildButtonId(int x, int y) {
         return GRID_BUTTON + x + " " + y;
+    }
+
+    private String buildButtonId(Coordinate coordinate) {
+        return GRID_BUTTON + coordinate.getX() + " " + coordinate.getY();
     }
 
     public void cancelShipSelection() {
