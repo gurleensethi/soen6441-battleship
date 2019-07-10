@@ -1,11 +1,11 @@
 package com.soen6441.battleship.view;
 
 /**
- * The interface View.
+ * Abstraction of the view layer in MVVM.
  */
 public interface IView {
     /**
-     * Start.
+     * Start the game.
      */
     void start();
 }

@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 
 /**
  * <p>GameController is the entity which drives the game.
+ * Singleton class.
+ *
  * <p>Major controls include:
  * <ul>
  * <li>Creating grids -  {@link com.soen6441.battleship.services.gamecontroller.GameController#GameController}
