@@ -1,4 +1,4 @@
-package com.soen6441.battleship;
+package com.soen6441.battleship.models;
 
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.ShipDirection;

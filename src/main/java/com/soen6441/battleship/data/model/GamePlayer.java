@@ -1,4 +1,4 @@
-package com.soen6441.battleship;
+package com.soen6441.battleship.data.model;
 
 import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.services.gamegrid.GameGrid;

@@ -1,6 +1,6 @@
 package com.soen6441.battleship.services.gamecontroller;
 
-import com.soen6441.battleship.GamePlayer;
+import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.data.model.GameOverInfo;
 import com.soen6441.battleship.enums.HitResult;

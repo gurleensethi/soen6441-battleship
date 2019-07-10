@@ -1,4 +1,4 @@
-package com.soen6441.battleship;
+package com.soen6441.battleship.services;
 
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.enums.CellState;
