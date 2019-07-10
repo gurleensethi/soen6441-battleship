@@ -52,28 +52,17 @@ public class AIPlayer implements IAIPlayer {
                 Direction previousAttemptedDirection = Direction.UP;
 
                 while (true) {
-                    switch (previousAttemptedDirection) {
-                        case UP:
-                            cordsToHit = new Coordinate(previousCoordinates.getX(), previousCoordinates.getY() - 1);
-                            break;
-                        case DOWN:
-                            cordsToHit = new Coordinate(previousCoordinates.getX(), previousCoordinates.getY() + 1);
-                            break;
-                        case LEFT:
-                            cordsToHit = new Coordinate(previousCoordinates.getX() - 1, previousCoordinates.getY());
-                            break;
-                        case RIGHT:
-                            cordsToHit = new Coordinate(previousCoordinates.getX() + 1, previousCoordinates.getY());
-                            break;
-                    }
+                    cordsToHit = getUpdatedCoordinatesFromDirection(previousAttemptedDirection, previousCoordinates);
+
+                    CellState cellState = player.getGameGrid().getGrid().getCellState(cordsToHit.getX(), cordsToHit.getY());
 
                     if (cordsToHit.getX() < 8
                             && cordsToHit.getX() >= 0
                             && cordsToHit.getY() < 8
                             && cordsToHit.getY() >= 0
-                            && player.getGameGrid().getGrid().getCellState(cordsToHit.getX(), cordsToHit.getY()) != CellState.EMPTY_HIT
-                            && player.getGameGrid().getGrid().getCellState(cordsToHit.getX(), cordsToHit.getY()) != CellState.SHIP_WITH_HIT
-                            && player.getGameGrid().getGrid().getCellState(cordsToHit.getX(), cordsToHit.getY()) != CellState.DESTROYED_SHIP
+                            && cellState != CellState.EMPTY_HIT
+                            && cellState != CellState.SHIP_WITH_HIT
+                            && cellState != CellState.DESTROYED_SHIP
                     ) {
                         break;
                     } else {
@@ -93,6 +82,7 @@ public class AIPlayer implements IAIPlayer {
                 switch (hitResult) {
                     case HIT: {
                         previousCoordinates = cordsToHit;
+                        shouldBreak = false;
                         wasPreviousHitSuccessful = true;
                         break;
                     }
@@ -102,12 +92,14 @@ public class AIPlayer implements IAIPlayer {
                         break;
                     }
                     case ALREADY_HIT: {
+                        shouldBreak = false;
                         wasPreviousHitSuccessful = false;
                         break;
                     }
                 }
 
             } catch (Exception e) {
+                shouldBreak = false;
                 e.printStackTrace();
             }
 
@@ -123,5 +115,28 @@ public class AIPlayer implements IAIPlayer {
     private Coordinate getRandomHitCords() {
         Random random = new Random();
         return new Coordinate(random.nextInt(8), random.nextInt(8));
+    }
+
+    /**
+     * Maps the to a direction to the coordinate, i.e. changes the coordinate to represent
+     * a single value move in a particular direction.
+     *
+     * @param direction  to move towards.
+     * @param coordinate to update.
+     * @return Updated Coordinates.
+     */
+    private Coordinate getUpdatedCoordinatesFromDirection(Direction direction, Coordinate coordinate) {
+        switch (direction) {
+            case UP:
+                return new Coordinate(coordinate.getX(), coordinate.getY() - 1);
+            case DOWN:
+                return new Coordinate(coordinate.getX(), coordinate.getY() + 1);
+            case LEFT:
+                return new Coordinate(coordinate.getX() - 1, coordinate.getY());
+            case RIGHT:
+                return new Coordinate(coordinate.getX() + 1, coordinate.getY());
+            default:
+                return null;
+        }
     }
 }
