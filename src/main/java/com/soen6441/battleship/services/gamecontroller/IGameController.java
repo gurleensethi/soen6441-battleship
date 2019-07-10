@@ -18,8 +18,8 @@ import io.reactivex.Observable;
 public interface IGameController {
     /**
      * To create/get player object.
-     * @param playerName
-     * @return
+     * @param playerName name of the player to be retrieved or created.
+     * @return instance of {@link GamePlayer}.
      */
     GamePlayer createOrGetPlayer(String playerName);
 

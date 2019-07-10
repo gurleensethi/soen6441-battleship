@@ -12,7 +12,6 @@ public class GridUtils {
     private static final Logger logger = Logger.getLogger(GridUtils.class.getName());
     private static final String EMPTY_CHAR = " ---- ";
     private static final String SHIP_CHAR = " ship ";
-    private static final String HIT_CHAR = " ❌ ";
 
     /**
      * Print the grid on console in a more understandable form.

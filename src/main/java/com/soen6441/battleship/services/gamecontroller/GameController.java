@@ -26,7 +26,6 @@ import java.util.logging.Logger;
  * <li>Handle game winner - {@link GameController#handleIsGameOver}
  * </ul>
  * <p>
- * <p>
  * Implements {@link com.soen6441.battleship.services.gamecontroller.IGameController} interface.
  */
 public class GameController implements IGameController {
@@ -55,6 +54,8 @@ public class GameController implements IGameController {
 
     /**
      * Generates(if null) and returns GameController instance.
+     *
+     * @return The instance of GameController.
      */
     public static GameController getInstance() {
         if (sGameController == null) {
