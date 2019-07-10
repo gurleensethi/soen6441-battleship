@@ -140,8 +140,8 @@ public class GameGrid implements IGameGrid {
         // Check if all coordinates passed lie on plane.
         if (ship.getStartX() < 0
                 || ship.getStartY() < 0
-                || ship.getEndX() > grid.getGridSize()
-                || ship.getEndY() > grid.getGridSize()) {
+                || ship.getEndX() >= grid.getGridSize()
+                || ship.getEndY() >= grid.getGridSize()) {
             logger.severe("Ship Coordinates are out of bounds!");
             throw new CoordinatesOutOfBoundsException();
         }
@@ -153,12 +153,12 @@ public class GameGrid implements IGameGrid {
         ships.add(ship);
 
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
-            for (int i = ship.getStartX(); i < ship.getEndX(); i++) {
+            for (int i = ship.getStartX(); i <= ship.getEndX(); i++) {
                 grid.updateCellStatus(i, ship.getStartY(), CellState.SHIP);
                 grid.setShipOnCell(i, ship.getStartY(), ship);
             }
         } else if (ship.getDirection() == ShipDirection.VERTICAL) {
-            for (int i = ship.getStartY(); i < ship.getEndY(); i++) {
+            for (int i = ship.getStartY(); i <= ship.getEndY(); i++) {
                 grid.updateCellStatus(ship.getStartX(), i, CellState.SHIP);
                 grid.setShipOnCell(ship.getStartX(), i, ship);
             }
