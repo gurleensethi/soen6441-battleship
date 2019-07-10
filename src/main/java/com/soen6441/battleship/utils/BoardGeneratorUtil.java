@@ -20,39 +20,38 @@ public class BoardGeneratorUtil {
         Random random = new Random();
 
         while (shipLength > 0) {
+            int startXCord = random.nextInt(8);
+            int startYCord = random.nextInt(8);
+            boolean isVertical = random.nextBoolean();
+            ShipDirection shipDirection = isVertical ? ShipDirection.VERTICAL : ShipDirection.HORIZONTAL;
 
-            while (true) {
-                int startXCord = random.nextInt(8);
-                int startYCord = random.nextInt(8);
-                boolean isVertical = random.nextBoolean();
-                ShipDirection shipDirection = isVertical ? ShipDirection.VERTICAL : ShipDirection.HORIZONTAL;
+            int endXCord = startXCord;
+            int endYCord = startYCord;
 
-                int endXCord = startXCord;
-                int endYCord = startYCord;
+            if (shipDirection == ShipDirection.VERTICAL) {
+                endYCord += shipLength - 1;
+            } else {
+                endXCord += shipLength - 1;
+            }
 
-                if (shipDirection == ShipDirection.VERTICAL) {
-                    endYCord += shipLength - 1;
-                } else {
-                    endXCord += shipLength - 1;
-                }
+            Ship ship = new Ship.Builder()
+                    .setName("Ship:" + shipLength)
+                    .setStartCoordinates(startXCord, startYCord)
+                    .setEndCoordinates(endXCord, endYCord)
+                    .setLength(shipLength)
+                    .setDirection(shipDirection)
+                    .build();
 
-                Ship ship = new Ship.Builder()
-                        .setName("Ship:" + shipLength)
-                        .setStartCoordinates(startXCord, startYCord)
-                        .setEndCoordinates(endXCord, endYCord)
-                        .setLength(shipLength)
-                        .setDirection(shipDirection)
-                        .build();
-
-                try {
-                    gameGrid.placeShip(ship);
-                    shipLength--;
-                    break;
-                } catch (Exception e) {
-                    logger.warning(() -> "Wrong coordinates. Trying again");
-                }
+            try {
+                gameGrid.placeShip(ship);
+                shipLength--;
+                logger.info(String.format("Ship added of length %d.", shipLength));
+            } catch (Exception e) {
+                logger.warning(() -> "Wrong coordinates. Trying again");
             }
         }
+
+        logger.info(String.format("Total ships added %d.", gameGrid.getShips().size()));
 
         logger.info(() -> "Enemy ship placement successfully!");
     }
