@@ -38,6 +38,8 @@ public class AIPlayer implements IAIPlayer {
     public void takeHit() {
         boolean wasPreviousHitSuccessful = false;
 
+        Direction previousAttemptedDirection = Direction.UP;
+
         // This loop continues until AI has found a coordinate to hit
         // or all ships of player are destroyed.
         // This loop is broken manually.
@@ -49,8 +51,6 @@ public class AIPlayer implements IAIPlayer {
             if (!wasPreviousHitSuccessful) {
                 cordsToHit = getRandomHitCords();
             } else {
-                Direction previousAttemptedDirection = Direction.UP;
-
                 while (true) {
                     cordsToHit = getUpdatedCoordinatesFromDirection(previousAttemptedDirection, previousCoordinates);
 
@@ -62,6 +62,7 @@ public class AIPlayer implements IAIPlayer {
                             && cordsToHit.getY() >= 0
                             && cellState != CellState.EMPTY_HIT
                             && cellState != CellState.SHIP_WITH_HIT
+                            && cellState != CellState.EMPTY
                             && cellState != CellState.DESTROYED_SHIP
                     ) {
                         break;
