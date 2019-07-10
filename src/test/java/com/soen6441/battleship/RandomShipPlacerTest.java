@@ -1,13 +1,13 @@
 package com.soen6441.battleship;
 
+import com.soen6441.battleship.services.boardgenerator.RandomShipPlacer;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
-import com.soen6441.battleship.utils.BoardGeneratorUtil;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class BoardGeneratorUtilTest {
+public class RandomShipPlacerTest {
     private GameGrid gameGrid;
 
     @Before
@@ -17,8 +17,8 @@ public class BoardGeneratorUtilTest {
 
     @Test
     public void shipsArePlaceOnBoard() {
-        BoardGeneratorUtil boardGeneratorUtil = new BoardGeneratorUtil();
-        boardGeneratorUtil.placeRandomShips(gameGrid);
+        RandomShipPlacer randomShipPlacer = new RandomShipPlacer();
+        randomShipPlacer.placeRandomShips(gameGrid);
         assertEquals(5, gameGrid.getShips().size());
     }
 }

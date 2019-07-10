@@ -1,19 +1,26 @@
-package com.soen6441.battleship.utils;
+package com.soen6441.battleship.services.boardgenerator;
 
-import com.soen6441.battleship.data.model.CellInfo;
-import com.soen6441.battleship.data.model.Grid;
-import com.soen6441.battleship.enums.CellState;
+import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.services.gamegrid.IGameGrid;
-import com.soen6441.battleship.data.model.Ship;
 
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class BoardGeneratorUtil {
-    private static final Logger logger = Logger.getLogger(BoardGeneratorUtil.class.getName());
+/**
+ * Provides utility to place random ships on a {@link IGameGrid}.
+ */
+public class RandomShipPlacer {
+    private static final Logger logger = Logger.getLogger(RandomShipPlacer.class.getName());
     private boolean enemyTurn = false;
 
+    /**
+     * Places randomly 5 ships of different lengths on a {@link IGameGrid}.
+     * The placement of ships in completed random. Java's {@link Random}
+     * class is used to select random coordinates.
+     *
+     * @param gameGrid on top of which random ships need to be placed.
+     */
     public void placeRandomShips(IGameGrid gameGrid) {
         int shipLength = 5;
 

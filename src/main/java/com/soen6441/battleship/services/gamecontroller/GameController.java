@@ -3,18 +3,15 @@ package com.soen6441.battleship.services.gamecontroller;
 import com.soen6441.battleship.GamePlayer;
 import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.data.model.GameOverInfo;
-import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.HitResult;
-import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.aiplayer.AIPlayer;
 import com.soen6441.battleship.services.aiplayer.IAIPlayer;
+import com.soen6441.battleship.services.boardgenerator.RandomShipPlacer;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
-import com.soen6441.battleship.utils.BoardGeneratorUtil;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-import java.util.Random;
 import java.util.logging.Logger;
 
 public class GameController implements IGameController {
@@ -44,8 +41,8 @@ public class GameController implements IGameController {
         aiPlayer = new AIPlayer(player);
 
         // Place random ships on board
-        BoardGeneratorUtil boardGeneratorUtil = new BoardGeneratorUtil();
-        boardGeneratorUtil.placeRandomShips(enemy.getGameGrid());
+        RandomShipPlacer randomShipPlacer = new RandomShipPlacer();
+        randomShipPlacer.placeRandomShips(enemy.getGameGrid());
 
         initPlayerTurnChangeListener();
     }
