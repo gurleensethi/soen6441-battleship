@@ -74,7 +74,7 @@ public class ShipPlacementScene implements IScene {
         doneButton.setText("Done");
         doneButton.setOnAction(onDoneHandler);
         shipPlacedCountObservable.subscribe(count -> {
-            doneButton.setDisable(count == 0);
+            doneButton.setDisable(count != 5);
         });
 
         Pane spacing = new Pane();

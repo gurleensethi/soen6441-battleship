@@ -64,6 +64,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                 button.setPrefHeight(50);
                 button.setPrefWidth(50);
                 button.setOnAction(this);
+                button.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                 buttons.put(id, button);
 
                 Coordinate coordinate = new Coordinate(x, y);
