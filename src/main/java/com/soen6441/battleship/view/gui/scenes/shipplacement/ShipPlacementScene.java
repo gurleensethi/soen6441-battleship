@@ -6,6 +6,7 @@ import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 import io.reactivex.Observable;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,6 +26,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ShipPlacementScene implements IScene {
 
     private final IShipPlacementViewModel shipPlacementViewModel;
+    ShipPlacementGrid shipPlacementGrid = new ShipPlacementGrid(8);
+
 
     /**
      * Instantiates a new Ship placement scene.
@@ -41,7 +44,6 @@ public class ShipPlacementScene implements IScene {
      */
     @Override
     public Scene buildScene() {
-        ShipPlacementGrid shipPlacementGrid = new ShipPlacementGrid(8);
 
         shipPlacementGrid.getShipAddedObservable().subscribe(shipPlacementViewModel::placeShip);
 
@@ -58,8 +60,12 @@ public class ShipPlacementScene implements IScene {
                 shipPlacementGrid.getSelectedShipCountObservable()
         );
 
+        Node shipPlacementButtons = shipPlacementButtons(
+                shipPlacementGrid.getSelectedShipObservable()
+        );
+
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(infoBar, toolbar, shipPlacementGrid);
+        vBox.getChildren().addAll(infoBar, toolbar, shipPlacementGrid,shipPlacementButtons);
 
         return new Scene(vBox);
     }
@@ -123,6 +129,61 @@ public class ShipPlacementScene implements IScene {
         shipPlacedCountObservable.subscribe(count -> placedShipCountText.setText("Ships Placed: " + count + "/5"));
 
         hBox.getChildren().addAll(placedShipCountText);
+
+        return hBox;
+    }
+
+    private Node shipPlacementButtons(
+            Observable<Integer> shipPlacedObservable
+    ){
+        HBox hBox = new HBox();
+        hBox.setPadding(new Insets(10, 10, 10, 10));
+        hBox.setAlignment(Pos.CENTER);
+        hBox.setSpacing(10);
+
+        Button ship1 = new Button("Ship1");
+        ship1.setOnAction(e -> { shipPlacementGrid.shipSelected = 1;});
+        Button ship2 = new Button("Ship2");
+        ship2.setOnAction(e -> { shipPlacementGrid.shipSelected = 2;});
+        Button ship3 = new Button("Ship3");
+        ship3.setOnAction(e -> { shipPlacementGrid.shipSelected = 3;});
+        Button ship4 = new Button("Ship4");
+        ship4.setOnAction(e -> { shipPlacementGrid.shipSelected = 4;});
+        Button ship5 = new Button("Ship5");
+        ship5.setOnAction(e -> { shipPlacementGrid.shipSelected = 5;});
+
+        int i = 0;
+
+        shipPlacedObservable.subscribe(c -> {
+                    System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+c.intValue());
+        switch (c.intValue()){
+
+            case 1:
+                ship1.setDisable(true);
+                break;
+
+            case 2:
+                ship2.setDisable(true);
+                break;
+
+            case 3:
+                ship3.setDisable(true);
+                break;
+
+            case 4:
+                ship4.setDisable(true);
+                break;
+
+            case 5:
+                ship5.setDisable(true);
+                break;
+        }}
+        );
+
+
+
+
+        hBox.getChildren().addAll(ship1,ship2,ship3,ship4,ship5);
 
         return hBox;
     }
