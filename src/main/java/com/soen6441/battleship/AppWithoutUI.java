@@ -8,8 +8,16 @@ import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.ShipPlacementViewModel;
 
-
+/**
+ * The type App without ui is the for console view and works as connection between the game controller
+ * and view model.
+ */
 public class AppWithoutUI {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         IGameController gameController = GameController.getInstance();
         IGameViewModel gameViewModel = new GameViewModel(gameController);

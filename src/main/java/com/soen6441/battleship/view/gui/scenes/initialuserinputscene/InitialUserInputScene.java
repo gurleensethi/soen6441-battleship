@@ -9,6 +9,10 @@ import javafx.scene.Scene;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The type Initial user input scene.
+ * This method InitialUserInputScene takes the Java FXML file from resources and loads to GUI.
+ */
 public class InitialUserInputScene implements IScene {
     @Override
     public Scene buildScene() {

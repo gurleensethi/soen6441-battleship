@@ -10,6 +10,10 @@ import javafx.event.ActionEvent;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+/**
+ * The type User input scene controller is the controller for Welcome screen fxml,
+ * takes grid size and name from the user and passes data to view model and ship placement.
+ */
 public class UserInputSceneController {
     final private Logger logger = Logger.getLogger(UserInputSceneController.class.getName());
     private int gridSize;
@@ -19,8 +23,16 @@ public class UserInputSceneController {
     @FXML
     private TextField nameField;
 
+    /**
+     * Start action:  This method start action is called on all the events from GUI
+     * displays the alert messages on the GUI and validates the input from the user.
+     *
+     * @param event the event
+     */
     @FXML
     protected void startAction(ActionEvent event) {
+
+        //Alert message for the invalid inputs
         Alert alert = new Alert(Alert.AlertType.WARNING);
 
         if (gridSizeField.getText() == null
@@ -51,6 +63,7 @@ public class UserInputSceneController {
             gridSize = Integer.parseInt(gridSizeField.getText());
             playerName = nameField.getText();
             logger.info("Values from input:" + " Player Name = " + playerName + " Grid Size : " + gridSize);
+            //Navigate to ship placement screen
             SceneNavigator.getInstance().navigate(SceneRoutes.SHIP_PLACEMENT);
         }
     }

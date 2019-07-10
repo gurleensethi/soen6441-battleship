@@ -10,18 +10,32 @@ import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementV
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+/**
+ * The type Console view.
+ * The class Console view has been created to for view at console to keep track of the placements
+ * and turns of players.
+ */
 public class ConsoleView implements IView {
     private static final Logger logger = Logger.getLogger(ConsoleView.class.getName());
     private IGameViewModel gameViewModel;
     private IShipPlacementViewModel shipPlacementViewModel;
     private Scanner scanner;
 
+    /**
+     * Instantiates a new Console view.
+     *
+     * @param gameViewModel          the game view model
+     * @param shipPlacementViewModel the ship placement view model
+     */
     public ConsoleView(IGameViewModel gameViewModel, IShipPlacementViewModel shipPlacementViewModel) {
         this.gameViewModel = gameViewModel;
         this.shipPlacementViewModel = shipPlacementViewModel;
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * This method void start is an overridden method to get data from viewmodel and print on console screen.
+     */
     @Override
     public void start() {
         getShipPlacementFromPlayer();
@@ -43,6 +57,11 @@ public class ConsoleView implements IView {
         beginGame();
     }
 
+    /**
+     * This method getShipPlacementFromPlayer is console view of GUI, it is and infinite loop
+     * which keeps on asking user for inputs until player has placed all five ships, when player places the ship from GUI
+     * it takes the coordinates and validate them and print on console. Stops when 5 ships placement is finish.
+     */
     private void getShipPlacementFromPlayer() {
         while (true) {
             logger.info("Select an options:");
@@ -107,6 +126,10 @@ public class ConsoleView implements IView {
         }
     }
 
+    /**
+     * This method beginGame starts the game after the placement is finished.
+     * It takes the coordinates , validate the coordinates and update the console with the hit.
+     */
     private void beginGame() {
         while (true) {
             String input = scanner.nextLine();

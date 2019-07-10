@@ -9,7 +9,15 @@ import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.ShipPlacementViewModel;
 
+/**
+ * The type App with gui sets the connection between the controller and view model.
+ */
 public class AppWithGUI {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         IGameController gameController = GameController.getInstance();
         IGameViewModel gameViewModel = new GameViewModel(gameController);

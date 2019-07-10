@@ -2,6 +2,7 @@ package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
+import com.sun.xml.internal.bind.v2.TODO;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -11,9 +12,19 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * This class Game Play scene is the screen which updates the GUI after each move when players
+ * makes moves. It displays the two boards and refresh the cells/buttons on every event.
+ * The type Game play scene.
+ */
 public class GamePlayScene implements IScene {
     private IGameViewModel gameViewModel;
 
+    /**
+     * Instantiates a new Game play scene.
+     *
+     * @param gameViewModel the game view model
+     */
     public GamePlayScene(IGameViewModel gameViewModel) {
         this.gameViewModel = gameViewModel;
     }
@@ -56,11 +67,17 @@ public class GamePlayScene implements IScene {
         return new Scene(root);
     }
 
+    /**
+     * This method build enemy grid board, builds the grid pane on Stage with the given coordinate size and hides the details
+     * from player.
+     * @return enemy grid board
+     */
     private Node buildEnemyBoard() {
         // Set up enemy board
         VBox enemyBoardVBox = new VBox();
         Text enemyTitleText = new Text("Enemy Board");
         enemyTitleText.setFont(new Font(30));
+        //TODO : Make the grid size dynamic on user input
         GameGridPane enemyGameGrid = new GameGridPane(8, true);
         enemyGameGrid.setOnCoordinateHit(coordinate -> gameViewModel.sendHit(coordinate.getX(), coordinate.getY()));
         enemyBoardVBox.getChildren().addAll(enemyTitleText, enemyGameGrid);
@@ -69,13 +86,17 @@ public class GamePlayScene implements IScene {
 
         return enemyBoardVBox;
     }
-
+    /**
+     * This method build player grid board, builds the grid pane on Stage with the given coordinate size and shows the details
+     * to player.
+     * @return player grid board
+     */
     private Node buildPlayerBoard() {
         // Set up player board
         VBox playerBoardVBox = new VBox();
         Text playerTitleText = new Text("Player Board");
         playerTitleText.setFont(new Font(30));
-
+        //TODO : Make the grid size dynamic on user input
         GameGridPane playerGameGrid = new GameGridPane(8, false);
         gameViewModel.getPlayerGrid().subscribe(playerGameGrid::updateGrid);
 
