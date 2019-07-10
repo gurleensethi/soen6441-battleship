@@ -1,7 +1,7 @@
 package com.soen6441.battleship.common;
 
 /**
- * The type Scene routes has the routes for navigator class to navigate between scenes.
+ * All the scene routes available for routing.
  */
 public class SceneRoutes {
     /**

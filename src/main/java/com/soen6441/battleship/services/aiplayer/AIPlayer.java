@@ -1,25 +1,21 @@
 package com.soen6441.battleship.services.aiplayer;
 
-import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.data.model.Coordinate;
+import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.Direction;
 import com.soen6441.battleship.enums.HitResult;
-import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
-import javafx.scene.control.Cell;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 import java.util.logging.Logger;
 
 public class AIPlayer implements IAIPlayer {
     private static final Logger logger = Logger.getLogger(AIPlayer.class.getName());
-    private IPlayer player;
+    private GamePlayer player;
     private Coordinate previousCoordinates = null;
     private Direction previousAttemptedDirection;
 
-    public AIPlayer(IPlayer player) {
+    public AIPlayer(GamePlayer player) {
         this.player = player;
     }
 

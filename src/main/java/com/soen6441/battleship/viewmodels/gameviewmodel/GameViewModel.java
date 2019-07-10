@@ -2,7 +2,6 @@ package com.soen6441.battleship.viewmodels.gameviewmodel;
 
 import com.soen6441.battleship.data.model.GameOverInfo;
 import com.soen6441.battleship.services.gamecontroller.IGameController;
-import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.data.model.Grid;
 import io.reactivex.Observable;
 

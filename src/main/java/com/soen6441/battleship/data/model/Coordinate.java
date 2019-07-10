@@ -2,10 +2,26 @@ package com.soen6441.battleship.data.model;
 
 import java.util.Objects;
 
+/**
+ * Represents a single point on an xy plane (Grid in our case).
+ */
 public class Coordinate {
+    /**
+     * X coordinate.
+     */
     private final int x;
+
+    /**
+     * Y coordinate.
+     */
     private final int y;
 
+    /**
+     * Note: No error checking is done, this is just a data class.
+     *
+     * @param x coordinate
+     * @param y coordinate
+     */
     public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
@@ -27,6 +43,11 @@ public class Coordinate {
                 '}';
     }
 
+    /**
+     * @param o other object. Ideally of type Coordinate.
+     * @return If the coordinates of passed object match coordinates
+     * of this object.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

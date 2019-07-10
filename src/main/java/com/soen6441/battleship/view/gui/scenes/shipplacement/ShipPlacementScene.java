@@ -31,6 +31,7 @@ public class ShipPlacementScene implements IScene {
 
     /**
      * Instantiates a new Ship placement scene.
+     *
      * @param shipPlacementViewModel the ship placement view model
      */
     public ShipPlacementScene(IShipPlacementViewModel shipPlacementViewModel) {
@@ -40,6 +41,7 @@ public class ShipPlacementScene implements IScene {
 
     /**
      * This method build scene is an overridden method to build scene for ship placement.
+     *
      * @return scene
      */
     @Override
@@ -60,12 +62,9 @@ public class ShipPlacementScene implements IScene {
                 shipPlacementGrid.getSelectedShipCountObservable()
         );
 
-        Node shipPlacementButtons = shipPlacementButtons(
-                shipPlacementGrid.getSelectedShipObservable()
-        );
 
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(infoBar, toolbar, shipPlacementGrid,shipPlacementButtons);
+        vBox.getChildren().addAll(infoBar, toolbar, shipPlacementGrid);
 
         return new Scene(vBox);
     }
@@ -73,6 +72,7 @@ public class ShipPlacementScene implements IScene {
     /**
      * This method buildtoolbar is the GUI which gives two selections to user
      * Cancel selection and Done, once the 5 ships are placed the done button works as navigator to game play scene.
+     *
      * @param onCancelSelectionHandler
      * @param onDoneHandler
      * @param selectionObservable
@@ -114,6 +114,7 @@ public class ShipPlacementScene implements IScene {
 
     /**
      * This method buildInfoBar displays the status of ship placement.
+     *
      * @param shipPlacedCountObservable
      * @return hBox
      */
@@ -129,61 +130,6 @@ public class ShipPlacementScene implements IScene {
         shipPlacedCountObservable.subscribe(count -> placedShipCountText.setText("Ships Placed: " + count + "/5"));
 
         hBox.getChildren().addAll(placedShipCountText);
-
-        return hBox;
-    }
-
-    private Node shipPlacementButtons(
-            Observable<Integer> shipPlacedObservable
-    ){
-        HBox hBox = new HBox();
-        hBox.setPadding(new Insets(10, 10, 10, 10));
-        hBox.setAlignment(Pos.CENTER);
-        hBox.setSpacing(10);
-
-        Button ship1 = new Button("Ship1");
-        ship1.setOnAction(e -> { shipPlacementGrid.shipSelected = 1;});
-        Button ship2 = new Button("Ship2");
-        ship2.setOnAction(e -> { shipPlacementGrid.shipSelected = 2;});
-        Button ship3 = new Button("Ship3");
-        ship3.setOnAction(e -> { shipPlacementGrid.shipSelected = 3;});
-        Button ship4 = new Button("Ship4");
-        ship4.setOnAction(e -> { shipPlacementGrid.shipSelected = 4;});
-        Button ship5 = new Button("Ship5");
-        ship5.setOnAction(e -> { shipPlacementGrid.shipSelected = 5;});
-
-        int i = 0;
-
-        shipPlacedObservable.subscribe(c -> {
-                    System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+c.intValue());
-        switch (c.intValue()){
-
-            case 1:
-                ship1.setDisable(true);
-                break;
-
-            case 2:
-                ship2.setDisable(true);
-                break;
-
-            case 3:
-                ship3.setDisable(true);
-                break;
-
-            case 4:
-                ship4.setDisable(true);
-                break;
-
-            case 5:
-                ship5.setDisable(true);
-                break;
-        }}
-        );
-
-
-
-
-        hBox.getChildren().addAll(ship1,ship2,ship3,ship4,ship5);
 
         return hBox;
     }

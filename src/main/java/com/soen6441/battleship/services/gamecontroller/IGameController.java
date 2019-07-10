@@ -1,7 +1,7 @@
 package com.soen6441.battleship.services.gamecontroller;
 
-import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.data.model.GameOverInfo;
+import com.soen6441.battleship.data.model.GamePlayer;
 import io.reactivex.Observable;
 
 /**
@@ -21,7 +21,7 @@ public interface IGameController {
      * @param playerName
      * @return
      */
-    IPlayer createOrGetPlayer(String playerName);
+    GamePlayer createOrGetPlayer(String playerName);
 
     /**
      * <p>Gets the hit result from the coordinates and changes the turn as per result.

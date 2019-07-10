@@ -2,17 +2,58 @@ package com.soen6441.battleship.data.model;
 
 import com.soen6441.battleship.enums.ShipDirection;
 
+/**
+ * Represents a single ship.
+ */
 public class Ship {
+    /**
+     * Unique id of the ship.
+     */
     private final String uniqueID;
+
+    /**
+     * A name for the ship.
+     */
     private final String name;
+
+    /**
+     * Starting x-coordinate of the ship.
+     */
     private final int startX;
+
+    /**
+     * Starting y-coordinate of the ship.
+     */
     private final int startY;
+
+    /**
+     * Ending x-coordinate of the ship. (Inclusive)
+     */
     private final int endX;
+
+    /**
+     * Ending y-coordinate of the ship. (Inclusive)
+     */
     private final int endY;
+
+    /**
+     * Length of the ship.
+     */
     private final int length;
+
+    /**
+     * Total hits that have been take on this ship.
+     */
     private int hits = 0;
+
+    /**
+     * Direction of the ship. Can be vertical or horizontal.
+     */
     private final ShipDirection direction;
 
+    /**
+     * Builder pattern for building a ship
+     */
     public static class Builder {
         private String uniqueId;
         private String name;

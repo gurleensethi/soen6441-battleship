@@ -1,6 +1,6 @@
 package com.soen6441.battleship.viewmodels.shipplacementviewmodel;
 
-import com.soen6441.battleship.data.interfaces.IPlayer;
+import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.services.gamecontroller.IGameController;
 
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class ShipPlacementViewModel implements IShipPlacementViewModel {
     private static final Logger logger = Logger.getLogger(ShipPlacementViewModel.class.getName());
     private IGameController gameController;
-    private IPlayer player;
+    private GamePlayer player;
 
     /**
      * Instantiates a new Ship placement view model.

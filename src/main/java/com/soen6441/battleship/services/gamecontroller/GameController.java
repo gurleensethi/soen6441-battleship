@@ -1,7 +1,6 @@
 package com.soen6441.battleship.services.gamecontroller;
 
 import com.soen6441.battleship.data.model.GamePlayer;
-import com.soen6441.battleship.data.interfaces.IPlayer;
 import com.soen6441.battleship.data.model.GameOverInfo;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
@@ -50,8 +49,8 @@ public class GameController implements IGameController {
      * Observer object to track game status
      */
     private BehaviorSubject<GameOverInfo> isGameOverBehaviourSubject = BehaviorSubject.create();
-    private IPlayer player;
-    private IPlayer enemy;
+    private GamePlayer player;
+    private GamePlayer enemy;
     private IAIPlayer aiPlayer;
 
     /**
@@ -118,7 +117,7 @@ public class GameController implements IGameController {
      * @return enemy ot player object
      */
     @Override
-    public IPlayer createOrGetPlayer(String playerName) {
+    public GamePlayer createOrGetPlayer(String playerName) {
         if (playerName.equals("player")) {
             return player;
         } else {
