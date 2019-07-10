@@ -6,12 +6,15 @@ import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.enums.CellState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.omg.CORBA.NO_IMPLEMENT;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -78,6 +81,15 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
                 button.setPrefWidth(50);
                 button.setOnAction(this);
                 button.setStyle("-fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: black; -fx-border-width: 0.2");
+                button.setOpacity(0.5);
+                button.setOnMouseEntered(event -> {
+                    this.getScene().setCursor(Cursor.HAND);
+                    button.setOpacity(1.0);
+                });
+                button.setOnMouseExited(event -> {
+                    this.getScene().setCursor(Cursor.DEFAULT);
+                    button.setOpacity(0.5);
+                });
                 buttons.put(id, button);
 
                 Coordinate coordinate = new Coordinate(x, y);
@@ -90,8 +102,20 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
     }
 
     /**
+     * Disables the mouse hover effect on button.
+     *
+     * @param button to disable hover effect of.
+     */
+    private void disableHoverOnMouse(Button button) {
+        button.setOnMouseEntered(null);
+        button.setOnMouseExited(null);
+        button.setOpacity(1.0);
+    }
+
+    /**
      * This method buildButton takes coordinates and and returns a string for to be split and make a button with the
      * coordinates associated.
+     *
      * @param x
      * @param y
      * @return
@@ -131,14 +155,17 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
                     case EMPTY_HIT:
                         button.setText("*");
                         button.setStyle("-fx-background-color: black; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
+                        this.disableHoverOnMouse(button);
                         break;
                     case SHIP_WITH_HIT:
                         button.setText("O");
                         button.setStyle("-fx-background-color: #ffc23e; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
+                        this.disableHoverOnMouse(button);
                         break;
                     case DESTROYED_SHIP:
                         button.setText("X");
                         button.setStyle("-fx-background-color: red; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
+                        this.disableHoverOnMouse(button);
                         break;
                 }
             }
