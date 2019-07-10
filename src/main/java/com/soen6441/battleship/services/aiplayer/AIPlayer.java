@@ -9,16 +9,31 @@ import com.soen6441.battleship.enums.HitResult;
 import java.util.Random;
 import java.util.logging.Logger;
 
+/**
+ * Player that takes turns automatically.
+ * A very naive AI, that hits a coordinate on random.
+ * If a hit is found it tries to hit the nearby coordinates.
+ */
 public class AIPlayer implements IAIPlayer {
     private static final Logger logger = Logger.getLogger(AIPlayer.class.getName());
+    /**
+     * Manual player of the game.
+     * AIPlayer hits the {@link com.soen6441.battleship.services.gamegrid.GameGrid} of this player.
+     */
     private GamePlayer player;
+
+    /**
+     * Coordinates of the previous attempted hit.
+     */
     private Coordinate previousCoordinates = null;
-    private Direction previousAttemptedDirection;
 
     public AIPlayer(GamePlayer player) {
         this.player = player;
     }
 
+    /**
+     * Take a hit on manual player's {@link com.soen6441.battleship.services.gamegrid.GameGrid} board.
+     */
     @Override
     public void takeHit() {
         boolean wasPreviousHitSuccessful = false;
@@ -34,7 +49,7 @@ public class AIPlayer implements IAIPlayer {
             if (!wasPreviousHitSuccessful) {
                 cordsToHit = getRandomHitCords();
             } else {
-                previousAttemptedDirection = Direction.UP;
+                Direction previousAttemptedDirection = Direction.UP;
 
                 while (true) {
                     switch (previousAttemptedDirection) {
@@ -102,6 +117,9 @@ public class AIPlayer implements IAIPlayer {
         }
     }
 
+    /**
+     * @return random coordinates to hit.
+     */
     private Coordinate getRandomHitCords() {
         Random random = new Random();
         return new Coordinate(random.nextInt(8), random.nextInt(8));

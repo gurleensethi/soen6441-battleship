@@ -12,7 +12,6 @@ import java.util.logging.Logger;
  */
 public class RandomShipPlacer {
     private static final Logger logger = Logger.getLogger(RandomShipPlacer.class.getName());
-    private boolean enemyTurn = false;
 
     /**
      * Places randomly 5 ships of different lengths on a {@link IGameGrid}.

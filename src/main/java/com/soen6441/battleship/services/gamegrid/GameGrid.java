@@ -19,7 +19,16 @@ import java.util.logging.Logger;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The type Game grid.
+ * Wraps the {@link Grid} class and adds logic to it.
+ * <p>
+ * Provides functionality to:
+ * <ul>
+ * <li>Hit the ship on a particular coordinate: {@link GameGrid#hit(int, int)}</li>
+ * <li>Get the list of all ships on grid: {@link GameGrid#getShips()}</li>
+ * <li>Get the grid as an observable, which is triggered whenever an update on grid is made: {@link GameGrid#getGridAsObservable()}</li>
+ * <li>Place a ship on the grid: {@link GameGrid#placeShip(Ship)}</li>
+ * <li>Check if every ship on grid is destroyed: {@link GameGrid#areAllShipsDestroyed()}</li>
+ * </ul>
  */
 public class GameGrid implements IGameGrid {
     private final Logger logger = Logger.getLogger(GameGrid.class.getName());
