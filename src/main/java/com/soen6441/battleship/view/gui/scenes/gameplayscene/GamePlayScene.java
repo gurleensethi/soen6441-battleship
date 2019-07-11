@@ -2,7 +2,6 @@ package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
-import com.sun.xml.internal.bind.v2.TODO;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
