@@ -1,14 +1,18 @@
 package com.soen6441.battleship.data.model;
 
+import com.soen6441.battleship.data.interfaces.HitCallback;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * The type Game player is the class to instantiate the player type from which both human player
  * and AI player will take properties.
  */
 public class GamePlayer {
-    private final String name;
-    private final GameGrid gameGrid;
+    protected final String name;
+    protected final GameGrid gameGrid;
+    protected Observable<Boolean> isMyTurn;
 
     /**
      * Instantiates a new Game player.
@@ -27,5 +31,13 @@ public class GamePlayer {
 
     public String getName() {
         return name;
+    }
+
+    public void setIsMyTurn(Observable<Boolean> isMyTurn) {
+        this.isMyTurn = isMyTurn;
+    }
+
+    public Observable<Boolean> getIsMyTurn() {
+        return isMyTurn;
     }
 }

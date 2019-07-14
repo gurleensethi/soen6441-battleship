@@ -1,5 +1,6 @@
 package com.soen6441.battleship.services.gamegrid;
 
+import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.HitResult;
@@ -56,4 +57,19 @@ public interface IGameGrid {
      * @return boolean if all the ships are destroyed on the board.
      */
     boolean areAllShipsDestroyed();
+
+    /**
+     * Get the number of ships that are still not sunk.
+     *
+     * @return The number of remaining ships that are not destroyed.
+     */
+    int getUnSunkShips();
+
+    /**
+     * Get the result of hit, but not actually hitting the board.
+     *
+     * @param coordinate Coordinate to hit.
+     * @return result of on a particular coordinate.
+     */
+    HitResult peekHit(Coordinate coordinate) throws CoordinatesOutOfBoundsException;
 }

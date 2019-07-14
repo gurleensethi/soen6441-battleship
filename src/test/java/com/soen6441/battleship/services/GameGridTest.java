@@ -1,5 +1,6 @@
 package com.soen6441.battleship.services;
 
+import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.HitResult;
@@ -276,5 +277,30 @@ public class GameGridTest {
         }
 
         assertEquals(CellState.DESTROYED_SHIP, gameGrid.getGrid().getCellState(1, 1));
+    }
+
+    @Test()
+    public void unSunkShipCountIsCorrect() throws Exception {
+        gameGrid.placeShip(correctShip);
+
+        assertEquals(1, gameGrid.getUnSunkShips());
+    }
+
+    @Test()
+    public void unSunkShipCountIsCorrectWithNoShip() throws Exception {
+        gameGrid.placeShip(correctShip);
+
+        correctShip.setHits(5);
+
+        assertEquals(0, gameGrid.getUnSunkShips());
+    }
+
+    @Test()
+    public void peekHitOnGrid() throws Exception {
+        gameGrid.placeShip(correctShip);
+        assertEquals(HitResult.MISS, gameGrid.peekHit(new Coordinate(0, 0)));
+        assertEquals(HitResult.HIT, gameGrid.peekHit(new Coordinate(1, 1)));
+        gameGrid.hit(1, 1);
+        assertEquals(HitResult.ALREADY_HIT, gameGrid.peekHit(new Coordinate(1, 1)));
     }
 }

@@ -1,6 +1,7 @@
 package com.soen6441.battleship.viewmodels.gameviewmodel;
 
 import com.soen6441.battleship.data.model.GameOverInfo;
+import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.services.gamecontroller.IGameController;
 import com.soen6441.battleship.data.model.Grid;
 import io.reactivex.Observable;
@@ -15,6 +16,9 @@ public class GameViewModel implements IGameViewModel {
      */
     private IGameController gameController;
 
+    private GamePlayer player;
+    private GamePlayer enemy;
+
     /**
      * Instantiates a new Game view model.
      *
@@ -22,6 +26,8 @@ public class GameViewModel implements IGameViewModel {
      */
     public GameViewModel(IGameController gameController) {
         this.gameController = gameController;
+        player = gameController.createOrGetPlayer("player");
+        enemy = gameController.createOrGetPlayer("enemy");
     }
 
     /**
@@ -29,7 +35,7 @@ public class GameViewModel implements IGameViewModel {
      */
     @Override
     public Observable<Grid> getPlayerGrid() {
-        return gameController.createOrGetPlayer("player").getGameGrid().getGridAsObservable();
+        return this.player.getGameGrid().getGridAsObservable();
     }
 
     /**
@@ -37,7 +43,7 @@ public class GameViewModel implements IGameViewModel {
      */
     @Override
     public Observable<Grid> getEnemyGrid() {
-        return gameController.createOrGetPlayer("enemy").getGameGrid().getGridAsObservable();
+        return this.enemy.getGameGrid().getGridAsObservable();
     }
 
     @Override
