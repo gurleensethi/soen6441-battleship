@@ -13,6 +13,7 @@ public class GamePlayer {
     protected final String name;
     protected final GameGrid gameGrid;
     protected Observable<Boolean> isMyTurn;
+    protected long totalTimeTaken;
 
     /**
      * Instantiates a new Game player.
@@ -39,5 +40,17 @@ public class GamePlayer {
 
     public Observable<Boolean> getIsMyTurn() {
         return isMyTurn;
+    }
+
+    public long getTotalTimeTaken() {
+        return totalTimeTaken;
+    }
+
+    public void setTotalTimeTaken(long totalTimeTaken) {
+        this.totalTimeTaken = totalTimeTaken;
+    }
+
+    public void addTimeTaken(long timeToAdd) {
+        this.totalTimeTaken += timeToAdd;
     }
 }

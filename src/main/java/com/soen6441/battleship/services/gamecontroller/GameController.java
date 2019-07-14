@@ -8,7 +8,9 @@ import com.soen6441.battleship.services.aiplayer.AIPlayer;
 import com.soen6441.battleship.services.boardgenerator.RandomShipPlacer;
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.ITurnStrategy;
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.SalvaTurnStrategy;
+import com.soen6441.battleship.services.gamecontroller.gamestrategy.SimpleTurnStrategy;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
+import com.soen6441.battleship.utils.TimerUtil;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -53,6 +55,7 @@ public class GameController implements IGameController {
     private GamePlayer enemy;
     private BehaviorSubject<Boolean> playerTurnBehaviourSubject = BehaviorSubject.create();
     private BehaviorSubject<Boolean> enemyTurnBehaviourSubject = BehaviorSubject.create();
+    private TimerUtil timer = new TimerUtil();
 
     private ITurnStrategy gameStrategy;
 
@@ -88,6 +91,8 @@ public class GameController implements IGameController {
         RandomShipPlacer randomShipPlacer = new RandomShipPlacer();
         randomShipPlacer.placeRandomShips(player.getGameGrid());
         randomShipPlacer.placeRandomShips(enemy.getGameGrid());
+
+        timer.start();
     }
 
     /**
@@ -121,11 +126,17 @@ public class GameController implements IGameController {
         logger.info(() -> String.format("%s has sent a hit on x: %d, y: %d", this.currentPlayerName, x, y));
 
         try {
+            long timeTaken = timer.stop();
+
+            if (currentPlayerName.equals("player")) {
+                player.setTotalTimeTaken(timeTaken);
+            } else {
+                enemy.setTotalTimeTaken(timeTaken);
+            }
+
             GamePlayer playerToHit = currentPlayerName.equals("player") ? enemy : player;
 
             HitResult result = playerToHit.getGameGrid().hit(x, y);
-
-            logger.info(() -> "Hit result " + result);
 
             GamePlayer playerToSwitchTurnTo = this.gameStrategy.getNextTurn(player, enemy, result);
 
@@ -135,14 +146,13 @@ public class GameController implements IGameController {
                 currentPlayerName = "enemy";
             }
 
-            notifyTurns();
-
             turnChangeBehaviourSubject.onNext(this.currentPlayerName);
         } catch (CoordinatesOutOfBoundsException e) {
             e.printStackTrace();
         }
 
         handleIsGameOver();
+        notifyTurns();
     }
 
     /**
@@ -159,6 +169,7 @@ public class GameController implements IGameController {
     }
 
     private void notifyTurns() {
+        timer.start();
         this.playerTurnBehaviourSubject.onNext(currentPlayerName.equals("player"));
         this.enemyTurnBehaviourSubject.onNext(currentPlayerName.equals("enemy"));
     }
