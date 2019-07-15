@@ -43,4 +43,6 @@ public interface IGameViewModel {
      * @return the observable
      */
     Observable<GameOverInfo> isGameOver();
+
+    Observable<Long> turnTimer();
 }

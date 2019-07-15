@@ -42,7 +42,6 @@ public class GamePlayScene implements IScene {
         // Set up sidebar
         Node sideBar = buildSideBar();
 
-
         gameViewModel.isGameOver().subscribe(gameOverInfo -> {
             if (gameOverInfo.isGameOver()) {
                 String winnerText = "";
@@ -106,6 +105,14 @@ public class GamePlayScene implements IScene {
 
     private Node buildSideBar() {
         VBox root = new VBox();
+
+        Text text = new Text();
+
+        gameViewModel.turnTimer().subscribe(time -> {
+            text.setText("" + time);
+        });
+
+        root.getChildren().add(text);
 
         return root;
     }

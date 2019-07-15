@@ -66,4 +66,9 @@ public class GameViewModel implements IGameViewModel {
     public Observable<GameOverInfo> isGameOver() {
         return gameController.isGameOver();
     }
+
+    @Override
+    public Observable<Long> turnTimer() {
+        return gameController.turnTimer();
+    }
 }

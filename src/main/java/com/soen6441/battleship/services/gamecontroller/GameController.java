@@ -8,7 +8,6 @@ import com.soen6441.battleship.services.aiplayer.AIPlayer;
 import com.soen6441.battleship.services.boardgenerator.RandomShipPlacer;
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.ITurnStrategy;
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.SalvaTurnStrategy;
-import com.soen6441.battleship.services.gamecontroller.gamestrategy.SimpleTurnStrategy;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
 import com.soen6441.battleship.utils.TimerUtil;
 import io.reactivex.Observable;
@@ -55,7 +54,9 @@ public class GameController implements IGameController {
     private GamePlayer enemy;
     private BehaviorSubject<Boolean> playerTurnBehaviourSubject = BehaviorSubject.create();
     private BehaviorSubject<Boolean> enemyTurnBehaviourSubject = BehaviorSubject.create();
-    private TimerUtil timer = new TimerUtil();
+
+    private TimerUtil turnTimer = new TimerUtil();
+    private TimerUtil gameTimer = new TimerUtil();
 
     private ITurnStrategy gameStrategy;
 
@@ -92,7 +93,7 @@ public class GameController implements IGameController {
         randomShipPlacer.placeRandomShips(player.getGameGrid());
         randomShipPlacer.placeRandomShips(enemy.getGameGrid());
 
-        timer.start();
+        turnTimer.start();
     }
 
     /**
@@ -126,7 +127,7 @@ public class GameController implements IGameController {
         logger.info(() -> String.format("%s has sent a hit on x: %d, y: %d", this.currentPlayerName, x, y));
 
         try {
-            long timeTaken = timer.stop();
+            long timeTaken = turnTimer.stop();
 
             if (currentPlayerName.equals("player")) {
                 player.setTotalTimeTaken(timeTaken);
@@ -151,14 +152,15 @@ public class GameController implements IGameController {
             e.printStackTrace();
         }
 
-        handleIsGameOver();
         notifyTurns();
+        handleIsGameOver();
     }
 
     /**
      * Declares a winner by checking if all ships of either side are destroyed.
      */
     private void handleIsGameOver() {
+        // Check if all ships of enemy or player are destroyed.
         boolean areAllShipsOnEnemyHit = enemy.getGameGrid().areAllShipsDestroyed();
         boolean areAllShipsOnPlayerHit = player.getGameGrid().areAllShipsDestroyed();
 
@@ -166,10 +168,16 @@ public class GameController implements IGameController {
 
         GameOverInfo gameOverInfo = new GameOverInfo(this.isGameOver, areAllShipsOnEnemyHit);
         this.isGameOverBehaviourSubject.onNext(gameOverInfo);
+
+        // Timer is stopped because we don't need it anymore as game
+        // is over.
+        if (isGameOver && turnTimer.isRunning()) {
+            turnTimer.stop();
+        }
     }
 
     private void notifyTurns() {
-        timer.start();
+        turnTimer.start();
         this.playerTurnBehaviourSubject.onNext(currentPlayerName.equals("player"));
         this.enemyTurnBehaviourSubject.onNext(currentPlayerName.equals("enemy"));
     }
@@ -192,5 +200,10 @@ public class GameController implements IGameController {
     @Override
     public Observable<GameOverInfo> isGameOver() {
         return this.isGameOverBehaviourSubject;
+    }
+
+    @Override
+    public Observable<Long> turnTimer() {
+        return turnTimer.asObservable();
     }
 }
