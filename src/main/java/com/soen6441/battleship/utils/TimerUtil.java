@@ -13,6 +13,13 @@ public class TimerUtil {
     private long stopTime;
     private BehaviorSubject<Long> timerListener = BehaviorSubject.create();
 
+    public static String printableTime(long milliseconds) {
+        long totalSeconds = milliseconds / 1000;
+        long minutes = (milliseconds / 1000) / 60;
+        totalSeconds -= minutes * 60;
+        return String.format("%02d:%02d", minutes, totalSeconds);
+    }
+
     public TimerUtil() {
         new Timer().schedule(new TimerTask() {
             @Override
@@ -23,7 +30,7 @@ public class TimerUtil {
                     timerListener.onNext(TimerUtil.this.stopTime - TimerUtil.this.startTime);
                 }
             }
-        }, 1000, 100);
+        }, 1000, 1000);
     }
 
     public void start() {
@@ -43,6 +50,12 @@ public class TimerUtil {
         isRunning = false;
         stopTime = new Date().getTime();
         return stopTime - startTime;
+    }
+
+    public void reset() {
+        this.isRunning = false;
+        this.startTime = 0;
+        this.stopTime = 0;
     }
 
     public Observable<Long> asObservable() {

@@ -45,4 +45,8 @@ public interface IGameViewModel {
     Observable<GameOverInfo> isGameOver();
 
     Observable<Long> turnTimer();
+
+    Observable<Long> gameTimer();
+
+    void startGame();
 }

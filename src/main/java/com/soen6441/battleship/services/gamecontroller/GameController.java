@@ -92,8 +92,12 @@ public class GameController implements IGameController {
         RandomShipPlacer randomShipPlacer = new RandomShipPlacer();
         randomShipPlacer.placeRandomShips(player.getGameGrid());
         randomShipPlacer.placeRandomShips(enemy.getGameGrid());
+    }
 
+    @Override
+    public void startGame() {
         turnTimer.start();
+        gameTimer.start();
     }
 
     /**
@@ -152,8 +156,11 @@ public class GameController implements IGameController {
             e.printStackTrace();
         }
 
-        notifyTurns();
         handleIsGameOver();
+
+        if (!isGameOver) {
+            notifyTurns();
+        }
     }
 
     /**
@@ -169,10 +176,16 @@ public class GameController implements IGameController {
         GameOverInfo gameOverInfo = new GameOverInfo(this.isGameOver, areAllShipsOnEnemyHit);
         this.isGameOverBehaviourSubject.onNext(gameOverInfo);
 
-        // Timer is stopped because we don't need it anymore as game
+        // Timers is stopped because we don't need it anymore as game
         // is over.
-        if (isGameOver && turnTimer.isRunning()) {
-            turnTimer.stop();
+        if (isGameOver) {
+            if (turnTimer.isRunning()) {
+                turnTimer.stop();
+            }
+
+            if (gameTimer.isRunning()) {
+                gameTimer.stop();
+            }
         }
     }
 
@@ -205,5 +218,10 @@ public class GameController implements IGameController {
     @Override
     public Observable<Long> turnTimer() {
         return turnTimer.asObservable();
+    }
+
+    @Override
+    public Observable<Long> gameTimer() {
+        return gameTimer.asObservable();
     }
 }

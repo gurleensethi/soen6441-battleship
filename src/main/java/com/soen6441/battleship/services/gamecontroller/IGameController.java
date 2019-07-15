@@ -44,4 +44,8 @@ public interface IGameController {
     Observable<GameOverInfo> isGameOver();
 
     Observable<Long> turnTimer();
+
+    Observable<Long> gameTimer();
+
+    void startGame();
 }

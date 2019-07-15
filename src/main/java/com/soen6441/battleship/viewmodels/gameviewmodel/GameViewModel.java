@@ -71,4 +71,14 @@ public class GameViewModel implements IGameViewModel {
     public Observable<Long> turnTimer() {
         return gameController.turnTimer();
     }
+
+    @Override
+    public Observable<Long> gameTimer() {
+        return gameController.gameTimer();
+    }
+
+    @Override
+    public void startGame() {
+        this.gameController.startGame();
+    }
 }
