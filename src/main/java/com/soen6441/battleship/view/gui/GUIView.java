@@ -4,6 +4,7 @@ import com.soen6441.battleship.common.SceneRoutes;
 import com.soen6441.battleship.services.gamecontroller.GameController;
 import com.soen6441.battleship.view.IView;
 import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
+import com.soen6441.battleship.view.gui.scenes.gameplayscene.GamePlay3DScene;
 import com.soen6441.battleship.view.gui.scenes.gameplayscene.GamePlayScene;
 import com.soen6441.battleship.view.gui.scenes.initialuserinputscene.InitialUserInputScene;
 import com.soen6441.battleship.view.gui.scenes.shipplacement.ShipPlacementScene;
@@ -47,9 +48,13 @@ public class GUIView extends Application implements IView {
             return new GamePlayScene(new GameViewModel(GameController.getInstance()));
         });
 
+        SceneNavigator.getInstance().registerRoute("3d", () -> {
+            return new GamePlay3DScene();
+        });
+
         // TODO: Get ShipPlacementViewModel from somewhere else, ideally use DI to inject it.
         primaryStage.show();
 
-        SceneNavigator.getInstance().navigate(SceneRoutes.GAME_PLAY);
+        SceneNavigator.getInstance().navigate(SceneRoutes.SHIP_PLACEMENT);
     }
 }

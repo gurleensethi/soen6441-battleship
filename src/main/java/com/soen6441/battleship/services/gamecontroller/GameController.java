@@ -90,7 +90,7 @@ public class GameController implements IGameController {
 
         // Place random ships on board
         RandomShipPlacer randomShipPlacer = new RandomShipPlacer();
-        randomShipPlacer.placeRandomShips(player.getGameGrid());
+//        randomShipPlacer.placeRandomShips(player.getGameGrid());
         randomShipPlacer.placeRandomShips(enemy.getGameGrid());
     }
 
