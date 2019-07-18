@@ -1,5 +1,6 @@
 package com.soen6441.battleship.services.gamegrid;
 
+import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.CellState;
@@ -121,6 +122,30 @@ public class GameGrid implements IGameGrid {
     }
 
     @Override
+    public HitResult peekHit(Coordinate coordinate) throws CoordinatesOutOfBoundsException {
+        // Check if the coordinates are correct
+        if (!isValidCell(coordinate.getX(), coordinate.getX())) {
+            throw new CoordinatesOutOfBoundsException();
+        }
+
+        CellState state = grid.getCellState(coordinate.getX(), coordinate.getY());
+
+        HitResult result;
+
+        // If cell has already been hit!
+        if (state == CellState.EMPTY_HIT || state == CellState.SHIP_WITH_HIT || state == CellState.DESTROYED_SHIP) {
+            result = HitResult.ALREADY_HIT;
+        } else if (state == CellState.SHIP) {  // If there is no hit, but there is ship.
+            result = HitResult.HIT;
+        } else {  // If the cell is empty i.e. not ship or hit on it.
+            result = HitResult.MISS;
+        }
+
+        gridBehaviorSubject.onNext(this.grid);
+        return result;
+    }
+
+    @Override
     public Observable<Grid> getGridAsObservable() {
         return gridBehaviorSubject;
     }
@@ -197,6 +222,24 @@ public class GameGrid implements IGameGrid {
         }
 
         return areShipsDestroyed;
+    }
+
+    /**
+     * Get the number of ships that are still not sunk.
+     *
+     * @return The number of remaining ships that are not destroyed.
+     */
+    @Override
+    public int getUnSunkShips() {
+        int count = 0;
+
+        for (Ship ship : ships) {
+            if (!ship.isSunk()) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     /**

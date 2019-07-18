@@ -1,5 +1,6 @@
 package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
+import com.soen6441.battleship.utils.TimerUtil;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
 import javafx.geometry.Insets;
@@ -42,7 +43,6 @@ public class GamePlayScene implements IScene {
         // Set up sidebar
         Node sideBar = buildSideBar();
 
-
         gameViewModel.isGameOver().subscribe(gameOverInfo -> {
             if (gameOverInfo.isGameOver()) {
                 String winnerText = "";
@@ -63,12 +63,15 @@ public class GamePlayScene implements IScene {
         HBox root = new HBox();
         root.getChildren().addAll(gameBox, sideBar);
 
+        gameViewModel.startGame();
+
         return new Scene(root);
     }
 
     /**
      * This method build enemy grid board, builds the grid pane on Stage with the given coordinate size and hides the details
      * from player.
+     *
      * @return enemy grid board
      */
     private Node buildEnemyBoard() {
@@ -85,9 +88,11 @@ public class GamePlayScene implements IScene {
 
         return enemyBoardVBox;
     }
+
     /**
      * This method build player grid board, builds the grid pane on Stage with the given coordinate size and shows the details
      * to player.
+     *
      * @return player grid board
      */
     private Node buildPlayerBoard() {
@@ -106,6 +111,27 @@ public class GamePlayScene implements IScene {
 
     private Node buildSideBar() {
         VBox root = new VBox();
+        root.setPadding(new Insets(16, 16, 16, 16));
+
+        Text turnTimerText = new Text();
+        turnTimerText.setFont(new Font(24));
+
+        gameViewModel.turnTimer().subscribe(time -> {
+            System.out.println(time);
+            turnTimerText.setText("Turn Timer: \n" + TimerUtil.printableTime(time));
+        });
+
+        Text gameTimerText = new Text();
+        gameTimerText.setFont(new Font(24));
+
+        gameViewModel.gameTimer().subscribe(time -> {
+            gameTimerText.setText("Game Timer: \n" + TimerUtil.printableTime(time));
+        });
+
+        root.getChildren().addAll(
+                gameTimerText,
+                turnTimerText
+        );
 
         return root;
     }
