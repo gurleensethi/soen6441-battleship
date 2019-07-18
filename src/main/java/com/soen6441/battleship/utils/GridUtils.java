@@ -41,6 +41,8 @@ public class GridUtils {
                     case EMPTY_HIT:
                         stringBuilder.append(" xxxx ");
                         break;
+                    case TO_BE_PLACED:
+                        stringBuilder.append(" tttt ");
                     default:
                         break;
                 }

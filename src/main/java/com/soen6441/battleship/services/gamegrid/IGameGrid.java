@@ -3,6 +3,7 @@ package com.soen6441.battleship.services.gamegrid;
 import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
+import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
@@ -72,4 +73,12 @@ public interface IGameGrid {
      * @return result of on a particular coordinate.
      */
     HitResult peekHit(Coordinate coordinate) throws CoordinatesOutOfBoundsException;
+
+    /**
+     * Update the state of a cell depending
+     *
+     * @param coordinate XY coordinates of cell to update.
+     * @param state New state of the cell.
+     */
+    void updateCellState(Coordinate coordinate, CellState state);
 }

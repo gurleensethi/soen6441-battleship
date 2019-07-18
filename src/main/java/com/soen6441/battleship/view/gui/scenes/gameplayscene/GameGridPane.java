@@ -166,6 +166,11 @@ class GameGridPane extends StackPane implements EventHandler<ActionEvent> {
                         button.setStyle("-fx-background-color: red; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                         this.disableHoverOnMouse(button);
                         break;
+                    case TO_BE_PLACED:
+                        button.setText(" ");
+                        button.setStyle("-fx-background-color: purple; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
+                        this.disableHoverOnMouse(button);
+                        break;
                 }
             }
         }

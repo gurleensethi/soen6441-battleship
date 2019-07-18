@@ -55,6 +55,6 @@ public class GUIView extends Application implements IView {
         // TODO: Get ShipPlacementViewModel from somewhere else, ideally use DI to inject it.
         primaryStage.show();
 
-        SceneNavigator.getInstance().navigate(SceneRoutes.SHIP_PLACEMENT);
+        SceneNavigator.getInstance().navigate(SceneRoutes.INITIAL_USER_INPUT);
     }
 }
