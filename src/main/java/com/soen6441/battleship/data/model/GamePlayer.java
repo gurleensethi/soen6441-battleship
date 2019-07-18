@@ -1,6 +1,7 @@
 package com.soen6441.battleship.data.model;
 
 import com.soen6441.battleship.data.interfaces.HitCallback;
+import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;

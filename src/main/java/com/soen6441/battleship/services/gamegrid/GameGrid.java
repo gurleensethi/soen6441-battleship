@@ -91,7 +91,8 @@ public class GameGrid implements IGameGrid {
         // If cell has already been hit!
         if (state == CellState.EMPTY_HIT || state == CellState.SHIP_WITH_HIT || state == CellState.DESTROYED_SHIP) {
             result = HitResult.ALREADY_HIT;
-        } else if (state == CellState.SHIP) {  // If there is no hit, but there is ship.
+        } else if (state == CellState.SHIP
+                || (state == CellState.TO_BE_PLACED && grid.getCellInfo(x, y).getShip() != null)) {  // If there is no hit, but there is ship.
             // TODO: Move this logic to a ship service
             grid.updateCellStatus(x, y, CellState.SHIP_WITH_HIT);
 
@@ -240,6 +241,12 @@ public class GameGrid implements IGameGrid {
         }
 
         return count;
+    }
+
+    @Override
+    public void updateCellState(Coordinate coordinate, CellState state) {
+        this.getGrid().updateCellStatus(coordinate.getX(), coordinate.getY(), state);
+        this.gridBehaviorSubject.onNext(this.grid);
     }
 
     /**

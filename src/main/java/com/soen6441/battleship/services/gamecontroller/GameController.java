@@ -1,13 +1,16 @@
 package com.soen6441.battleship.services.gamecontroller;
 
+import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.data.model.GameOverInfo;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.aiplayer.AIPlayer;
 import com.soen6441.battleship.services.boardgenerator.RandomShipPlacer;
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.ITurnStrategy;
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.SalvaTurnStrategy;
+import com.soen6441.battleship.services.gamecontroller.gamestrategy.SimpleTurnStrategy;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
 import com.soen6441.battleship.utils.TimerUtil;
 import io.reactivex.Observable;
@@ -58,7 +61,9 @@ public class GameController implements IGameController {
     private TimerUtil turnTimer = new TimerUtil();
     private TimerUtil gameTimer = new TimerUtil();
 
-    private ITurnStrategy gameStrategy;
+    private ITurnStrategy turnStrategy;
+
+    private GameConfig gameConfig = GameConfig.getsInstance();
 
     /**
      * Generates(if null) and returns GameController instance.
@@ -86,11 +91,10 @@ public class GameController implements IGameController {
         player.setIsMyTurn(playerTurnBehaviourSubject);
         enemy.setIsMyTurn(enemyTurnBehaviourSubject);
 
-        gameStrategy = new SalvaTurnStrategy();
+        turnStrategy = new SimpleTurnStrategy();
 
         // Place random ships on board
         RandomShipPlacer randomShipPlacer = new RandomShipPlacer();
-//        randomShipPlacer.placeRandomShips(player.getGameGrid());
         randomShipPlacer.placeRandomShips(enemy.getGameGrid());
     }
 
@@ -98,6 +102,12 @@ public class GameController implements IGameController {
     public void startGame() {
         turnTimer.start();
         gameTimer.start();
+
+        if (gameConfig.isSalvaVariation()) {
+            this.turnStrategy = new SalvaTurnStrategy(this.player, this.enemy);
+        } else {
+            this.turnStrategy = new SimpleTurnStrategy();
+        }
     }
 
     /**
@@ -141,9 +151,9 @@ public class GameController implements IGameController {
 
             GamePlayer playerToHit = currentPlayerName.equals("player") ? enemy : player;
 
-            HitResult result = playerToHit.getGameGrid().hit(x, y);
+            HitResult result = this.turnStrategy.hit(playerToHit, new Coordinate(x, y));
 
-            GamePlayer playerToSwitchTurnTo = this.gameStrategy.getNextTurn(player, enemy, result);
+            GamePlayer playerToSwitchTurnTo = this.turnStrategy.getNextTurn(player, enemy, result);
 
             if (playerToSwitchTurnTo == player) {
                 currentPlayerName = "player";

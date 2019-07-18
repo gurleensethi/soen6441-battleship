@@ -117,7 +117,6 @@ public class GamePlayScene implements IScene {
         turnTimerText.setFont(new Font(24));
 
         gameViewModel.turnTimer().subscribe(time -> {
-            System.out.println(time);
             turnTimerText.setText("Turn Timer: \n" + TimerUtil.printableTime(time));
         });
 
