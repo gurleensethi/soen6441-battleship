@@ -102,11 +102,11 @@ public class ShipPlacementScene implements IScene {
         Button shipButton = new Button();
         shipButton.setGraphic(view);
 
-//Drag detected event handler is used for adding drag functionality to the boat node
+        //Drag detected event handler is used for adding drag functionality to the boat node
         shipButton.setOnDragDetected(event -> {
             //Drag was detected, start drap-and-drop gesture
             //Allow any transfer node
-            Dragboard db = shipButton.startDragAndDrop(TransferMode.ANY);
+            Dragboard db = shipButton.startDragAndDrop(TransferMode.MOVE);
 
             //Put ImageView on dragboard
             ClipboardContent cbContent = new ClipboardContent();
@@ -120,10 +120,16 @@ public class ShipPlacementScene implements IScene {
         });
 
 
+        shipButton.setOnDragDropped(event -> {
+
+            System.out.println("----------------------dropped");
+
+        });
+
         shipButton.setOnDragDone(event -> {
             //the drag and drop gesture has ended
             //if the data was successfully moved, clear it
-            System.out.println(event.getTransferMode());
+            System.out.println("Transfer mode = " + event.getTransferMode());
             if(event.getTransferMode() == TransferMode.MOVE){
                 shipButton.setVisible(false);
             }

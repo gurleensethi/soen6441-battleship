@@ -73,16 +73,12 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
 
 
 
-//Drag over event handler is used for the receiving node to allow movement
+            //Drag over event handler is used for the receiving node to allow movement
                 button.setOnDragOver(event -> {
 
-                    //data is dragged over to target
-                    //accept it only if it is not dragged from the same node
-                    //and if it has image data
-                    if(event.getGestureSource() == button && event.getDragboard().hasImage()){
+                    if(event.getGestureSource() != button && event.getDragboard().hasImage()){
                         //allow for moving
                         event.acceptTransferModes(TransferMode.MOVE);
-                        System.out.println("transfer allowed");
 
                     }
 
@@ -90,13 +86,14 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
 
                 });
 
-//Drag entered changes the appearance of the receiving node to indicate to the player that they can place there
+            //Drag entered changes the appearance of the receiving node to indicate to the player that they can place there
                 button.setOnDragEntered(event -> {
                     //The drag-and-drop gesture entered the target
                     //show the user that it is an actual gesture target
                     if(event.getGestureSource() != button && event.getDragboard().hasImage()){
                         // source.setVisible(false);
                         button.setOpacity(0.7);
+                        String str = "";
                         System.out.println("Drag entered at " + button.getId());
                     }
                     event.consume();
@@ -104,27 +101,26 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                 });
 
 
-// Drag dropped draws the image to the receiving node
+     //Not working       // Drag dropped draws the image to the receiving node
                 button.setOnDragDropped(event -> {
 
-                    System.out.println("on dropped");
                     //If there is an image on the dragboard, read it and use it
                     Dragboard db = event.getDragboard();
                     boolean success = false;
                     Node node = event.getPickResult().getIntersectedNode();
                     if(node != button && db.hasImage()){
 
-                        Integer cIndex = GridPane.getColumnIndex(node);
-                        Integer rIndex = GridPane.getRowIndex(node);
-                        int xShip = cIndex == null ? 0 : cIndex;
-                        int yShip = rIndex == null ? 0 : rIndex;
+
+
+                        int xShip = buttonCoordinates.get(button.getId()).getX();
+                        int yShip = buttonCoordinates.get(button.getId()).getY();
                         //target.setText(db.getImage()); --- must be changed to target.add(source, col, row)
                         //target.add(source, 5, 5, 1, 1);
                         //Places at 0,0 - will need to take coordinates once that is implemented
                         ImageView image = new ImageView(db.getImage());
 
                         // TODO: set image size; use correct column/row span
-                        System.out.println("Placing ship at" + xShip + " " + yShip);
+                        System.out.println("Placing ship at " + xShip + ", " + yShip);
                         //button.add(image, x, y, 1, 1);
                         success = true;
                     }
@@ -137,12 +133,11 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
 
 
 
-//Drag exited reverts the appearance of the receiving node when the mouse is outside of the node
+            //Drag exited reverts the appearance of the receiving node when the mouse is outside of the node
                 button.setOnDragExited(event -> {
                     //mouse moved away, remove graphical cues
-                    //  source.setVisible(true);
+                   //  source.setVisible(true);
 
-                    System.out.println("Exited ");
                     button.setOpacity(1);
 
                     event.consume();
