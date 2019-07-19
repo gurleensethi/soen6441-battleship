@@ -14,6 +14,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
@@ -89,6 +94,44 @@ public class ShipPlacementScene implements IScene {
         hBox.setSpacing(10);
         hBox.setPadding(new Insets(10, 10, 10, 10));
 
+        Image img = new Image("https://i.pinimg.com/564x/61/02/33/610233eb937b2119fde0dd7443d9114c.jpg");
+        ImageView view = new ImageView(img);
+        view.setFitHeight(10);
+        view.setFitWidth(30);
+
+        Button shipButton = new Button();
+        shipButton.setGraphic(view);
+
+//Drag detected event handler is used for adding drag functionality to the boat node
+        shipButton.setOnDragDetected(event -> {
+            //Drag was detected, start drap-and-drop gesture
+            //Allow any transfer node
+            Dragboard db = shipButton.startDragAndDrop(TransferMode.ANY);
+
+            //Put ImageView on dragboard
+            ClipboardContent cbContent = new ClipboardContent();
+            cbContent.putImage(img);
+
+            //cbContent.put(DataFormat.)
+            db.setContent(cbContent);
+            // shipButton.setVisible(false);
+            event.consume();
+
+        });
+
+
+        shipButton.setOnDragDone(event -> {
+            //the drag and drop gesture has ended
+            //if the data was successfully moved, clear it
+            System.out.println(event.getTransferMode());
+            if(event.getTransferMode() == TransferMode.MOVE){
+                shipButton.setVisible(false);
+            }
+            event.consume();
+
+        });
+
+
         // Button to cancel current ship selection
         Button cancelSelectionButton = new Button();
         cancelSelectionButton.setDisable(true);
@@ -107,7 +150,7 @@ public class ShipPlacementScene implements IScene {
         Pane spacing = new Pane();
         HBox.setHgrow(spacing, Priority.ALWAYS);
 
-        hBox.getChildren().addAll(spacing, cancelSelectionButton, doneButton);
+        hBox.getChildren().addAll(spacing, shipButton,cancelSelectionButton, doneButton);
 
         return hBox;
     }

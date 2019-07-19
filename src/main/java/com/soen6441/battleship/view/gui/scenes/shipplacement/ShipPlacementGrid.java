@@ -7,7 +7,11 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 
 import java.util.*;
@@ -66,6 +70,84 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                 button.setOnAction(this);
                 button.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                 buttons.put(id, button);
+
+
+
+//Drag over event handler is used for the receiving node to allow movement
+                button.setOnDragOver(event -> {
+
+                    //data is dragged over to target
+                    //accept it only if it is not dragged from the same node
+                    //and if it has image data
+                    if(event.getGestureSource() == button && event.getDragboard().hasImage()){
+                        //allow for moving
+                        event.acceptTransferModes(TransferMode.MOVE);
+                        System.out.println("transfer allowed");
+
+                    }
+
+                    event.consume();
+
+                });
+
+//Drag entered changes the appearance of the receiving node to indicate to the player that they can place there
+                button.setOnDragEntered(event -> {
+                    //The drag-and-drop gesture entered the target
+                    //show the user that it is an actual gesture target
+                    if(event.getGestureSource() != button && event.getDragboard().hasImage()){
+                        // source.setVisible(false);
+                        button.setOpacity(0.7);
+                        System.out.println("Drag entered at " + button.getId());
+                    }
+                    event.consume();
+
+                });
+
+
+// Drag dropped draws the image to the receiving node
+                button.setOnDragDropped(event -> {
+
+                    System.out.println("on dropped");
+                    //If there is an image on the dragboard, read it and use it
+                    Dragboard db = event.getDragboard();
+                    boolean success = false;
+                    Node node = event.getPickResult().getIntersectedNode();
+                    if(node != button && db.hasImage()){
+
+                        Integer cIndex = GridPane.getColumnIndex(node);
+                        Integer rIndex = GridPane.getRowIndex(node);
+                        int xShip = cIndex == null ? 0 : cIndex;
+                        int yShip = rIndex == null ? 0 : rIndex;
+                        //target.setText(db.getImage()); --- must be changed to target.add(source, col, row)
+                        //target.add(source, 5, 5, 1, 1);
+                        //Places at 0,0 - will need to take coordinates once that is implemented
+                        ImageView image = new ImageView(db.getImage());
+
+                        // TODO: set image size; use correct column/row span
+                        System.out.println("Placing ship at" + xShip + " " + yShip);
+                        //button.add(image, x, y, 1, 1);
+                        success = true;
+                    }
+                    //let the source know whether the image was successfully transferred and used
+                    event.setDropCompleted(success);
+
+                    event.consume();
+
+                });
+
+
+
+//Drag exited reverts the appearance of the receiving node when the mouse is outside of the node
+                button.setOnDragExited(event -> {
+                    //mouse moved away, remove graphical cues
+                    //  source.setVisible(true);
+
+                    System.out.println("Exited ");
+                    button.setOpacity(1);
+
+                    event.consume();
+
+                });
 
                 Coordinate coordinate = new Coordinate(x, y);
                 buttonCoordinates.put(id, coordinate);
