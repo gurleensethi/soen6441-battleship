@@ -76,11 +76,12 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
             //Drag over event handler is used for the receiving node to allow movement
                 button.setOnDragOver(event -> {
 
-                    if(event.getGestureSource() != button && event.getDragboard().hasImage()){
+                   // if(event.getGestureSource() != button && event.getDragboard().hasImage()){
                         //allow for moving
+                   // System.out.println("drop");
                         event.acceptTransferModes(TransferMode.MOVE);
 
-                    }
+                    //}
 
                     event.consume();
 
@@ -92,7 +93,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                     //show the user that it is an actual gesture target
                     if(event.getGestureSource() != button && event.getDragboard().hasImage()){
                         // source.setVisible(false);
-                        button.setOpacity(0.7);
+                        button.setOpacity(0.5);
                         String str = "";
                         System.out.println("Drag entered at " + button.getId());
                     }
@@ -110,18 +111,26 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                     Node node = event.getPickResult().getIntersectedNode();
                     if(node != button && db.hasImage()){
 
+                        int xShipInitial = buttonCoordinates.get(button.getId()).getX();
+                        int yShipInitial = buttonCoordinates.get(button.getId()).getY();
 
+                        int xShipFinal = xShipInitial + 1;
+                        int yShipFinal = yShipInitial ;
 
-                        int xShip = buttonCoordinates.get(button.getId()).getX();
-                        int yShip = buttonCoordinates.get(button.getId()).getY();
-                        //target.setText(db.getImage()); --- must be changed to target.add(source, col, row)
-                        //target.add(source, 5, 5, 1, 1);
-                        //Places at 0,0 - will need to take coordinates once that is implemented
                         ImageView image = new ImageView(db.getImage());
+                        image.setFitWidth(button.getWidth()/2);
+                        image.setFitHeight(button.getHeight()/2);
+
 
                         // TODO: set image size; use correct column/row span
-                        System.out.println("Placing ship at " + xShip + ", " + yShip);
-                        //button.add(image, x, y, 1, 1);
+                        System.out.println("Placing ship at " + xShipInitial + ", " + yShipInitial);
+
+                        button.setText("");
+                        button.setGraphic(image);
+
+//                         buttons.get(buildButtonId(xShipFinal,yShipFinal)).setText("");
+//                        buttons.get(buildButtonId(xShipFinal,yShipFinal)).setGraphic(image);
+
                         success = true;
                     }
                     //let the source know whether the image was successfully transferred and used

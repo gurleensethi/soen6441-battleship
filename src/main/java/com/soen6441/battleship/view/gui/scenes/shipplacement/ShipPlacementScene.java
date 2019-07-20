@@ -22,6 +22,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.io.FileInputStream;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -67,11 +69,16 @@ public class ShipPlacementScene implements IScene {
                 shipPlacementGrid.getSelectedShipCountObservable()
         );
 
+        Node shipBar = buildShipButtons();
+
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(infoBar, toolbar, shipPlacementGrid);
 
-        return new Scene(vBox);
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(vBox,shipBar);
+
+        return new Scene(hBox);
     }
 
     /**
@@ -94,49 +101,6 @@ public class ShipPlacementScene implements IScene {
         hBox.setSpacing(10);
         hBox.setPadding(new Insets(10, 10, 10, 10));
 
-        Image img = new Image("https://i.pinimg.com/564x/61/02/33/610233eb937b2119fde0dd7443d9114c.jpg");
-        ImageView view = new ImageView(img);
-        view.setFitHeight(10);
-        view.setFitWidth(30);
-
-        Button shipButton = new Button();
-        shipButton.setGraphic(view);
-
-        //Drag detected event handler is used for adding drag functionality to the boat node
-        shipButton.setOnDragDetected(event -> {
-            //Drag was detected, start drap-and-drop gesture
-            //Allow any transfer node
-            Dragboard db = shipButton.startDragAndDrop(TransferMode.MOVE);
-
-            //Put ImageView on dragboard
-            ClipboardContent cbContent = new ClipboardContent();
-            cbContent.putImage(img);
-
-            //cbContent.put(DataFormat.)
-            db.setContent(cbContent);
-            // shipButton.setVisible(false);
-            event.consume();
-
-        });
-
-
-        shipButton.setOnDragDropped(event -> {
-
-            System.out.println("----------------------dropped");
-
-        });
-
-        shipButton.setOnDragDone(event -> {
-            //the drag and drop gesture has ended
-            //if the data was successfully moved, clear it
-            System.out.println("Transfer mode = " + event.getTransferMode());
-            if(event.getTransferMode() == TransferMode.MOVE){
-                shipButton.setVisible(false);
-            }
-            event.consume();
-
-        });
-
 
         // Button to cancel current ship selection
         Button cancelSelectionButton = new Button();
@@ -156,7 +120,7 @@ public class ShipPlacementScene implements IScene {
         Pane spacing = new Pane();
         HBox.setHgrow(spacing, Priority.ALWAYS);
 
-        hBox.getChildren().addAll(spacing, shipButton,cancelSelectionButton, doneButton);
+        hBox.getChildren().addAll(spacing,cancelSelectionButton, doneButton);
 
         return hBox;
     }
@@ -182,4 +146,65 @@ public class ShipPlacementScene implements IScene {
 
         return hBox;
     }
+
+    private Node buildShipButtons(){
+
+        VBox vBox = new VBox(10);
+        vBox.setPadding(new Insets(100, 10, 10, 10));
+
+
+        Button ship1 = new Button();
+        Image img = new Image("https://static.thenounproject.com/png/12287-200.png");
+
+        ImageView view = new ImageView(img);
+        view.setFitHeight(30);
+        view.setFitWidth(40);
+
+
+        ship1.setGraphic(view);
+
+        //Drag detected event handler is used for adding drag functionality to the boat node
+        ship1.setOnDragDetected(event -> {
+            //Allow any transfer node
+            Dragboard db = ship1.startDragAndDrop(TransferMode.MOVE);
+
+            //Put ImageView on dragboard
+            ClipboardContent cbContent = new ClipboardContent();
+            cbContent.putImage(img);
+
+
+            //cbContent.put(DataFormat.)
+            db.setContent(cbContent);
+            // shipButton.setVisible(false);
+            event.consume();
+
+        });
+
+
+        ship1.setOnDragDropped(event -> {
+
+            System.out.println("----------------------dropped");
+
+        });
+
+        ship1.setOnDragDone(event -> {
+            //the drag and drop gesture has ended
+            //if the data was successfully moved, clear it
+            System.out.println("Transfer mode = " + event.getTransferMode());
+            if(event.getTransferMode() == TransferMode.MOVE){
+                ship1.setVisible(false);
+            }
+            event.consume();
+
+        });
+
+
+        vBox.getChildren().add(ship1);
+
+
+        return vBox;
+
+    }
+
+
 }
