@@ -153,20 +153,43 @@ public class ShipPlacementScene implements IScene {
         vBox.setPadding(new Insets(100, 10, 10, 10));
 
 
-        Button ship1 = new Button();
-        Image img = new Image("https://static.thenounproject.com/png/12287-200.png");
+        Button ship1 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",1);
+
+        Button ship2 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",2);
+
+        Button ship3 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",3);
+
+        Button ship4 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",4);
+
+        Button ship5 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",5);
+
+
+        vBox.getChildren().addAll(ship1,ship2,ship3,ship4,ship5);
+
+
+        return vBox;
+
+    }
+
+    private Button createShipButtons(String imageURL,int shipSize){
+
+
+        //TODO: Utilize shipSize
+
+        Button shipButton = new Button();
+        Image img = new Image(imageURL);
 
         ImageView view = new ImageView(img);
         view.setFitHeight(30);
         view.setFitWidth(40);
 
 
-        ship1.setGraphic(view);
+        shipButton.setGraphic(view);
 
         //Drag detected event handler is used for adding drag functionality to the boat node
-        ship1.setOnDragDetected(event -> {
+        shipButton.setOnDragDetected(event -> {
             //Allow any transfer node
-            Dragboard db = ship1.startDragAndDrop(TransferMode.MOVE);
+            Dragboard db = shipButton.startDragAndDrop(TransferMode.MOVE);
 
             //Put ImageView on dragboard
             ClipboardContent cbContent = new ClipboardContent();
@@ -181,30 +204,28 @@ public class ShipPlacementScene implements IScene {
         });
 
 
-        ship1.setOnDragDropped(event -> {
+        shipButton.setOnDragDropped(event -> {
 
             System.out.println("----------------------dropped");
 
         });
 
-        ship1.setOnDragDone(event -> {
+        shipButton.setOnDragDone(event -> {
             //the drag and drop gesture has ended
             //if the data was successfully moved, clear it
             System.out.println("Transfer mode = " + event.getTransferMode());
             if(event.getTransferMode() == TransferMode.MOVE){
-                ship1.setVisible(false);
+                shipButton.setVisible(false);
             }
             event.consume();
 
         });
 
-
-        vBox.getChildren().add(ship1);
-
-
-        return vBox;
+        return shipButton;
 
     }
+
+
 
 
 }
