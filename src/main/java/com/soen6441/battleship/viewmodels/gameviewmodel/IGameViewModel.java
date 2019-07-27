@@ -49,4 +49,6 @@ public interface IGameViewModel {
     Observable<Long> gameTimer();
 
     void startGame();
+
+    Long getFinalScore();
 }

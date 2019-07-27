@@ -1,6 +1,8 @@
 package com.soen6441.battleship.utils;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 import java.util.Date;
@@ -59,7 +61,7 @@ public class TimerUtil {
     }
 
     public Observable<Long> asObservable() {
-        return this.timerListener;
+        return this.timerListener.subscribeOn(Schedulers.newThread());
     }
 
     public boolean isRunning() {

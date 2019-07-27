@@ -6,6 +6,9 @@ import com.soen6441.battleship.services.gamegrid.GameGrid;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The type Game player is the class to instantiate the player type from which both human player
  * and AI player will take properties.
@@ -14,7 +17,7 @@ public class GamePlayer {
     protected final String name;
     protected final GameGrid gameGrid;
     protected Observable<Boolean> isMyTurn;
-    protected long totalTimeTaken;
+    protected List<Long> turnTimes = new ArrayList<>();
 
     /**
      * Instantiates a new Game player.
@@ -43,15 +46,15 @@ public class GamePlayer {
         return isMyTurn;
     }
 
-    public long getTotalTimeTaken() {
-        return totalTimeTaken;
+    public List<Long> getTurnTimes() {
+        return turnTimes;
     }
 
-    public void setTotalTimeTaken(long totalTimeTaken) {
-        this.totalTimeTaken = totalTimeTaken;
+    public void setTurnTimes(List<Long> turnTimes) {
+        this.turnTimes = turnTimes;
     }
 
     public void addTimeTaken(long timeToAdd) {
-        this.totalTimeTaken += timeToAdd;
+        this.turnTimes.add(timeToAdd);
     }
 }

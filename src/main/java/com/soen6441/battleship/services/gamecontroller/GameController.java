@@ -12,6 +12,7 @@ import com.soen6441.battleship.services.gamecontroller.gamestrategy.ITurnStrateg
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.SalvaTurnStrategy;
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.SimpleTurnStrategy;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
+import com.soen6441.battleship.services.scorecalculator.ScoreCalculator;
 import com.soen6441.battleship.utils.TimerUtil;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
@@ -144,9 +145,9 @@ public class GameController implements IGameController {
             long timeTaken = turnTimer.stop();
 
             if (currentPlayerName.equals("player")) {
-                player.setTotalTimeTaken(timeTaken);
+                player.addTimeTaken(timeTaken);
             } else {
-                enemy.setTotalTimeTaken(timeTaken);
+                enemy.addTimeTaken(timeTaken);
             }
 
             GamePlayer playerToHit = currentPlayerName.equals("player") ? enemy : player;
@@ -233,5 +234,11 @@ public class GameController implements IGameController {
     @Override
     public Observable<Long> gameTimer() {
         return gameTimer.asObservable();
+    }
+
+    @Override
+    public Long getFinalScore() {
+        boolean didPlayerWin = this.enemy.getGameGrid().getUnSunkShips() == 0;
+        return new ScoreCalculator().calculateScore(this.player.getTurnTimes(), didPlayerWin, enemy.getGameGrid().getUnSunkShips());
     }
 }

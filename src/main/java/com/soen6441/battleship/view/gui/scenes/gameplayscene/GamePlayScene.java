@@ -3,6 +3,7 @@ package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 import com.soen6441.battleship.utils.TimerUtil;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
+import io.reactivex.schedulers.Schedulers;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -11,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * This class Game Play scene is the screen which updates the GUI after each move when players
@@ -55,7 +58,7 @@ public class GamePlayScene implements IScene {
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setHeaderText("Game Over!");
-                alert.setContentText(winnerText);
+                alert.setContentText(winnerText + "\nScore: " + gameViewModel.getFinalScore());
                 alert.show();
             }
         });
