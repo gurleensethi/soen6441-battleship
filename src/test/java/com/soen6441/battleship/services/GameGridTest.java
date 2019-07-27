@@ -35,6 +35,8 @@ public class GameGridTest {
     private static Ship shipBelowCurrentShip;
     private static Ship correctShipVertical;
     private static Ship shipToLeftOfVerticalCorrectShip;
+    private static Ship shipToTopOfVerticalCorrectShip;
+    private static Ship shipToBelowOfVerticalCorrectShip;
 
     @BeforeClass()
     public static void setUpBeforeClass() {
@@ -99,6 +101,20 @@ public class GameGridTest {
                 .setDirection(ShipDirection.VERTICAL)
                 .setStartCoordinates(0, 1)
                 .setEndCoordinates(0, 6)
+                .setLength(5)
+                .build();
+
+        shipToTopOfVerticalCorrectShip = new Ship.Builder()
+                .setDirection(ShipDirection.VERTICAL)
+                .setStartCoordinates(1, 0)
+                .setEndCoordinates(1, 0)
+                .setLength(1)
+                .build();
+
+        shipToBelowOfVerticalCorrectShip = new Ship.Builder()
+                .setDirection(ShipDirection.VERTICAL)
+                .setStartCoordinates(1, 7)
+                .setEndCoordinates(1, 7)
                 .setLength(5)
                 .build();
     }
@@ -352,5 +368,17 @@ public class GameGridTest {
     public void twoShipsCannotBePlacedAdjacentlyVerticalRight() throws Exception {
         gameGrid.placeShip(shipToLeftOfVerticalCorrectShip);
         gameGrid.placeShip(correctShipVertical);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyVerticalTop() throws Exception {
+        gameGrid.placeShip(correctShipVertical);
+        gameGrid.placeShip(shipToTopOfVerticalCorrectShip);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyVerticalBelow() throws Exception {
+        gameGrid.placeShip(correctShipVertical);
+        gameGrid.placeShip(shipToBelowOfVerticalCorrectShip);
     }
 }

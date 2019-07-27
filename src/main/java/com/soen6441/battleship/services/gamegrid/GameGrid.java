@@ -289,12 +289,12 @@ public class GameGrid implements IGameGrid {
             }
         } else if (ship.getDirection() == ShipDirection.VERTICAL) {
             // Check if no ships are on top for below the ship
-            if (ship.getStartY() != 0) {
+            if (ship.getStartY() >= 0) {
                 checkValidAndThrow(ship.getStartX(), ship.getStartY() - 1);
             }
 
-            if (ship.getEndY() != (gridSize - 1)) {
-                checkValidAndThrow(ship.getStartX() + 1, ship.getEndY() - 1);
+            if (ship.getEndY() <= (gridSize - 1)) {
+                checkValidAndThrow(ship.getStartX(), ship.getEndY() + 1);
             }
 
             for (int y = ship.getStartY(); y <= ship.getEndY(); y++) {
