@@ -47,5 +47,7 @@ public interface IGameController {
 
     Observable<Long> gameTimer();
 
+    Long getFinalScore();
+
     void startGame();
 }

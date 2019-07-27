@@ -81,4 +81,9 @@ public class GameViewModel implements IGameViewModel {
     public void startGame() {
         this.gameController.startGame();
     }
+
+    @Override
+    public Long getFinalScore() {
+        return this.gameController.getFinalScore();
+    }
 }
