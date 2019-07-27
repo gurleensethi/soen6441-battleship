@@ -6,12 +6,9 @@ import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 import io.reactivex.Observable;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -21,8 +18,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-
-import java.io.FileInputStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -69,14 +64,15 @@ public class ShipPlacementScene implements IScene {
                 shipPlacementGrid.getSelectedShipCountObservable()
         );
 
-        Node shipBar = buildShipButtons();
+        Node shipBar = buildVerticalShipButtons();
+        Node shipBar2 = buildHorizontalShipButtons();
 
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(infoBar, toolbar, shipPlacementGrid);
 
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(vBox,shipBar);
+        hBox.getChildren().addAll(vBox,shipBar,shipBar2);
 
         return new Scene(hBox);
     }
@@ -147,25 +143,46 @@ public class ShipPlacementScene implements IScene {
         return hBox;
     }
 
-    private Node buildShipButtons(){
+    private Node buildVerticalShipButtons(){
 
         VBox vBox = new VBox(10);
         vBox.setPadding(new Insets(100, 10, 10, 10));
 
+        Text verticalShipLabel = new Text("Vertical");
 
-        Button ship1 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",1);
+        Button ship1v = createShipButtons("https://static.thenounproject.com/png/12287-200.png",6);
 
-        Button ship2 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",2);
+        Button ship2v = createShipButtons("https://static.thenounproject.com/png/12287-200.png",7);
 
-        Button ship3 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",3);
+        Button ship3v = createShipButtons("https://static.thenounproject.com/png/12287-200.png",8);
 
-        Button ship4 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",4);
+        Button ship4v = createShipButtons("https://static.thenounproject.com/png/12287-200.png",9);
 
-        Button ship5 = createShipButtons("https://static.thenounproject.com/png/12287-200.png",5);
+        Button ship5v = createShipButtons("https://static.thenounproject.com/png/12287-200.png",10);
+
+        vBox.getChildren().addAll(verticalShipLabel,ship1v,ship2v,ship3v,ship4v,ship5v);
 
 
-        vBox.getChildren().addAll(ship1,ship2,ship3,ship4,ship5);
+        return vBox;
 
+    }
+    private Node buildHorizontalShipButtons(){
+
+        VBox vBox = new VBox(10);
+        vBox.setPadding(new Insets(100, 10, 10, 10));
+        Text horizontalShipLabel = new Text("Horizontal");
+
+        Button ship1h = createShipButtons("https://static.thenounproject.com/png/12287-200.png",1);
+
+        Button ship2h = createShipButtons("https://static.thenounproject.com/png/12287-200.png",2);
+
+        Button ship3h = createShipButtons("https://static.thenounproject.com/png/12287-200.png",3);
+
+        Button ship4h = createShipButtons("https://static.thenounproject.com/png/12287-200.png",4);
+
+        Button ship5h = createShipButtons("https://static.thenounproject.com/png/12287-200.png",5);
+
+        vBox.getChildren().addAll(horizontalShipLabel,ship1h,ship2h,ship3h,ship4h,ship5h);
 
         return vBox;
 
@@ -202,7 +219,6 @@ public class ShipPlacementScene implements IScene {
             event.consume();
 
         });
-
 
         shipButton.setOnDragDropped(event -> {
 

@@ -73,70 +73,67 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
                 button.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                 buttons.put(id, button);
 
-
-
                 //Drag over event handler is used for the receiving node to allow movement
                 button.setOnDragOver(event -> {
-                        event.acceptTransferModes(TransferMode.MOVE);
-                event.consume();
+                    event.acceptTransferModes(TransferMode.MOVE);
+                    event.consume();
                 });
 
                 //Drag entered changes the appearance of the receiving node to indicate to the player that they can place there
                 button.setOnDragEntered(event -> {
-                        //The drag-and-drop gesture entered the target
-                        //show the user that it is an actual gesture target
-                if (event.getGestureSource() != button && event.getDragboard().hasImage()) {
-                    // source.setVisible(false);
-                    button.setOpacity(0.5);
-                    String str = "";
-                    System.out.println("Drag entered at " + button.getId());
-                }
-                event.consume();
+                    //The drag-and-drop gesture entered the target
+                    //show the user that it is an actual gesture target
+                    if (event.getGestureSource() != button && event.getDragboard().hasImage()) {
+                        // source.setVisible(false);
+                        button.setOpacity(0.5);
+                        System.out.println("Drag entered at " + button.getId());
+                    }
+                    event.consume();
 
                 });
 
                 // Drag dropped draws the image to the receiving node
                 button.setOnDragDropped(event -> {
 
-                        //If there is an image on the dragboard, read it and use it
-                        Dragboard db = event.getDragboard();
-                boolean success = false;
-                Node node = event.getPickResult().getIntersectedNode();
-                if (node != button && db.hasImage()) {
+                    //If there is an image on the dragboard, read it and use it
+                    Dragboard db = event.getDragboard();
+                    boolean success = false;
+                    Node node = event.getPickResult().getIntersectedNode();
+                    if (node != button && db.hasImage()) {
 
-                    int xShipInitial = buttonCoordinates.get(button.getId()).getX();
-                    int yShipInitial = buttonCoordinates.get(button.getId()).getY();
+                        int xShipInitial = buttonCoordinates.get(button.getId()).getX();
+                        int yShipInitial = buttonCoordinates.get(button.getId()).getY();
 
-                    int xShipFinal = xShipInitial + 1;
-                    int yShipFinal = yShipInitial;
+                        int xShipFinal = xShipInitial + 1;
+                        int yShipFinal = yShipInitial;
 
-                    ImageView image = new ImageView(db.getImage());
-                    image.setFitWidth(button.getWidth() / 2);
-                    image.setFitHeight(button.getHeight() / 2);
+                        ImageView image = new ImageView(db.getImage());
+                        image.setFitWidth(button.getWidth() / 2);
+                        image.setFitHeight(button.getHeight() / 2);
 
 
-                    // TODO: set image size; use correct column/row span
-                    System.out.println("Placing ship at " + xShipInitial + ", " + yShipInitial);
+                        // TODO: set image size; use correct column/row span
+                        System.out.println("Placing ship at " + xShipInitial + ", " + yShipInitial);
 
-                    button.setText("");
-                    button.setGraphic(image);
+                        button.setText("");
+                        button.setGraphic(image);
 
-                    //                         buttons.get(buildButtonId(xShipFinal,yShipFinal)).setText("");
-                    //                        buttons.get(buildButtonId(xShipFinal,yShipFinal)).setGraphic(image);
+                        //                         buttons.get(buildButtonId(xShipFinal,yShipFinal)).setText("");
+                        //                        buttons.get(buildButtonId(xShipFinal,yShipFinal)).setGraphic(image);
 
-                    success = true;
-                }
-                //let the source know whether the image was successfully transferred and used
-                event.setDropCompleted(success);
+                        success = true;
+                    }
+                    //let the source know whether the image was successfully transferred and used
+                    event.setDropCompleted(success);
 
-                event.consume();
+                    event.consume();
 
                 });
                 //Drag exited reverts the appearance of the receiving node when the mouse is outside of the node
                 button.setOnDragExited(event -> {
-                        //mouse moved away, remove graphical cues
-                        button.setOpacity(1);
-                event.consume();
+                    //mouse moved away, remove graphical cues
+                    button.setOpacity(1);
+                    event.consume();
                 });
 
                 Coordinate coordinate = new Coordinate(x, y);
