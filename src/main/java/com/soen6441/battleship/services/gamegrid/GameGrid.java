@@ -273,8 +273,20 @@ public class GameGrid implements IGameGrid {
                 checkValidAndThrow(ship.getEndX() + 1, ship.getStartY());
             }
 
+            // Normalise starting and ending coordinates to check if ship is no being placed diagonally
+            // to any other ship.
+            int startX = ship.getStartX();
+            int endX = ship.getEndX();
 
-            for (int x = ship.getStartX(); x <= ship.getEndX(); x++) {
+            if (startX > 0) {
+                startX -= 1;
+            }
+
+            if (endX < (gridSize - 1)) {
+                endX += 1;
+            }
+
+            for (int x = startX; x <= endX; x++) {
                 // Check if no ship is placed above
                 if (ship.getStartY() != 0) {
                     checkValidAndThrow(x, ship.getStartY() - 1);
@@ -297,7 +309,20 @@ public class GameGrid implements IGameGrid {
                 checkValidAndThrow(ship.getStartX(), ship.getEndY() + 1);
             }
 
-            for (int y = ship.getStartY(); y <= ship.getEndY(); y++) {
+            // Normalise starting and ending coordinates to check if ship is no being placed diagonally
+            // to any other ship.
+            int startY = ship.getStartY();
+            int endY = ship.getEndY();
+
+            if (startY > 0) {
+                startY -= 1;
+            }
+
+            if (endY < (gridSize - 1)) {
+                endY += 1;
+            }
+
+            for (int y = startY; y <= endY; y++) {
 
                 // Check if no ship is placed to the left
                 if (ship.getStartX() != 0) {
