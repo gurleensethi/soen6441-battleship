@@ -40,8 +40,12 @@ public class GameGridTest {
     private static Ship shipToTopOfVerticalCorrectShip;
     private static Ship shipToBelowOfVerticalCorrectShip;
 
-    @BeforeClass()
-    public static void setUpBeforeClass() {
+    /**
+     * Sets up.
+     */
+    @Before()
+    public void setUp() {
+        gameGrid = new GameGrid(8);
         wrongShipHorizontal = new Ship.Builder()
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 1)
@@ -133,14 +137,6 @@ public class GameGridTest {
                 .setEndCoordinates(7, 1)
                 .setLength(1)
                 .build();
-    }
-
-    /**
-     * Sets up.
-     */
-    @Before()
-    public void setUp() {
-        gameGrid = new GameGrid(8);
     }
 
     /**
