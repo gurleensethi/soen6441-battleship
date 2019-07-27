@@ -73,7 +73,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
                 button.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                 buttons.put(id, button);
 
-                //Drag over event handler is used for the receiving node to allow movement
+               // Drag over event handler is used for the receiving node to allow movement
                 button.setOnDragOver(event -> {
                     event.acceptTransferModes(TransferMode.MOVE);
                     event.consume();
@@ -95,7 +95,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
                 // Drag dropped draws the image to the receiving node
                 button.setOnDragDropped(event -> {
 
-                    //If there is an image on the dragboard, read it and use it
+                    //If there is an image on the drag board, read it and use it
                     Dragboard db = event.getDragboard();
                     boolean success = false;
                     Node node = event.getPickResult().getIntersectedNode();
@@ -104,23 +104,15 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
                         int xShipInitial = buttonCoordinates.get(button.getId()).getX();
                         int yShipInitial = buttonCoordinates.get(button.getId()).getY();
 
-                        int xShipFinal = xShipInitial + 1;
-                        int yShipFinal = yShipInitial;
-
                         ImageView image = new ImageView(db.getImage());
                         image.setFitWidth(button.getWidth() / 2);
                         image.setFitHeight(button.getHeight() / 2);
 
-
                         // TODO: set image size; use correct column/row span
-                        System.out.println("Placing ship at " + xShipInitial + ", " + yShipInitial);
+                        logger.info("Placing ship at " + xShipInitial + ", " + yShipInitial);
 
                         button.setText("");
                         button.setGraphic(image);
-
-                        //                         buttons.get(buildButtonId(xShipFinal,yShipFinal)).setText("");
-                        //                        buttons.get(buildButtonId(xShipFinal,yShipFinal)).setGraphic(image);
-
                         success = true;
                     }
                     //let the source know whether the image was successfully transferred and used
@@ -157,6 +149,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
 
     @Override
     public void handle(ActionEvent event) {
+
         if (event.getTarget() instanceof Button) {
             final Button clickedButton = (Button) event.getTarget();
             final String clickedButtonId = clickedButton.getId();
