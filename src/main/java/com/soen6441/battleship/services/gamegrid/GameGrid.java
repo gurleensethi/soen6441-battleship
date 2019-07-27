@@ -9,6 +9,7 @@ import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.exceptions.DirectionCoordinatesMismatchException;
 import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.utils.GridUtils;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
@@ -250,18 +251,90 @@ public class GameGrid implements IGameGrid {
     }
 
     /**
+     * Checks if the ship can be placed on provided coordinates.
+     * - No ships on already existing coordinates.
+     * - No ships in surrounding coordinates.
+     *
      * @param ship to be added on the grid
      * @throws InvalidShipPlacementException if ship cannot be placed because of invalid surroundings.
      */
     private void checkPointValidityForShip(Ship ship) throws InvalidShipPlacementException {
         logger.info("Checking Ship validity...");
+
+        int gridSize = GameConfig.getsInstance().getGridSize();
+
         if (ship.getDirection() == ShipDirection.HORIZONTAL) {
-            for (int i = ship.getStartX(); i <= ship.getEndX(); i++) {
-                checkValidAndThrow(i, ship.getStartY());
+            // Check if no ship is on the left or right
+            if (ship.getStartX() != 0) {
+                checkValidAndThrow(ship.getStartX() - 1, ship.getStartY());
+            }
+
+            if (ship.getStartX() != (gridSize - 1)) {
+                checkValidAndThrow(ship.getEndX() + 1, ship.getStartY());
+            }
+
+            // Normalise starting and ending coordinates to check if ship is no being placed diagonally
+            // to any other ship.
+            int startX = ship.getStartX();
+            int endX = ship.getEndX();
+
+            if (startX > 0) {
+                startX -= 1;
+            }
+
+            if (endX < (gridSize - 1)) {
+                endX += 1;
+            }
+
+            for (int x = startX; x <= endX; x++) {
+                // Check if no ship is placed above
+                if (ship.getStartY() != 0) {
+                    checkValidAndThrow(x, ship.getStartY() - 1);
+                }
+
+                // Check if no ships is placed below
+                if (ship.getStartY() != gridSize - 1) {
+                    checkValidAndThrow(x, ship.getStartY() + 1);
+                }
+
+                checkValidAndThrow(x, ship.getStartY());
             }
         } else if (ship.getDirection() == ShipDirection.VERTICAL) {
-            for (int i = ship.getStartY(); i <= ship.getEndY(); i++) {
-                checkValidAndThrow(ship.getStartX(), i);
+            // Check if no ships are on top for below the ship
+            if (ship.getStartY() >= 0) {
+                checkValidAndThrow(ship.getStartX(), ship.getStartY() - 1);
+            }
+
+            if (ship.getEndY() <= (gridSize - 1)) {
+                checkValidAndThrow(ship.getStartX(), ship.getEndY() + 1);
+            }
+
+            // Normalise starting and ending coordinates to check if ship is no being placed diagonally
+            // to any other ship.
+            int startY = ship.getStartY();
+            int endY = ship.getEndY();
+
+            if (startY > 0) {
+                startY -= 1;
+            }
+
+            if (endY < (gridSize - 1)) {
+                endY += 1;
+            }
+
+            for (int y = startY; y <= endY; y++) {
+
+                // Check if no ship is placed to the left
+                if (ship.getStartX() != 0) {
+                    checkValidAndThrow(ship.getStartX() - 1, y);
+                }
+
+                // Check if no ship is placed to the right
+                if (ship.getStartX() != (gridSize - 1)) {
+                    checkValidAndThrow(ship.getStartX() + 1, y);
+                }
+
+                checkValidAndThrow(ship.getStartX(), y);
             }
         }
         logger.info("Ship validity check complete!");

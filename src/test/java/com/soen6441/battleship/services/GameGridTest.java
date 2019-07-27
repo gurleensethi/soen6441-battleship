@@ -13,7 +13,6 @@ import com.soen6441.battleship.exceptions.InvalidShipPlacementException;
 import com.soen6441.battleship.services.gamegrid.IGameGrid;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
-import javafx.scene.control.Cell;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,6 +32,13 @@ public class GameGridTest {
     private static Ship correctShip;
     private static Ship correctShip2;
     private static Ship overlappingShip;
+    private static Ship shipToBelowCurrentShip;
+    private static Ship shipToLeftOfCurrentShip;
+    private static Ship shipToRightOfCurrentShip;
+    private static Ship correctShipVertical;
+    private static Ship shipToLeftOfVerticalCorrectShip;
+    private static Ship shipToTopOfVerticalCorrectShip;
+    private static Ship shipToBelowOfVerticalCorrectShip;
 
     /**
      * Sets up.
@@ -40,7 +46,6 @@ public class GameGridTest {
     @Before()
     public void setUp() {
         gameGrid = new GameGrid(8);
-
         wrongShipHorizontal = new Ship.Builder()
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 1)
@@ -82,6 +87,55 @@ public class GameGridTest {
                 .setDirection(ShipDirection.VERTICAL)
                 .setStartCoordinates(3, 0)
                 .setEndCoordinates(3, 5)
+                .build();
+
+        shipToBelowCurrentShip = new Ship.Builder()
+                .setDirection(ShipDirection.HORIZONTAL)
+                .setStartCoordinates(1, 2)
+                .setEndCoordinates(6, 2)
+                .setLength(5)
+                .build();
+
+        correctShipVertical = new Ship.Builder()
+                .setDirection(ShipDirection.VERTICAL)
+                .setStartCoordinates(1, 1)
+                .setEndCoordinates(1, 6)
+                .setLength(5)
+                .build();
+
+        shipToLeftOfVerticalCorrectShip = new Ship.Builder()
+                .setDirection(ShipDirection.VERTICAL)
+                .setStartCoordinates(0, 1)
+                .setEndCoordinates(0, 6)
+                .setLength(5)
+                .build();
+
+        shipToTopOfVerticalCorrectShip = new Ship.Builder()
+                .setDirection(ShipDirection.VERTICAL)
+                .setStartCoordinates(1, 0)
+                .setEndCoordinates(1, 0)
+                .setLength(1)
+                .build();
+
+        shipToBelowOfVerticalCorrectShip = new Ship.Builder()
+                .setDirection(ShipDirection.VERTICAL)
+                .setStartCoordinates(1, 7)
+                .setEndCoordinates(1, 7)
+                .setLength(1)
+                .build();
+
+        shipToLeftOfCurrentShip = new Ship.Builder()
+                .setDirection(ShipDirection.HORIZONTAL)
+                .setStartCoordinates(0, 1)
+                .setEndCoordinates(0, 1)
+                .setLength(1)
+                .build();
+
+        shipToRightOfCurrentShip = new Ship.Builder()
+                .setDirection(ShipDirection.HORIZONTAL)
+                .setStartCoordinates(7, 1)
+                .setEndCoordinates(7, 1)
+                .setLength(1)
                 .build();
     }
 
@@ -302,5 +356,53 @@ public class GameGridTest {
         assertEquals(HitResult.HIT, gameGrid.peekHit(new Coordinate(1, 1)));
         gameGrid.hit(1, 1);
         assertEquals(HitResult.ALREADY_HIT, gameGrid.peekHit(new Coordinate(1, 1)));
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyHorizontalDown() throws Exception {
+        gameGrid.placeShip(correctShip);
+        gameGrid.placeShip(shipToBelowCurrentShip);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyHorizontalUp() throws Exception {
+        gameGrid.placeShip(shipToBelowCurrentShip);
+        gameGrid.placeShip(correctShip);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyHorizontalLeft() throws Exception {
+        gameGrid.placeShip(correctShip);
+        gameGrid.placeShip(shipToLeftOfCurrentShip);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyHorizontalRight() throws Exception {
+        gameGrid.placeShip(correctShip);
+        gameGrid.placeShip(shipToRightOfCurrentShip);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyVerticalLeft() throws Exception {
+        gameGrid.placeShip(correctShipVertical);
+        gameGrid.placeShip(shipToLeftOfVerticalCorrectShip);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyVerticalRight() throws Exception {
+        gameGrid.placeShip(shipToLeftOfVerticalCorrectShip);
+        gameGrid.placeShip(correctShipVertical);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyVerticalTop() throws Exception {
+        gameGrid.placeShip(correctShipVertical);
+        gameGrid.placeShip(shipToTopOfVerticalCorrectShip);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyVerticalBelow() throws Exception {
+        gameGrid.placeShip(correctShipVertical);
+        gameGrid.placeShip(shipToBelowOfVerticalCorrectShip);
     }
 }

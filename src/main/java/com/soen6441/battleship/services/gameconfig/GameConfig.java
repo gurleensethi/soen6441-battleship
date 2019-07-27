@@ -4,6 +4,7 @@ public class GameConfig {
     private static GameConfig sInstance;
     private String playerName = "Player";
     private boolean isSalvaVariation = false;
+    private int gridSize = 8;
 
     private GameConfig() {
     }
@@ -30,5 +31,13 @@ public class GameConfig {
 
     public void setSalvaVariation(boolean salvaVariation) {
         isSalvaVariation = salvaVariation;
+    }
+
+    public int getGridSize() {
+        return gridSize;
+    }
+
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
     }
 }
