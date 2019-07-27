@@ -32,7 +32,9 @@ public class GameGridTest {
     private static Ship correctShip;
     private static Ship correctShip2;
     private static Ship overlappingShip;
-    private static Ship shipBelowCurrentShip;
+    private static Ship shipToBelowCurrentShip;
+    private static Ship shipToLeftOfCurrentShip;
+    private static Ship shipToRightOfCurrentShip;
     private static Ship correctShipVertical;
     private static Ship shipToLeftOfVerticalCorrectShip;
     private static Ship shipToTopOfVerticalCorrectShip;
@@ -83,7 +85,7 @@ public class GameGridTest {
                 .setEndCoordinates(3, 5)
                 .build();
 
-        shipBelowCurrentShip = new Ship.Builder()
+        shipToBelowCurrentShip = new Ship.Builder()
                 .setDirection(ShipDirection.HORIZONTAL)
                 .setStartCoordinates(1, 2)
                 .setEndCoordinates(6, 2)
@@ -115,7 +117,21 @@ public class GameGridTest {
                 .setDirection(ShipDirection.VERTICAL)
                 .setStartCoordinates(1, 7)
                 .setEndCoordinates(1, 7)
-                .setLength(5)
+                .setLength(1)
+                .build();
+
+        shipToLeftOfCurrentShip = new Ship.Builder()
+                .setDirection(ShipDirection.HORIZONTAL)
+                .setStartCoordinates(0, 1)
+                .setEndCoordinates(0, 1)
+                .setLength(1)
+                .build();
+
+        shipToRightOfCurrentShip = new Ship.Builder()
+                .setDirection(ShipDirection.HORIZONTAL)
+                .setStartCoordinates(7, 1)
+                .setEndCoordinates(7, 1)
+                .setLength(1)
                 .build();
     }
 
@@ -349,13 +365,25 @@ public class GameGridTest {
     @Test(expected = InvalidShipPlacementException.class)
     public void twoShipsCannotBePlacedAdjacentlyHorizontalDown() throws Exception {
         gameGrid.placeShip(correctShip);
-        gameGrid.placeShip(shipBelowCurrentShip);
+        gameGrid.placeShip(shipToBelowCurrentShip);
     }
 
     @Test(expected = InvalidShipPlacementException.class)
     public void twoShipsCannotBePlacedAdjacentlyHorizontalUp() throws Exception {
-        gameGrid.placeShip(shipBelowCurrentShip);
+        gameGrid.placeShip(shipToBelowCurrentShip);
         gameGrid.placeShip(correctShip);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyHorizontalLeft() throws Exception {
+        gameGrid.placeShip(correctShip);
+        gameGrid.placeShip(shipToLeftOfCurrentShip);
+    }
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyHorizontalRight() throws Exception {
+        gameGrid.placeShip(correctShip);
+        gameGrid.placeShip(shipToRightOfCurrentShip);
     }
 
     @Test(expected = InvalidShipPlacementException.class)
