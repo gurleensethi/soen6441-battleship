@@ -84,25 +84,24 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
         // This loop is broken manually.
         logger.info("Thinking....");
 
+        if (coordinatesToHit.empty()) {
+            this.isInTargetMode = false;
+        }
+
         if (isInTargetMode) {
             Coordinate cordsToHit = coordinatesToHit.pop();
 
             try {
                 HitResult hitResult = this.player.getGameGrid().peekHit(cordsToHit);
 
-                this.hitCallback.onHit(cordsToHit);
-
                 if (hitResult == HitResult.HIT) {
                     updateStackWithCoordinates(cordsToHit);
                 }
 
-                if (coordinatesToHit.empty()) {
-                    this.isInTargetMode = false;
-                }
+                this.hitCallback.onHit(cordsToHit);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         } else {
             calculateDistributions();
             Coordinate cordsToHit = getHittableCoordinate();
@@ -126,6 +125,7 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
     }
 
     private void updateStackWithCoordinates(Coordinate coordinate) {
+
         // TOP
         if (canHit(new Coordinate(coordinate.getX(), coordinate.getY() - 1))) {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
@@ -150,6 +150,10 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
 
     private boolean canHit(Coordinate coordinate) {
         int gridSize = GameConfig.getsInstance().getGridSize();
+
+        if (this.coordinatesToHit.contains(coordinate)) {
+            return false;
+        }
 
         if (coordinate.getX() < 0
                 || coordinate.getY() < 0

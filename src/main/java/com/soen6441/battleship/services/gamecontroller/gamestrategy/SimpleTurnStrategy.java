@@ -26,12 +26,9 @@ public class SimpleTurnStrategy implements ITurnStrategy {
             currentPlayer = player;
         }
 
-        if (!(result == HitResult.ALREADY_HIT && currentPlayer == enemy)
-                && (result == HitResult.MISS || result == HitResult.ALREADY_HIT)) {
-
+        if (result != HitResult.HIT) {
+            switchCurrentPlayer();
         }
-
-        switchCurrentPlayer();
 
         return currentPlayer;
     }
