@@ -1,4 +1,4 @@
-package com.soen6441.battleship.services;
+package com.soen6441.battleship.utils;
 
 import com.soen6441.battleship.services.boardgenerator.RandomShipPlacer;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
