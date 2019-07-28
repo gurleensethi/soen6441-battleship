@@ -6,6 +6,7 @@ import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.Direction;
 import com.soen6441.battleship.enums.HitResult;
+import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
 import io.reactivex.Observable;
@@ -156,6 +157,12 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
 
         GameGrid playerGameGrid = this.player.getGameGrid();
 
+        try {
+            playerGameGrid.hit(2, 2);
+        } catch (CoordinatesOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
         for (int shipLegth = 5; shipLegth > 0; shipLegth--) {
             if (!this.destroyedShips.contains(shipLegth)) {
                 for (int y = 0; y < this.cellDistributions.length; y++) {
@@ -177,8 +184,8 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
                         }
 
                         if (horizontalWindow != (x + shipLegth)) {
-                            for (int i = horizontalWindow; i >= x; i++) {
-                                this.cellDistributions[horizontalWindow][y]--;
+                            for (int i = horizontalWindow - 1; i >= x; i--) {
+                                this.cellDistributions[i][y]--;
                             }
                         }
 
@@ -198,8 +205,8 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
                         }
 
                         if (verticalWindow != (x + shipLegth)) {
-                            for (int i = verticalWindow; i >= x; i++) {
-                                this.cellDistributions[y][verticalWindow]--;
+                            for (int i = verticalWindow - 1; i >= x; i--) {
+                                this.cellDistributions[y][i]--;
                             }
                         }
                     }
@@ -225,5 +232,27 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
             }
             System.out.println();
         }
+    }
+
+    private Coordinate getHittableCoordinate() {
+        int largestValue = 0;
+        Coordinate coordinate = new Coordinate(0, 0);
+
+        for (int i = 0; i < this.cellDistributions.length; i++) {
+            for (int j = 0; j < this.cellDistributions.length; j++) {
+                int probabilityValue = this.cellDistributions[j][i];
+
+                CellState cellState = this.player.getGameGrid().getGrid().getCellState(j, i);
+
+                if (probabilityValue > largestValue
+                        && (cellState != CellState.EMPTY_HIT && cellState != CellState.SHIP_WITH_HIT)) {
+                    largestValue = probabilityValue;
+                    coordinate = new Coordinate(j, i);
+                }
+            }
+            System.out.println();
+        }
+
+        return coordinate;
     }
 }
