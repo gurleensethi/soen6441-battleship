@@ -3,6 +3,7 @@ package com.soen6441.battleship.services.aiplayer;
 import com.soen6441.battleship.data.interfaces.HitCallback;
 import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.GamePlayer;
+import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.Direction;
 import com.soen6441.battleship.enums.HitResult;
@@ -14,28 +15,28 @@ import io.reactivex.Observable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.Stack;
 import java.util.logging.Logger;
 
 public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
-    private static final Logger logger = Logger.getLogger(AIPlayer.class.getName());
+    private static final Logger logger = Logger.getLogger(ProbabilityAIPlayer.class.getName());
     /**
      * Manual player of the game.
      * AIPlayer hits the {@link com.soen6441.battleship.services.gamegrid.GameGrid} of this player.
      */
     private final GamePlayer player;
 
-    /**
-     * Coordinates of the previous attempted hit.
-     */
-    private Coordinate previousCoordinates = null;
-
-    private boolean wasPreviousHitSuccessful = false;
+    private boolean isInTargetMode = false;
 
     private final HitCallback hitCallback;
 
     private final int cellDistributions[][];
 
     private final Set<Integer> destroyedShips = new HashSet<>();
+
+    private final Stack<Coordinate> coordinatesToHit = new Stack<>();
+
+    private Coordinate previousHitCoordinate;
 
     /**
      * Instantiates a new Game player.
@@ -68,80 +69,104 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
      */
     @Override
     public void takeHit() {
-        calculateDistributions();
-
         if (player.getGameGrid().areAllShipsDestroyed()) {
             return;
+        }
+
+        for (Ship ship : this.player.getGameGrid().getShips()) {
+            if (ship.isSunk()) {
+                this.destroyedShips.add(ship.getLength());
+            }
         }
 
         // This loop continues until AI has found a coordinate to hit
         // or all ships of player are destroyed.
         // This loop is broken manually.
         logger.info("Thinking....");
-        boolean shouldBreak = false;
 
-        Coordinate cordsToHit = null;
-        if (!wasPreviousHitSuccessful) {
-            cordsToHit = getRandomHitCords();
-        } else {
-            Direction previousAttemptedDirection = Direction.UP;
+        if (isInTargetMode) {
+            Coordinate cordsToHit = coordinatesToHit.pop();
 
-            while (true) {
-                switch (previousAttemptedDirection) {
-                    case UP:
-                        cordsToHit = new Coordinate(previousCoordinates.getX(), previousCoordinates.getY() - 1);
-                        break;
-                    case DOWN:
-                        cordsToHit = new Coordinate(previousCoordinates.getX(), previousCoordinates.getY() + 1);
-                        break;
-                    case LEFT:
-                        cordsToHit = new Coordinate(previousCoordinates.getX() - 1, previousCoordinates.getY());
-                        break;
-                    case RIGHT:
-                        cordsToHit = new Coordinate(previousCoordinates.getX() + 1, previousCoordinates.getY());
-                        break;
+            try {
+                HitResult hitResult = this.player.getGameGrid().peekHit(cordsToHit);
+
+                this.hitCallback.onHit(cordsToHit);
+
+                if (hitResult == HitResult.HIT) {
+                    updateStackWithCoordinates(cordsToHit);
                 }
 
-                if (cordsToHit.getX() < 8
-                        && cordsToHit.getX() >= 0
-                        && cordsToHit.getY() < 8
-                        && cordsToHit.getY() >= 0
-                        && player.getGameGrid().getGrid().getCellState(cordsToHit.getX(), cordsToHit.getY()) != CellState.EMPTY_HIT
-                        && player.getGameGrid().getGrid().getCellState(cordsToHit.getX(), cordsToHit.getY()) != CellState.SHIP_WITH_HIT
-                        && player.getGameGrid().getGrid().getCellState(cordsToHit.getX(), cordsToHit.getY()) != CellState.DESTROYED_SHIP
-                ) {
-                    break;
-                } else {
-                    if (previousAttemptedDirection == Direction.RIGHT) {
-                        cordsToHit = getRandomHitCords();
-                        break;
-                    }
-                    previousAttemptedDirection = Direction.getFromCode(previousAttemptedDirection.code + 1);
+                if (coordinatesToHit.empty()) {
+                    this.isInTargetMode = false;
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
 
-        try {
-            previousCoordinates = cordsToHit;
-            HitResult hitResult = player.getGameGrid().peekHit(cordsToHit);
-            logger.info("AI is attempting hit on x: " + cordsToHit.getX() + " y: " + cordsToHit.getY());
+        } else {
+            calculateDistributions();
+            Coordinate cordsToHit = getHittableCoordinate();
 
-            switch (hitResult) {
-                case HIT: {
-                    wasPreviousHitSuccessful = true;
-                    break;
+            try {
+                HitResult hitResult = this.player.getGameGrid().peekHit(cordsToHit);
+
+                if (hitResult == HitResult.HIT) {
+                    previousHitCoordinate = cordsToHit;
+                    this.isInTargetMode = true;
+                    updateStackWithCoordinates(cordsToHit);
+                } else {
+                    this.isInTargetMode = false;
                 }
-                case MISS:
-                case ALREADY_HIT: {
-                    wasPreviousHitSuccessful = false;
-                    break;
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             this.hitCallback.onHit(cordsToHit);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+    }
+
+    private void updateStackWithCoordinates(Coordinate coordinate) {
+        // TOP
+        if (canHit(new Coordinate(coordinate.getX(), coordinate.getY() - 1))) {
+            this.coordinatesToHit.add(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
+        }
+
+        // Right
+        if (canHit(new Coordinate(coordinate.getX() + 1, coordinate.getY()))) {
+            this.coordinatesToHit.add(new Coordinate(coordinate.getX() + 1, coordinate.getY()));
+        }
+
+        // Bottom
+        if (canHit(new Coordinate(coordinate.getX(), coordinate.getY() + 1))) {
+            this.coordinatesToHit.add(new Coordinate(coordinate.getX(), coordinate.getY() + 1));
+        }
+
+        // Left
+
+        if (canHit(new Coordinate(coordinate.getX() - 1, coordinate.getY()))) {
+            this.coordinatesToHit.add(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
+        }
+    }
+
+    private boolean canHit(Coordinate coordinate) {
+        int gridSize = GameConfig.getsInstance().getGridSize();
+
+        if (coordinate.getX() < 0
+                || coordinate.getY() < 0
+                || coordinate.getX() >= gridSize
+                || coordinate.getY() >= gridSize) {
+            return false;
+        }
+
+        CellState cellState = this.player.getGameGrid().getGrid().getCellInfo(coordinate).getState();
+
+        if (cellState == CellState.EMPTY_HIT
+                || cellState == CellState.SHIP_WITH_HIT
+                || cellState == CellState.DESTROYED_SHIP) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -157,14 +182,9 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
 
         GameGrid playerGameGrid = this.player.getGameGrid();
 
-        try {
-            playerGameGrid.hit(2, 2);
-        } catch (CoordinatesOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-
         for (int shipLegth = 5; shipLegth > 0; shipLegth--) {
             if (!this.destroyedShips.contains(shipLegth)) {
+                logger.info("------>>>>>" + shipLegth);
                 for (int y = 0; y < this.cellDistributions.length; y++) {
                     for (int x = 0; x <= this.cellDistributions.length - shipLegth; x++) {
 
@@ -176,7 +196,8 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
                             CellState cellState = playerGameGrid.getGrid().getCellInfo(coordinate).getState();
 
                             if (cellState == CellState.EMPTY_HIT
-                                    || cellState == CellState.SHIP_WITH_HIT) {
+                                    || cellState == CellState.SHIP_WITH_HIT
+                                    || cellState == CellState.DESTROYED_SHIP) {
                                 break;
                             }
 
@@ -197,7 +218,8 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
                             CellState cellState = playerGameGrid.getGrid().getCellInfo(coordinate).getState();
 
                             if (cellState == CellState.EMPTY_HIT
-                                    || cellState == CellState.SHIP_WITH_HIT) {
+                                    || cellState == CellState.SHIP_WITH_HIT
+                                    || cellState == CellState.DESTROYED_SHIP) {
                                 break;
                             }
 
@@ -245,7 +267,7 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
                 CellState cellState = this.player.getGameGrid().getGrid().getCellState(j, i);
 
                 if (probabilityValue > largestValue
-                        && (cellState != CellState.EMPTY_HIT && cellState != CellState.SHIP_WITH_HIT)) {
+                        && (cellState != CellState.EMPTY_HIT && cellState != CellState.SHIP_WITH_HIT && cellState != CellState.DESTROYED_SHIP)) {
                     largestValue = probabilityValue;
                     coordinate = new Coordinate(j, i);
                 }

@@ -6,6 +6,7 @@ import com.soen6441.battleship.data.model.GameOverInfo;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.aiplayer.AIPlayer;
+import com.soen6441.battleship.services.aiplayer.ProbabilityAIPlayer;
 import com.soen6441.battleship.services.boardgenerator.RandomShipPlacer;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.ITurnStrategy;
@@ -86,7 +87,7 @@ public class GameController implements IGameController {
         turnChangeBehaviourSubject.onNext(currentPlayerName);
 
         player = new GamePlayer("Player", new GameGrid(8));
-        enemy = new AIPlayer("AI", new GameGrid(8), player, coordinate ->
+        enemy = new ProbabilityAIPlayer("AI", new GameGrid(8), player, coordinate ->
                 this.hit(coordinate.getX(), coordinate.getY()));
 
         player.setIsMyTurn(playerTurnBehaviourSubject);
