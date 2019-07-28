@@ -87,6 +87,14 @@ public class Grid {
         return this.coordinates[y][x];
     }
 
+    /**
+     * @param coordinate coordinates
+     * @return {@link CellInfo} at particular x y coordinate.
+     */
+    public CellInfo getCellInfo(Coordinate coordinate) {
+        return this.coordinates[coordinate.getY()][coordinate.getX()];
+    }
+
     @Override
     public String toString() {
         return "Grid{" +

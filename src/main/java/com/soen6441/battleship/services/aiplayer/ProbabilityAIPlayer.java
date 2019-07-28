@@ -10,6 +10,7 @@ import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
 import io.reactivex.Observable;
 
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -32,6 +33,8 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
     private final HitCallback hitCallback;
 
     private final int cellDistributions[][];
+
+    private final Set<Integer> destroyedShips = new HashSet<>();
 
     /**
      * Instantiates a new Game player.
@@ -64,6 +67,8 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
      */
     @Override
     public void takeHit() {
+        calculateDistributions();
+
         if (player.getGameGrid().areAllShipsDestroyed()) {
             return;
         }
@@ -144,5 +149,60 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
     private Coordinate getRandomHitCords() {
         Random random = new Random();
         return new Coordinate(random.nextInt(8), random.nextInt(8));
+    }
+
+    private void calculateDistributions() {
+        resetDistributions();
+
+        GameGrid playerGameGrid = this.player.getGameGrid();
+
+        for (int shipLegth = 5; shipLegth > 0; shipLegth--) {
+            if (!this.destroyedShips.contains(shipLegth)) {
+                for (int y = 0; y < this.cellDistributions.length; y++) {
+                    for (int x = 0; x <= this.cellDistributions.length - shipLegth; x++) {
+
+                        int w;
+
+                        for (w = x; w < x + shipLegth; w++) {
+                            Coordinate coordinate = new Coordinate(w, y);
+
+                            CellState cellState = playerGameGrid.getGrid().getCellInfo(coordinate).getState();
+
+                            if (cellState == CellState.EMPTY_HIT
+                                    || cellState == CellState.SHIP_WITH_HIT) {
+                                break;
+                            }
+
+                            this.cellDistributions[w][y]++;
+                        }
+
+                        if (w != (x + shipLegth)) {
+                            for (int i = w; i >= x; i++) {
+                                this.cellDistributions[w][y]--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        printDistributions();
+    }
+
+    private void resetDistributions() {
+        for (int i = 0; i < this.cellDistributions.length; i++) {
+            for (int j = 0; j < this.cellDistributions.length; j++) {
+                this.cellDistributions[i][j] = 0;
+            }
+        }
+    }
+
+    private void printDistributions() {
+        for (int i = 0; i < this.cellDistributions.length; i++) {
+            for (int j = 0; j < this.cellDistributions.length; j++) {
+                System.out.print(this.cellDistributions[j][i] + "  ");
+            }
+            System.out.println();
+        }
     }
 }
