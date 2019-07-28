@@ -140,7 +140,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                                 for (int i = buttonCoordinate.getX(); i < (buttonCoordinate.getX() + shipLength); i++) {
                                     String newButtonId = buildButtonId(new Coordinate(i, buttonCoordinate.getY()));
                                     buttons.get(newButtonId).setOpacity(0.5);
-                                    buttons.get(newButtonId).setText("*");
+                                    buttons.get(newButtonId).setStyle("-fx-background-color: LIGHTBLUE; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                                 }
                             }
                         } else {
@@ -148,7 +148,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                                 for (int j = buttonCoordinate.getY(); j < (buttonCoordinate.getY() + shipLength); j++) {
                                     String newButtonId = buildButtonId(new Coordinate(buttonCoordinate.getX(), j));
                                     buttons.get(newButtonId).setOpacity(0.5);
-                                    buttons.get(newButtonId).setText("*");
+                                    buttons.get(newButtonId).setStyle("-fx-background-color: LIGHTBLUE; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                                 }
                             }
                         }

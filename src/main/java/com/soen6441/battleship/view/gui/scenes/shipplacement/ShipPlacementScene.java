@@ -32,6 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ShipPlacementScene implements IScene {
 
     private final IShipPlacementViewModel shipPlacementViewModel;
+    public Map<Button, String> allShips = new HashMap<>();
     ShipPlacementGrid shipPlacementGrid = new ShipPlacementGrid(8);
 
 
@@ -154,15 +155,11 @@ public class ShipPlacementScene implements IScene {
 
         Text verticalShipLabel = new Text("Vertical");
 
-        Button ship5v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 5, "v 5");
-
-        Button ship4v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 4, "v 4");
-
-        Button ship3v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 3, "v 3");
-
-        Button ship2v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 2, "v 2");
-
         Button ship1v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 1, "v 1");
+        Button ship2v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 2, "v 2");
+        Button ship3v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 3, "v 3");
+        Button ship4v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 4, "v 4");
+        Button ship5v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 5, "v 5");
 
         vBox.getChildren().addAll(verticalShipLabel, ship1v, ship2v, ship3v, ship4v, ship5v);
 
@@ -178,13 +175,9 @@ public class ShipPlacementScene implements IScene {
         Text horizontalShipLabel = new Text("Horizontal");
 
         Button ship1h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 1, "h 1");
-
         Button ship2h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 2, "h 2");
-
         Button ship3h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 3, "h 3");
-
         Button ship4h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 4, "h 4");
-
         Button ship5h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 5, "h 5");
 
         vBox.getChildren().addAll(horizontalShipLabel, ship1h, ship2h, ship3h, ship4h, ship5h);
@@ -198,6 +191,7 @@ public class ShipPlacementScene implements IScene {
         //TODO: Utilize shipSize
 
         Button shipButton = new Button();
+        allShips.put(shipButton,shipId);
         shipButton.setId(shipId);
         Image img = new Image(imageURL);
 
@@ -224,9 +218,12 @@ public class ShipPlacementScene implements IScene {
         shipButton.setOnDragDone(event -> {
             //the drag and drop gesture has ended
             //if the data was successfully moved, clear it
-            System.out.println("Transfer mode = " + event.getTransferMode());
             if (event.getTransferMode() == TransferMode.MOVE) {
-                shipButton.setVisible(false);
+                for(String ship : allShips.values()){
+                    if(shipId!=ship){
+                        shipButton.setVisible(false);
+                    }
+                }
             }
             event.consume();
 
