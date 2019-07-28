@@ -157,11 +157,10 @@ public class ShipPlacementScene implements IScene {
         VBox vBox = new VBox(10);
         vBox.setPadding(new Insets(100, 10, 10, 10));
         Text verticalShipLabel = new Text("Vertical");
-        verticalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
+        verticalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         verticalShipLabel.setFill(Color.BLACK);
-        verticalShipLabel.setStrokeWidth(0.5);
-        verticalShipLabel.setStroke(Color.BLACK);
-
+//        verticalShipLabel.setStrokeWidth(0.5);
+//        verticalShipLabel.setStroke(Color.BLACK);
 
         Button ship1v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 1, "v 1");
         Button ship2v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 2, "v 2");
@@ -170,10 +169,7 @@ public class ShipPlacementScene implements IScene {
         Button ship5v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 5, "v 5");
 
         vBox.getChildren().addAll(verticalShipLabel, ship1v, ship2v, ship3v, ship4v, ship5v);
-
-
         return vBox;
-
     }
 
     private Node buildHorizontalShipButtons() {
@@ -181,10 +177,10 @@ public class ShipPlacementScene implements IScene {
         VBox vBox = new VBox(10);
         vBox.setPadding(new Insets(100, 10, 10, 10));
         Text horizontalShipLabel = new Text("Horizontal");
-        horizontalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
+        horizontalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         horizontalShipLabel.setFill(Color.BLACK);
-        horizontalShipLabel.setStrokeWidth(0.5);
-        horizontalShipLabel.setStroke(Color.BLACK);
+//        horizontalShipLabel.setStrokeWidth(0.5);
+//        horizontalShipLabel.setStroke(Color.BLACK);
 
         Button ship1h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 1, "h 1");
         Button ship2h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 2, "h 2");

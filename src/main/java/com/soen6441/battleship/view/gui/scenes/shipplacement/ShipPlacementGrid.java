@@ -125,7 +125,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                         int xShipInitial = buttonCoordinates.get(button.getId()).getX();
                         int yShipInitial = buttonCoordinates.get(button.getId()).getY();
 
-                        ImageView image = new ImageView(db.getImage());
+                        ImageView image = new ImageView("https://static.thenounproject.com/png/12287-200.png");
                         image.setFitWidth(button.getWidth() / 2);
                         image.setFitHeight(button.getHeight() / 2);
 
@@ -141,6 +141,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                                     String newButtonId = buildButtonId(new Coordinate(i, buttonCoordinate.getY()));
                                     buttons.get(newButtonId).setStyle("-fx-background-color: LIGHTBLUE; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                                     buttons.get(newButtonId).setText("");
+//                                    buttons.get(newButtonId).setGraphic(image);
                                 }
                             }
                         } else {
@@ -149,6 +150,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                                     String newButtonId = buildButtonId(new Coordinate(buttonCoordinate.getX(), j));
                                     buttons.get(newButtonId).setStyle("-fx-background-color: LIGHTBLUE; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                                     buttons.get(newButtonId).setText("");
+//                                    buttons.get(newButtonId).setGraphic(image);
                                 }
                             }
                         }
