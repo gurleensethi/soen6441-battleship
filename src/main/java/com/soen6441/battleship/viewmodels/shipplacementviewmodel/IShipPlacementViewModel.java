@@ -13,4 +13,11 @@ public interface IShipPlacementViewModel {
      * @param ship the ship
      */
     void placeShip(Ship ship);
+
+    /**
+     * Can a ship be placed at certain coordinates on the grid.
+     *
+     * @param ship the ship
+     */
+    boolean canPlaceShip(Ship ship);
 }

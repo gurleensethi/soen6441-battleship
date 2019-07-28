@@ -1,33 +1,27 @@
 package com.soen6441.battleship.view.gui.scenes.shipplacement;
 
+import com.soen6441.battleship.common.ButtonStyle;
 import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.ShipDirection;
+import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     private static final Logger logger = Logger.getLogger(ShipPlacementGrid.class.getName());
     private static final String GRID_BUTTON = "GridButton:";
-    private static final int MAX_SHIPS = 5;
 
     /**
      * Size of the ship currently allowed to be placed.
@@ -35,10 +29,8 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     private int currentShipLength = 5;
     private int numOfShipsPlaced = 0;
     private final int gridSize;
-    private Map<String,
-            Button> buttons = new HashMap<>();
-    private Map<String,
-            Coordinate> buttonCoordinates = new HashMap<>();
+    private Map<String, Button> buttons = new HashMap<>();
+    private Map<String, Coordinate> buttonCoordinates = new HashMap<>();
     private Set<String> shipButtonsIds = new HashSet<>();
     private boolean isSelectingShip = false;
     private Coordinate prevSelectedBtnCoordinate;
@@ -46,8 +38,12 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     private PublishSubject<Integer> numShipPlacedSubject = PublishSubject.create();
     private PublishSubject<Ship> shipAddedPublishSubject = PublishSubject.create();
 
-    ShipPlacementGrid(int gridSize) {
+    private final IShipPlacementViewModel shipPlacementViewModel;
+
+    ShipPlacementGrid(int gridSize, IShipPlacementViewModel shipPlacementViewModel) {
         this.gridSize = gridSize;
+        this.shipPlacementViewModel = shipPlacementViewModel;
+
         isSelectingShipSubject.onNext(this.isSelectingShip);
         numShipPlacedSubject.onNext(this.numOfShipsPlaced);
         initUI();
@@ -77,6 +73,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                 button.setPrefHeight(50);
                 button.setOnAction(this);
                 button.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
+                button.setStyle(ButtonStyle.DEFAULT);
                 buttons.put(id, button);
 
 
@@ -125,37 +122,15 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                         int xShipInitial = buttonCoordinates.get(button.getId()).getX();
                         int yShipInitial = buttonCoordinates.get(button.getId()).getY();
 
-                        ImageView image = new ImageView("https://static.thenounproject.com/png/12287-200.png");
-                        image.setFitWidth(button.getWidth() / 2);
-                        image.setFitHeight(button.getHeight() / 2);
-
                         // TODO: set image size; use correct column/row span
                         logger.info("Placing ship at " + xShipInitial + ", " + yShipInitial);
 
                         String buttonId = ((Button) event.getSource()).getId();
                         Coordinate buttonCoordinate = buttonCoordinates.get(buttonId);
-                        if (shipDirection == ShipDirection.HORIZONTAL) {
-                            if ((buttonCoordinate.getX() + shipLength - 1) < 8) {
-                                logger.info(shipDirection.toString() + " " + shipLength + " " + buttonCoordinate.toString());
-                                for (int i = buttonCoordinate.getX(); i < (buttonCoordinate.getX() + shipLength); i++) {
-                                    String newButtonId = buildButtonId(new Coordinate(i, buttonCoordinate.getY()));
-                                    buttons.get(newButtonId).setStyle("-fx-background-color: LIGHTBLUE; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
-                                    buttons.get(newButtonId).setText("");
-//                                    buttons.get(newButtonId).setGraphic(image);
-                                }
-                            }
-                        } else {
-                            if ((buttonCoordinate.getY() + shipLength - 1) < 8) {
-                                for (int j = buttonCoordinate.getY(); j < (buttonCoordinate.getY() + shipLength); j++) {
-                                    String newButtonId = buildButtonId(new Coordinate(buttonCoordinate.getX(), j));
-                                    buttons.get(newButtonId).setStyle("-fx-background-color: LIGHTBLUE; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
-                                    buttons.get(newButtonId).setText("");
-//                                    buttons.get(newButtonId).setGraphic(image);
-                                }
-                            }
-                        }
-//                        button.setGraphic(image);
-                        success = true;
+
+                        success = placeShip(shipDirection, shipLength, buttonCoordinate);
+
+                        updateUI();
                     }
                     //let the source know whether the image was successfully transferred and used
                     event.setDropCompleted(success);
@@ -166,9 +141,8 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                 //Drag exited reverts the appearance of the receiving node when the mouse is outside of the node
                 button.setOnDragExited(event -> {
                     //mouse moved away, remove graphical cues
-                    button.setOpacity(1);
+                    updateUI();
                     event.consume();
-                    resetHighlight();
                 });
 
                 Coordinate coordinate = new Coordinate(x, y);
@@ -181,41 +155,122 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     }
 
     private void updateUI() {
-        if (numOfShipsPlaced < MAX_SHIPS) {
-            // Disable all the buttons that have been selected for a ship.
-            buttons.forEach((buttonId, button) -> button.setDisable(shipButtonsIds.contains(buttonId)));
-        } else {
-            buttons.forEach((buttonId, button) -> button.setDisable(true));
-        }
-    }
+        // Disable all the buttons that have been selected for a ship.
+        buttons.forEach((buttonId, button) -> {
+            boolean isShipDisabled = shipButtonsIds.contains(buttonId);
 
-    private void resetHighlight() {
-        for (Button button : buttons.values()) {
-            button.setOpacity(1.0);
-        }
+            if (isShipDisabled) {
+                logger.info("Setting color to black!");
+                button.setStyle(ButtonStyle.DISABLED);
+            } else {
+                button.setOpacity(1.0);
+                button.setStyle(ButtonStyle.DEFAULT);
+            }
+        });
     }
 
     private void highlightHoveringButtons(ShipDirection shipDirection, int shipLength, Coordinate coordinate) {
+        int shipEndX = shipDirection == ShipDirection.HORIZONTAL ? coordinate.getX() + shipLength - 1 : coordinate.getX();
+        int shipEndY = shipDirection == ShipDirection.HORIZONTAL ? coordinate.getY() : coordinate.getY() + shipLength - 1;
+
+        Ship ship = new Ship.Builder()
+                .setDirection(shipDirection)
+                .setStartCoordinates(coordinate.getX(), coordinate.getY())
+                .setEndCoordinates(shipEndX, shipEndY)
+                .setLength(shipLength)
+                .build();
+
+        boolean canPlaceShip = this.shipPlacementViewModel.canPlaceShip(ship);
+
+        if (shipDirection == ShipDirection.HORIZONTAL) {
+            int endX = Math.min(8, coordinate.getX() + shipLength);
+
+            for (int x = coordinate.getX(); x < endX; x++) {
+                String buttonId = buildButtonId(new Coordinate(x, coordinate.getY()));
+                Button button = buttons.get(buttonId);
+
+                button.setOpacity(0.5);
+
+                if (!canPlaceShip) {
+                    button.setStyle(ButtonStyle.WARNING);
+                }
+            }
+        } else {
+            int endY = Math.min(8, coordinate.getY() + shipLength);
+
+            for (int y = coordinate.getY(); y < endY; y++) {
+                String buttonId = buildButtonId(new Coordinate(coordinate.getX(), y));
+                Button button = buttons.get(buttonId);
+
+                button.setOpacity(0.5);
+
+                if (!canPlaceShip) {
+                    button.setStyle(ButtonStyle.WARNING);
+                }
+            }
+        }
+    }
+
+    private boolean placeShip(ShipDirection shipDirection, int shipLength, Coordinate coordinate) {
+        int shipEndX = shipDirection == ShipDirection.HORIZONTAL ? coordinate.getX() + shipLength - 1 : coordinate.getX();
+        int shipEndY = shipDirection == ShipDirection.HORIZONTAL ? coordinate.getY() : coordinate.getY() + shipLength - 1;
+
+        Ship ship = new Ship.Builder()
+                .setDirection(shipDirection)
+                .setStartCoordinates(coordinate.getX(), coordinate.getY())
+                .setEndCoordinates(shipEndX, shipEndY)
+                .setLength(shipLength)
+                .build();
+
+        if (!shipPlacementViewModel.canPlaceShip(ship)) {
+            return false;
+        }
+
+        shipPlacementViewModel.placeShip(ship);
+
+        numOfShipsPlaced++;
+        this.numShipPlacedSubject.onNext(numOfShipsPlaced);
+
         if (shipDirection == ShipDirection.HORIZONTAL) {
             if ((coordinate.getX() + shipLength - 1) < 8) {
                 logger.info(shipDirection.toString() + " " + shipLength + " " + coordinate.toString());
-                for (int x = coordinate.getX(); x < (coordinate.getX() + shipLength); x++) {
-                    String buttonId = buildButtonId(new Coordinate(x, coordinate.getY()));
-                    buttons.get(buttonId).setOpacity(0.5);
+                for (int i = coordinate.getX(); i < (coordinate.getX() + shipLength); i++) {
+                    String buttonId = buildButtonId(new Coordinate(i, coordinate.getY()));
+
+                    shipButtonsIds.add(buttonId);
+
+                    Button button = buttons.get(buttonId);
+
+                    button.setText("");
+
+                    ImageView imageView = new ImageView("https://static.thenounproject.com/png/12287-200.png");
+                    imageView.setFitWidth(button.getWidth() / 2);
+                    imageView.setFitHeight(button.getHeight() / 2);
+
+                    button.setGraphic(imageView);
                 }
             }
         } else {
             if ((coordinate.getY() + shipLength - 1) < 8) {
-                for (int y = coordinate.getY(); y < (coordinate.getY() + shipLength); y++) {
-                    String buttonId = buildButtonId(new Coordinate(coordinate.getX(), y));
-                    buttons.get(buttonId).setOpacity(0.5);
+                for (int j = coordinate.getY(); j < (coordinate.getY() + shipLength); j++) {
+                    String buttonId = buildButtonId(new Coordinate(coordinate.getX(), j));
+
+                    shipButtonsIds.add(buttonId);
+
+                    Button button = buttons.get(buttonId);
+
+                    button.setText("");
+
+                    ImageView imageView = new ImageView("https://static.thenounproject.com/png/12287-200.png");
+                    imageView.setFitWidth(button.getWidth() / 2);
+                    imageView.setFitHeight(button.getHeight() / 2);
+
+                    button.setGraphic(imageView);
                 }
             }
         }
-    }
 
-    private void placeShip(ShipDirection shipDirection, int shipLength, Coordinate coordinate) {
-
+        return true;
     }
 
     @Override
@@ -397,47 +452,6 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                 buttons.get(buildButtonId(rightCoordinates.getX(), rightCoordinates.getY())).setDisable(false);
             }
         }
-
-        //        for (int x = coordinate.getX(); x < gridSize; x++) {
-        //            final String buttonId = buildButtonId(x, coordinate.getY());
-        //
-        //            if (shipButtonsIds.contains(buttonId)) {
-        //                break;
-        //            }
-        //
-        //            buttons.get(buttonId).setDisable(false);
-        //        }
-        //
-        //        for (int x = coordinate.getX(); x >= 0; x--) {
-        //            final String buttonId = buildButtonId(x, coordinate.getY());
-        //
-        //            if (shipButtonsIds.contains(buttonId)) {
-        //                break;
-        //            }
-        //
-        //            buttons.get(buttonId).setDisable(false);
-        //        }
-        //
-        //        for (int y = coordinate.getY(); y < gridSize; y++) {
-        //            final String buttonId = buildButtonId(coordinate.getX(), y);
-        //
-        //            if (shipButtonsIds.contains(buttonId)) {
-        //                break;
-        //            }
-        //
-        //            buttons.get(buttonId).setDisable(false);
-        //        }
-        //
-        //        for (int y = coordinate.getY(); y >= 0; y--) {
-        //            final String buttonId = buildButtonId(coordinate.getX(), y);
-        //
-        //            if (shipButtonsIds.contains(buttonId)) {
-        //                break;
-        //            }
-        //
-        //            buttons.get(buttonId).setDisable(false);
-        //        }
-
     }
 
     private String buildButtonId(int x, int y) {

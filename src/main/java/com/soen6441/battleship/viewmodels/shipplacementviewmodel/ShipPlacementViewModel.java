@@ -35,4 +35,9 @@ public class ShipPlacementViewModel implements IShipPlacementViewModel {
             logger.warning(e.getMessage());
         }
     }
+
+    @Override
+    public boolean canPlaceShip(Ship ship) {
+        return player.getGameGrid().canPlaceShip(ship);
+    }
 }

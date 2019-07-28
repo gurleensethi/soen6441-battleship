@@ -36,8 +36,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ShipPlacementScene implements IScene {
 
     private final IShipPlacementViewModel shipPlacementViewModel;
-    public Map<Button, Integer> allShips = new HashMap<>();
-    ShipPlacementGrid shipPlacementGrid = new ShipPlacementGrid(8);
+    private Map<Button, Integer> allShips = new HashMap<>();
+    private final ShipPlacementGrid shipPlacementGrid;
 
 
     /**
@@ -48,6 +48,7 @@ public class ShipPlacementScene implements IScene {
     public ShipPlacementScene(IShipPlacementViewModel shipPlacementViewModel) {
         checkNotNull(shipPlacementViewModel);
         this.shipPlacementViewModel = shipPlacementViewModel;
+        this.shipPlacementGrid = new ShipPlacementGrid(8, shipPlacementViewModel);
     }
 
     /**
@@ -199,7 +200,7 @@ public class ShipPlacementScene implements IScene {
         //TODO: Utilize shipSize
 
         Button shipButton = new Button();
-        allShips.put(shipButton,shipSize);
+        allShips.put(shipButton, shipSize);
         shipButton.setId(shipId);
         Image img = new Image(imageURL);
 
@@ -227,8 +228,8 @@ public class ShipPlacementScene implements IScene {
             //the drag and drop gesture has ended
             //if the data was successfully moved, clear it
             if (event.getTransferMode() == TransferMode.MOVE) {
-                for(Map.Entry<Button, Integer> entry : allShips.entrySet()){
-                    if(shipSize == entry.getValue()){
+                for (Map.Entry<Button, Integer> entry : allShips.entrySet()) {
+                    if (shipSize == entry.getValue()) {
                         entry.getKey().setVisible(false);
 //                        System.out.println("Hello I am here");
                         shipButton.setVisible(false);

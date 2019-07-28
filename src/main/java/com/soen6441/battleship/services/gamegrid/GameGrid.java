@@ -208,6 +208,37 @@ public class GameGrid implements IGameGrid {
     }
 
     @Override
+    public boolean canPlaceShip(Ship ship) {
+        try {
+            checkNotNull(ship);
+            logger.info(String.format("Testing if ship can be palced on grid: %s", ship));
+
+            // Check if direction of ship matches the coordinates
+            if ((ship.getDirection() == ShipDirection.HORIZONTAL && ship.getStartY() != ship.getEndY())
+                    || (ship.getDirection() == ShipDirection.VERTICAL && ship.getStartX() != ship.getEndX())) {
+                throw new DirectionCoordinatesMismatchException();
+            }
+
+            // Check if all coordinates passed lie on plane.
+            if (ship.getStartX() < 0
+                    || ship.getStartY() < 0
+                    || ship.getEndX() >= grid.getGridSize()
+                    || ship.getEndY() >= grid.getGridSize()) {
+                logger.severe("Ship Coordinates are out of bounds!");
+                throw new CoordinatesOutOfBoundsException();
+            }
+
+            // Check if there are no other ships surrounding the placement of current ship
+            checkPointValidityForShip(ship);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean areAllShipsDestroyed() {
         // If no ships then all are are destroyed
         if (ships.isEmpty()) {
