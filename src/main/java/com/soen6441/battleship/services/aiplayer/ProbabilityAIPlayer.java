@@ -161,10 +161,10 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
                 for (int y = 0; y < this.cellDistributions.length; y++) {
                     for (int x = 0; x <= this.cellDistributions.length - shipLegth; x++) {
 
-                        int w;
+                        int horizontalWindow;
 
-                        for (w = x; w < x + shipLegth; w++) {
-                            Coordinate coordinate = new Coordinate(w, y);
+                        for (horizontalWindow = x; horizontalWindow < x + shipLegth; horizontalWindow++) {
+                            Coordinate coordinate = new Coordinate(horizontalWindow, y);
 
                             CellState cellState = playerGameGrid.getGrid().getCellInfo(coordinate).getState();
 
@@ -173,12 +173,33 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
                                 break;
                             }
 
-                            this.cellDistributions[w][y]++;
+                            this.cellDistributions[horizontalWindow][y]++;
                         }
 
-                        if (w != (x + shipLegth)) {
-                            for (int i = w; i >= x; i++) {
-                                this.cellDistributions[w][y]--;
+                        if (horizontalWindow != (x + shipLegth)) {
+                            for (int i = horizontalWindow; i >= x; i++) {
+                                this.cellDistributions[horizontalWindow][y]--;
+                            }
+                        }
+
+                        int verticalWindow;
+
+                        for (verticalWindow = x; verticalWindow < x + shipLegth; verticalWindow++) {
+                            Coordinate coordinate = new Coordinate(y, verticalWindow);
+
+                            CellState cellState = playerGameGrid.getGrid().getCellInfo(coordinate).getState();
+
+                            if (cellState == CellState.EMPTY_HIT
+                                    || cellState == CellState.SHIP_WITH_HIT) {
+                                break;
+                            }
+
+                            this.cellDistributions[y][verticalWindow]++;
+                        }
+
+                        if (verticalWindow != (x + shipLegth)) {
+                            for (int i = verticalWindow; i >= x; i++) {
+                                this.cellDistributions[y][verticalWindow]--;
                             }
                         }
                     }
