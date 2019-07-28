@@ -51,6 +51,20 @@ public class GameControllerTest {
         testObserver.assertValue(GameOverInfo::didPlayerWin);
     }
 
+    @Test()
+    public void gameQuitsWhenAPlayerWins() {
+        Observable<GameOverInfo> gameOverInfo = gameController.isGameOver();
+        TestObserver<GameOverInfo> testObserver = new TestObserver<>();
+        gameOverInfo.subscribe(testObserver);
+
+        placeShipAtTopOnEnemy();
+
+        gameController.startGame();
+        gameController.hit(7, 0);
+
+        testObserver.assertValue(GameOverInfo::isGameOver);
+    }
+
     private void placeShipAtTopOnEnemy() {
         GamePlayer enemyPlayer = gameController.createOrGetPlayer("enemy");
         enemyPlayer.getGameGrid().getShips().add(gameShip);
