@@ -17,6 +17,10 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.net.Inet4Address;
@@ -32,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ShipPlacementScene implements IScene {
 
     private final IShipPlacementViewModel shipPlacementViewModel;
-    public Map<Button, String> allShips = new HashMap<>();
+    public Map<Button, Integer> allShips = new HashMap<>();
     ShipPlacementGrid shipPlacementGrid = new ShipPlacementGrid(8);
 
 
@@ -152,8 +156,12 @@ public class ShipPlacementScene implements IScene {
 
         VBox vBox = new VBox(10);
         vBox.setPadding(new Insets(100, 10, 10, 10));
-
         Text verticalShipLabel = new Text("Vertical");
+        verticalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
+        verticalShipLabel.setFill(Color.BLACK);
+        verticalShipLabel.setStrokeWidth(0.5);
+        verticalShipLabel.setStroke(Color.BLACK);
+
 
         Button ship1v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 1, "v 1");
         Button ship2v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 2, "v 2");
@@ -173,6 +181,10 @@ public class ShipPlacementScene implements IScene {
         VBox vBox = new VBox(10);
         vBox.setPadding(new Insets(100, 10, 10, 10));
         Text horizontalShipLabel = new Text("Horizontal");
+        horizontalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
+        horizontalShipLabel.setFill(Color.BLACK);
+        horizontalShipLabel.setStrokeWidth(0.5);
+        horizontalShipLabel.setStroke(Color.BLACK);
 
         Button ship1h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 1, "h 1");
         Button ship2h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 2, "h 2");
@@ -191,7 +203,7 @@ public class ShipPlacementScene implements IScene {
         //TODO: Utilize shipSize
 
         Button shipButton = new Button();
-        allShips.put(shipButton,shipId);
+        allShips.put(shipButton,shipSize);
         shipButton.setId(shipId);
         Image img = new Image(imageURL);
 
@@ -219,8 +231,10 @@ public class ShipPlacementScene implements IScene {
             //the drag and drop gesture has ended
             //if the data was successfully moved, clear it
             if (event.getTransferMode() == TransferMode.MOVE) {
-                for(String ship : allShips.values()){
-                    if(shipId!=ship){
+                for(Map.Entry<Button, Integer> entry : allShips.entrySet()){
+                    if(shipSize == entry.getValue()){
+                        entry.getKey().setVisible(false);
+//                        System.out.println("Hello I am here");
                         shipButton.setVisible(false);
                     }
                 }
