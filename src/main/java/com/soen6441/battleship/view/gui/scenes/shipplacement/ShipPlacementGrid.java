@@ -6,18 +6,25 @@ import com.soen6441.battleship.enums.ShipDirection;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent > {
+class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     private static final Logger logger = Logger.getLogger(ShipPlacementGrid.class.getName());
     private static final String GRID_BUTTON = "GridButton:";
     private static final int MAX_SHIPS = 5;
@@ -26,19 +33,18 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
      * Size of the ship currently allowed to be placed.
      */
     private int currentShipLength = 5;
-
     private int numOfShipsPlaced = 0;
     private final int gridSize;
-    private Map < String,
-            Button > buttons = new HashMap < > ();
-    private Map < String,
-            Coordinate > buttonCoordinates = new HashMap < > ();
-    private Set < String > shipButtonsIds = new HashSet < > ();
+    private Map<String,
+            Button> buttons = new HashMap<>();
+    private Map<String,
+            Coordinate> buttonCoordinates = new HashMap<>();
+    private Set<String> shipButtonsIds = new HashSet<>();
     private boolean isSelectingShip = false;
     private Coordinate prevSelectedBtnCoordinate;
-    private PublishSubject < Boolean > isSelectingShipSubject = PublishSubject.create();
-    private PublishSubject < Integer > numShipPlacedSubject = PublishSubject.create();
-    private PublishSubject < Ship > shipAddedPublishSubject = PublishSubject.create();
+    private PublishSubject<Boolean> isSelectingShipSubject = PublishSubject.create();
+    private PublishSubject<Integer> numShipPlacedSubject = PublishSubject.create();
+    private PublishSubject<Ship> shipAddedPublishSubject = PublishSubject.create();
 
     ShipPlacementGrid(int gridSize) {
         this.gridSize = gridSize;
@@ -47,15 +53,15 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
         initUI();
     }
 
-    Observable < Boolean > getShipSelectionObservable() {
+    Observable<Boolean> getShipSelectionObservable() {
         return this.isSelectingShipSubject;
     }
 
-    Observable < Integer > getSelectedShipCountObservable() {
+    Observable<Integer> getSelectedShipCountObservable() {
         return this.numShipPlacedSubject;
     }
 
-    Observable < Ship > getShipAddedObservable() {
+    Observable<Ship> getShipAddedObservable() {
         return this.shipAddedPublishSubject;
     }
 
@@ -73,7 +79,8 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
                 button.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-color: darkgrey; -fx-border-width: 0.2;");
                 buttons.put(id, button);
 
-               // Drag over event handler is used for the receiving node to allow movement
+
+                // Drag over event handler is used for the receiving node to allow movement
                 button.setOnDragOver(event -> {
                     event.acceptTransferModes(TransferMode.MOVE);
                     event.consume();
@@ -83,17 +90,32 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
                 button.setOnDragEntered(event -> {
                     //The drag-and-drop gesture entered the target
                     //show the user that it is an actual gesture target
-                    if (event.getGestureSource() != button && event.getDragboard().hasImage()) {
-                        // source.setVisible(false);
-                        button.setOpacity(0.5);
-                        System.out.println("Drag entered at " + button.getId());
+
+                    String[] shipInfo = ((Button) event.getGestureSource()).getId().split(" ");
+                    ShipDirection shipDirection = shipInfo[0].equals("v") ? ShipDirection.VERTICAL : ShipDirection.HORIZONTAL;
+                    int shipLength = Integer.parseInt(shipInfo[1]);
+
+                    if (event.getSource() instanceof Button) {
+                        String buttonId = ((Button) event.getSource()).getId();
+
+                        if (buttonId.startsWith(GRID_BUTTON)) {
+                            Coordinate buttonCoordinate = buttonCoordinates.get(buttonId);
+
+                            highlightHoveringButtons(shipDirection, shipLength, buttonCoordinate);
+                        }
                     }
+
+                    logger.info("Drag entered at " + button.getId());
+
                     event.consume();
 
                 });
 
                 // Drag dropped draws the image to the receiving node
                 button.setOnDragDropped(event -> {
+                    String[] shipInfo = ((Button) event.getGestureSource()).getId().split(" ");
+                    ShipDirection shipDirection = shipInfo[0].equals("v") ? ShipDirection.VERTICAL : ShipDirection.HORIZONTAL;
+                    int shipLength = Integer.parseInt(shipInfo[1]);
 
                     //If there is an image on the drag board, read it and use it
                     Dragboard db = event.getDragboard();
@@ -111,6 +133,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
                         // TODO: set image size; use correct column/row span
                         logger.info("Placing ship at " + xShipInitial + ", " + yShipInitial);
 
+
                         button.setText("");
                         button.setGraphic(image);
                         success = true;
@@ -126,6 +149,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
                     //mouse moved away, remove graphical cues
                     button.setOpacity(1);
                     event.consume();
+                    resetHighlight();
                 });
 
                 Coordinate coordinate = new Coordinate(x, y);
@@ -146,10 +170,37 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
         }
     }
 
+    private void resetHighlight() {
+        for (Button button : buttons.values()) {
+            button.setOpacity(1.0);
+        }
+    }
+
+    private void highlightHoveringButtons(ShipDirection shipDirection, int shipLength, Coordinate coordinate) {
+        if (shipDirection == ShipDirection.HORIZONTAL) {
+            if ((coordinate.getX() + shipLength - 1) < 8) {
+                logger.info(shipDirection.toString() + " " + shipLength + " " + coordinate.toString());
+                for (int x = coordinate.getX(); x < (coordinate.getX() + shipLength); x++) {
+                    String buttonId = buildButtonId(new Coordinate(x, coordinate.getY()));
+                    buttons.get(buttonId).setOpacity(0.5);
+                }
+            }
+        } else {
+            if ((coordinate.getY() + shipLength - 1) < 8) {
+                for (int y = coordinate.getY(); y < (coordinate.getY() + shipLength); y++) {
+                    String buttonId = buildButtonId(new Coordinate(coordinate.getX(), y));
+                    buttons.get(buttonId).setOpacity(0.5);
+                }
+            }
+        }
+    }
+
+    private void placeShip(ShipDirection shipDirection, int shipLength, Coordinate coordinate) {
+
+    }
 
     @Override
     public void handle(ActionEvent event) {
-
         if (event.getTarget() instanceof Button) {
             final Button clickedButton = (Button) event.getTarget();
             final String clickedButtonId = clickedButton.getId();
@@ -248,7 +299,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler < ActionEvent >
 
     private void disableAllButtons() {
         buttons.forEach((buttonId, button) -> {
-                button.setDisable(true);
+            button.setDisable(true);
         });
     }
 
