@@ -6,14 +6,13 @@ import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamecontroller.GameController;
-import com.soen6441.battleship.utils.GridUtils;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.TimeUnit;
 
 public class GameControllerTest {
     private GameController gameController;
@@ -22,14 +21,7 @@ public class GameControllerTest {
     @Before()
     public void setUp() {
         GameConfig.getsInstance().setSalvaVariation(false);
-
-        try {
-            Constructor<GameController> constructor = (Constructor<GameController>) GameController.class.getDeclaredConstructors()[0];
-            constructor.setAccessible(true);
-            gameController = constructor.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        hardResetGameController();
 
         gameShip = new Ship.Builder()
                 .setStartCoordinates(7, 0)
@@ -47,6 +39,18 @@ public class GameControllerTest {
                 enemyPlayer.getGameGrid().getGrid().updateCellStatus(i, j, CellState.EMPTY);
             }
         }
+    }
+
+    @Test()
+    public void timerStartsWhenGameIsStarted() throws Exception {
+        gameController.startGame();
+
+        Observable<Long> gameTimer = gameController.gameTimer();
+        TestObserver<Long> gameTimerObserver = new TestObserver<>();
+        gameTimer.subscribe(gameTimerObserver);
+
+        gameTimerObserver.await(1100, TimeUnit.MILLISECONDS);
+        gameTimerObserver.assertValue(time -> time > 0);
     }
 
     @Test()
@@ -110,5 +114,15 @@ public class GameControllerTest {
         enemyPlayer.getGameGrid().getShips().add(gameShip);
         enemyPlayer.getGameGrid().getGrid().setShipOnCell(7, 0, gameShip);
         enemyPlayer.getGameGrid().getGrid().updateCellStatus(7, 0, CellState.SHIP);
+    }
+
+    private void hardResetGameController() {
+        try {
+            Constructor<GameController> constructor = (Constructor<GameController>) GameController.class.getDeclaredConstructors()[0];
+            constructor.setAccessible(true);
+            gameController = constructor.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
