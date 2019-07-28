@@ -41,6 +41,30 @@ public class ProbabilityAITest {
         testObserver.assertValue(coordinate -> coordinate.equals(new Coordinate(3, 3)));
     }
 
+    @Test
+    public void hitsCellWithHighestDistributionAfterFirstHit() {
+        placeShipAtTop();
+
+        BehaviorSubject<Coordinate> coordinateBehaviourSubject = BehaviorSubject.create();
+        TestObserver<Coordinate> testObserver = new TestObserver<>();
+        coordinateBehaviourSubject.subscribe(testObserver);
+
+        // Hit one coordinate
+        try {
+            gamePlayer.getGameGrid().hit(3, 3);
+        } catch (CoordinatesOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
+        aiPlayer = new ProbabilityAIPlayer("AI Player", new GameGrid(8), gamePlayer, coordinateBehaviourSubject::onNext);
+
+        BehaviorSubject<Boolean> isMyTurn = BehaviorSubject.create();
+        aiPlayer.setIsMyTurn(isMyTurn);
+        isMyTurn.onNext(true);
+
+        testObserver.assertValue(coordinate -> coordinate.equals(new Coordinate(4, 4)));
+    }
+
     private void placeShip() {
         try {
             gamePlayer.getGameGrid().placeShip(new Ship.Builder()
