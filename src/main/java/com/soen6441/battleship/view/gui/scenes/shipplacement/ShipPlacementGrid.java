@@ -100,7 +100,6 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
 
                         if (buttonId.startsWith(GRID_BUTTON)) {
                             Coordinate buttonCoordinate = buttonCoordinates.get(buttonId);
-
                             highlightHoveringButtons(shipDirection, shipLength, buttonCoordinate);
                         }
                     }
@@ -133,9 +132,27 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                         // TODO: set image size; use correct column/row span
                         logger.info("Placing ship at " + xShipInitial + ", " + yShipInitial);
 
-
-                        button.setText("");
-                        button.setGraphic(image);
+                        String buttonId = ((Button) event.getSource()).getId();
+                        Coordinate buttonCoordinate = buttonCoordinates.get(buttonId);
+                        if (shipDirection == ShipDirection.HORIZONTAL) {
+                            if ((buttonCoordinate.getX() + shipLength - 1) < 8) {
+                                logger.info(shipDirection.toString() + " " + shipLength + " " + buttonCoordinate.toString());
+                                for (int i = buttonCoordinate.getX(); i < (buttonCoordinate.getX() + shipLength); i++) {
+                                    String newButtonId = buildButtonId(new Coordinate(i, buttonCoordinate.getY()));
+                                    buttons.get(newButtonId).setOpacity(0.5);
+                                    buttons.get(newButtonId).setText("*");
+                                }
+                            }
+                        } else {
+                            if ((buttonCoordinate.getY() + shipLength - 1) < 8) {
+                                for (int j = buttonCoordinate.getY(); j < (buttonCoordinate.getY() + shipLength); j++) {
+                                    String newButtonId = buildButtonId(new Coordinate(buttonCoordinate.getX(), j));
+                                    buttons.get(newButtonId).setOpacity(0.5);
+                                    buttons.get(newButtonId).setText("*");
+                                }
+                            }
+                        }
+//                        button.setGraphic(image);
                         success = true;
                     }
                     //let the source know whether the image was successfully transferred and used

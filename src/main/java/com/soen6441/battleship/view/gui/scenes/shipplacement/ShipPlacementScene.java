@@ -156,7 +156,7 @@ public class ShipPlacementScene implements IScene {
 
         Button ship5v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 5, "v 5");
 
-        Button ship4v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 4, "v 3");
+        Button ship4v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 4, "v 4");
 
         Button ship3v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 3, "v 3");
 
