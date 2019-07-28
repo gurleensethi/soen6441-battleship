@@ -131,20 +131,19 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
         }
 
-        // Right
-        if (canHit(new Coordinate(coordinate.getX() + 1, coordinate.getY()))) {
-            this.coordinatesToHit.add(new Coordinate(coordinate.getX() + 1, coordinate.getY()));
-        }
-
         // Bottom
         if (canHit(new Coordinate(coordinate.getX(), coordinate.getY() + 1))) {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX(), coordinate.getY() + 1));
         }
 
         // Left
-
         if (canHit(new Coordinate(coordinate.getX() - 1, coordinate.getY()))) {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
+        }
+
+        // Right
+        if (canHit(new Coordinate(coordinate.getX() + 1, coordinate.getY()))) {
+            this.coordinatesToHit.add(new Coordinate(coordinate.getX() + 1, coordinate.getY()));
         }
     }
 
