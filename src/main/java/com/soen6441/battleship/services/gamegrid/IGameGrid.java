@@ -26,6 +26,13 @@ public interface IGameGrid {
     void placeShip(Ship ship) throws Exception;
 
     /**
+     * Tells if ship can be placed at certain coordinates.
+     *
+     * @param ship The ship to be placed.
+     */
+    boolean canPlaceShip(Ship ship);
+
+    /**
      * Raw grid data structure.
      *
      * @return Grid data structure contained withing {@link GameGrid}
