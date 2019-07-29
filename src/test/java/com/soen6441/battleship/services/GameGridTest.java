@@ -142,7 +142,7 @@ public class GameGridTest {
     /**
      * Throws exception if ship is null.
      *
-     * @throws Exception the exception
+     * @throws NullPointerException the exception
      */
     @Test(expected = NullPointerException.class)
     public void throwsExceptionIfShipIsNull() throws Exception {
@@ -152,7 +152,7 @@ public class GameGridTest {
     /**
      * Throws exception on wrong coordinates x.
      *
-     * @throws Exception the exception
+     * @throws CoordinatesOutOfBoundsException the exception
      */
     @Test(expected = CoordinatesOutOfBoundsException.class)
     public void throwsExceptionOnWrongCoordinatesX() throws Exception {
@@ -162,7 +162,7 @@ public class GameGridTest {
     /**
      * Throws exception on wrong coordinates y.
      *
-     * @throws Exception the exception
+     * @throws CoordinatesOutOfBoundsException the exception
      */
     @Test(expected = CoordinatesOutOfBoundsException.class)
     public void throwsExceptionOnWrongCoordinatesY() throws Exception {
@@ -172,7 +172,7 @@ public class GameGridTest {
     /**
      * Throws exception on wrong direction horizontal.
      *
-     * @throws Exception the exception
+     * @throws DirectionCoordinatesMismatchException the exception
      */
     @Test(expected = DirectionCoordinatesMismatchException.class)
     public void throwsExceptionOnWrongDirectionHorizontal() throws Exception {
@@ -182,7 +182,7 @@ public class GameGridTest {
     /**
      * Throws exception on wrong direction vertical.
      *
-     * @throws Exception the exception
+     * @throws DirectionCoordinatesMismatchException the exception
      */
     @Test(expected = DirectionCoordinatesMismatchException.class)
     public void throwsExceptionOnWrongDirectionVertical() throws Exception {
@@ -192,7 +192,7 @@ public class GameGridTest {
     /**
      * Throws exception if overlapping.
      *
-     * @throws Exception the exception
+     * @throws InvalidShipPlacementException the exception
      */
     @Test(expected = InvalidShipPlacementException.class)
     public void throwsExceptionIfOverlapping() throws Exception {
@@ -247,7 +247,7 @@ public class GameGridTest {
     /**
      * Throws exception on wrong coordinates.
      *
-     * @throws Exception the exception
+     * @throws CoordinatesOutOfBoundsException the exception
      */
     @Test(expected = CoordinatesOutOfBoundsException.class)
     public void throwsExceptionOnWrongCoordinates() throws Exception {
