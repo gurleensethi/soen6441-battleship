@@ -333,21 +333,11 @@ public class GameGridTest {
         assertEquals(CellState.DESTROYED_SHIP, gameGrid.getGrid().getCellState(1, 1));
     }
 
-    @Test()
-    public void unSunkShipCountIsCorrect() throws Exception {
-        gameGrid.placeShip(correctShip);
-
-        assertEquals(1, gameGrid.getUnSunkShips());
-    }
-
-    @Test()
-    public void unSunkShipCountIsCorrectWithNoShip() throws Exception {
-        gameGrid.placeShip(correctShip);
-
-        correctShip.setHits(5);
-
-        assertEquals(0, gameGrid.getUnSunkShips());
-    }
+    /**
+     * Throws exception if overlapping.
+     *
+     * @throws Exception the exception
+     */
 
     @Test()
     public void peekHitOnGrid() throws Exception {
@@ -358,11 +348,51 @@ public class GameGridTest {
         assertEquals(HitResult.ALREADY_HIT, gameGrid.peekHit(new Coordinate(1, 1)));
     }
 
+    /**
+     * Checks un-sunk ship count when ships are present.
+     *
+     * @throws Exception the exception
+     */
+
+    @Test()
+    public void unSunkShipCountIsCorrect() throws Exception {
+        gameGrid.placeShip(correctShip);
+
+        assertEquals(1, gameGrid.getUnSunkShips());
+    }
+
+    /**
+     * Checks un-sunk ship count when no ships are present.
+     *
+     * @throws Exception the exception
+     */
+
+    @Test()
+    public void unSunkShipCountIsCorrectWithNoShip() throws Exception {
+        gameGrid.placeShip(correctShip);
+
+        correctShip.setHits(5);
+
+        assertEquals(0, gameGrid.getUnSunkShips());
+    }
+
+    /**
+     * Adjacent Ship placement check - Below the current ship - Horizontal placement
+     *
+     * @throws InvalidShipPlacementException the exception
+     */
+
     @Test(expected = InvalidShipPlacementException.class)
     public void twoShipsCannotBePlacedAdjacentlyHorizontalDown() throws Exception {
         gameGrid.placeShip(correctShip);
         gameGrid.placeShip(shipToBelowCurrentShip);
     }
+
+    /**
+     * Adjacent Ship placement check - Above the current ship - Horizontal placement
+     *
+     * @throws InvalidShipPlacementException the exception
+     */
 
     @Test(expected = InvalidShipPlacementException.class)
     public void twoShipsCannotBePlacedAdjacentlyHorizontalUp() throws Exception {
@@ -370,11 +400,23 @@ public class GameGridTest {
         gameGrid.placeShip(correctShip);
     }
 
+    /**
+     * Adjacent Ship placement check - Left to the current ship - Horizontal placement
+     *
+     * @throws InvalidShipPlacementException the exception
+     */
+
     @Test(expected = InvalidShipPlacementException.class)
     public void twoShipsCannotBePlacedAdjacentlyHorizontalLeft() throws Exception {
         gameGrid.placeShip(correctShip);
         gameGrid.placeShip(shipToLeftOfCurrentShip);
     }
+
+    /**
+     * Adjacent Ship placement check - Right to the current ship - Horizontal placement
+     *
+     * @throws InvalidShipPlacementException the exception
+     */
 
     @Test(expected = InvalidShipPlacementException.class)
     public void twoShipsCannotBePlacedAdjacentlyHorizontalRight() throws Exception {
@@ -382,17 +424,25 @@ public class GameGridTest {
         gameGrid.placeShip(shipToRightOfCurrentShip);
     }
 
-    @Test(expected = InvalidShipPlacementException.class)
-    public void twoShipsCannotBePlacedAdjacentlyVerticalLeft() throws Exception {
-        gameGrid.placeShip(correctShipVertical);
-        gameGrid.placeShip(shipToLeftOfVerticalCorrectShip);
-    }
+    /**
+     * Adjacent Ship placement check - Below the current ship - Vertical placement
+     *
+     * @throws InvalidShipPlacementException the exception
+     */
 
     @Test(expected = InvalidShipPlacementException.class)
-    public void twoShipsCannotBePlacedAdjacentlyVerticalRight() throws Exception {
-        gameGrid.placeShip(shipToLeftOfVerticalCorrectShip);
+    public void twoShipsCannotBePlacedAdjacentlyVerticalBelow() throws Exception {
         gameGrid.placeShip(correctShipVertical);
+        gameGrid.placeShip(shipToBelowOfVerticalCorrectShip);
     }
+
+
+    /**
+     * Adjacent Ship placement check - Above the current ship - Vertical placement
+     *
+     * @throws InvalidShipPlacementException the exception
+     */
+
 
     @Test(expected = InvalidShipPlacementException.class)
     public void twoShipsCannotBePlacedAdjacentlyVerticalTop() throws Exception {
@@ -400,9 +450,28 @@ public class GameGridTest {
         gameGrid.placeShip(shipToTopOfVerticalCorrectShip);
     }
 
+
+    /**
+     * Adjacent Ship placement check - Left to the current ship - Vertical placement
+     *
+     * @throws InvalidShipPlacementException the exception
+     */
+
     @Test(expected = InvalidShipPlacementException.class)
-    public void twoShipsCannotBePlacedAdjacentlyVerticalBelow() throws Exception {
+    public void twoShipsCannotBePlacedAdjacentlyVerticalLeft() throws Exception {
         gameGrid.placeShip(correctShipVertical);
-        gameGrid.placeShip(shipToBelowOfVerticalCorrectShip);
+        gameGrid.placeShip(shipToLeftOfVerticalCorrectShip);
+    }
+
+    /**
+     * Adjacent Ship placement check - Right to the current ship - Vertical placement
+     *
+     * @throws InvalidShipPlacementException the exception
+     */
+
+    @Test(expected = InvalidShipPlacementException.class)
+    public void twoShipsCannotBePlacedAdjacentlyVerticalRight() throws Exception {
+        gameGrid.placeShip(shipToLeftOfVerticalCorrectShip);
+        gameGrid.placeShip(correctShipVertical);
     }
 }
