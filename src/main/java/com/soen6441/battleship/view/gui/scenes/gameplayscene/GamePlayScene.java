@@ -1,8 +1,10 @@
 package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.utils.TimerUtil;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
+import com.sun.javafx.scene.layout.region.Margins;
 import io.reactivex.schedulers.Schedulers;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -134,6 +136,15 @@ public class GamePlayScene implements IScene {
                 gameTimerText,
                 turnTimerText
         );
+
+        if (GameConfig.getsInstance().isSalvaVariation()) {
+            final Text salvaVariationText = new Text("Playing in Salva variation.");
+            salvaVariationText.setFont(new Font(16));
+
+            root.getChildren().addAll(
+                    salvaVariationText
+            );
+        }
 
         return root;
     }
