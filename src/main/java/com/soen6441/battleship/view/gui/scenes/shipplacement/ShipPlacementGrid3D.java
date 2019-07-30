@@ -1,6 +1,7 @@
 package com.soen6441.battleship.view.gui.scenes.shipplacement;
 
 import com.soen6441.battleship.data.model.Coordinate;
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.view.IView;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
@@ -38,8 +39,10 @@ public class ShipPlacementGrid3D extends Application implements IView {
         //Create a group
         Group group = new Group();
 
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
+        int gridSize = GameConfig.getsInstance().getGridSize();
+
+        for (int x = 0; x < gridSize; x++) {
+            for (int y = 0; y < gridSize; y++) {
                 Box box = prepareBox();
                 String id = buildButtonId(x, y);
                 boxes.put(id, box);

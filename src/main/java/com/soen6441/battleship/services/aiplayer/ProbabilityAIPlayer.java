@@ -38,6 +38,8 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
 
     private Coordinate previousHitCoordinate;
 
+    private final int gridSize = GameConfig.getsInstance().getGridSize();
+
     /**
      * Instantiates a new Game player.
      *
@@ -177,7 +179,7 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
      */
     private Coordinate getRandomHitCords() {
         Random random = new Random();
-        return new Coordinate(random.nextInt(8), random.nextInt(8));
+        return new Coordinate(random.nextInt(gridSize), random.nextInt(gridSize));
     }
 
     private void calculateDistributions() {

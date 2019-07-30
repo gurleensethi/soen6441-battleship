@@ -1,5 +1,6 @@
 package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -50,8 +51,10 @@ public class GamePlay3DScene implements IScene {
 //            );
 //        });
 
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
+        int gridSize = GameConfig.getsInstance().getGridSize();
+
+        for (int x = 0; x < gridSize; x++) {
+            for (int y = 0; y < gridSize; y++) {
                 Box box = new Box(10, 10, 10);
                 box.setMaterial(new PhongMaterial(Color.SKYBLUE));
                 box.setOnMouseClicked(event -> {
@@ -73,8 +76,8 @@ public class GamePlay3DScene implements IScene {
             }
         }
 
-        for (int x = 0; x < 8; x++) {
-            for (int y = 10; y < 18; y++) {
+        for (int x = 0; x < gridSize; x++) {
+            for (int y = 10; y < gridSize + 10; y++) {
                 Box box = new Box(10, 10, 10);
                 box.setOnMouseClicked(event -> {
                     System.out.println("OK");
