@@ -14,10 +14,16 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The type GameController test.
+ */
 public class GameControllerTest {
     private GameController gameController;
     private Ship gameShip;
 
+    /**
+     *Initial setup.
+     */
     @Before()
     public void setUp() {
         GameConfig.getsInstance().setSalvaVariation(false);
@@ -41,17 +47,10 @@ public class GameControllerTest {
         }
     }
 
-    @Test()
-    public void timerStartsWhenGameIsStarted() throws Exception {
-        gameController.startGame();
 
-        Observable<Long> gameTimer = gameController.gameTimer();
-        TestObserver<Long> gameTimerObserver = new TestObserver<>();
-        gameTimer.subscribe(gameTimerObserver);
-
-        gameTimerObserver.await(1100, TimeUnit.MILLISECONDS);
-        gameTimerObserver.assertValue(time -> time > 0);
-    }
+    /**
+     * Check if the player has won the game.
+     */
 
     @Test()
     public void playerWinsTheGame() {
@@ -67,6 +66,11 @@ public class GameControllerTest {
         testObserver.assertValue(GameOverInfo::didPlayerWin);
     }
 
+
+    /**
+     * Game status set to finished.
+     */
+
     @Test()
     public void gameQuitsWhenAPlayerWins() {
         Observable<GameOverInfo> gameOverInfo = gameController.isGameOver();
@@ -81,19 +85,30 @@ public class GameControllerTest {
         testObserver.assertValue(GameOverInfo::isGameOver);
     }
 
+
+    /**
+     * Game timer start as soon as game starts.
+     *
+     * @throws Exception type exception.
+     */
+
     @Test()
-    public void turnChangesIfPlayerHitsWrongCell() {
-        placeShipAtTopOnEnemy();
-
-        Observable<String> turnChange = gameController.turnChange();
-        TestObserver<String> testObserver = new TestObserver<>();
-        turnChange.subscribe(testObserver);
-
+    public void timerStartsWhenGameIsStarted() throws Exception {
         gameController.startGame();
-        gameController.hit(5, 0);
 
-        testObserver.assertValueAt(1, "enemy");
+        Observable<Long> gameTimer = gameController.gameTimer();
+        TestObserver<Long> gameTimerObserver = new TestObserver<>();
+        gameTimer.subscribe(gameTimerObserver);
+
+        gameTimerObserver.await(1100, TimeUnit.MILLISECONDS);
+        gameTimerObserver.assertValue(time -> time > 0);
     }
+
+
+
+    /**
+     * Another turn on successful hit.
+     */
 
     @Test()
     public void turnStaysSameWhenPlayerHitsACorrectCell() {
@@ -109,12 +124,41 @@ public class GameControllerTest {
         testObserver.assertValueAt(1, "player");
     }
 
+    /**
+     * Shift turn if hit unsuccessful.
+     */
+
+    @Test()
+    public void turnChangesIfPlayerHitsWrongCell() {
+        placeShipAtTopOnEnemy();
+
+        Observable<String> turnChange = gameController.turnChange();
+        TestObserver<String> testObserver = new TestObserver<>();
+        turnChange.subscribe(testObserver);
+
+        gameController.startGame();
+        gameController.hit(5, 0);
+
+        testObserver.assertValueAt(1, "enemy");
+    }
+
+
+
+
+    /**
+     *  Places a enemy ship at top right corner of enemy board.
+     */
+
     private void placeShipAtTopOnEnemy() {
         GamePlayer enemyPlayer = gameController.createOrGetPlayer("enemy");
         enemyPlayer.getGameGrid().getShips().add(gameShip);
         enemyPlayer.getGameGrid().getGrid().setShipOnCell(7, 0, gameShip);
         enemyPlayer.getGameGrid().getGrid().updateCellStatus(7, 0, CellState.SHIP);
     }
+
+    /**
+     *  Reset GameController object.
+     */
 
     private void hardResetGameController() {
         try {
