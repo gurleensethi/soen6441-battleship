@@ -2,6 +2,7 @@ package com.soen6441.battleship.services.boardgenerator;
 
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.ShipDirection;
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamegrid.IGameGrid;
 
 import java.util.Random;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
  */
 public class RandomShipPlacer {
     private static final Logger logger = Logger.getLogger(RandomShipPlacer.class.getName());
+    private static final int gridSize = GameConfig.getsInstance().getGridSize();
 
     /**
      * Places randomly 5 ships of different lengths on a {@link IGameGrid}.
@@ -26,8 +28,8 @@ public class RandomShipPlacer {
         Random random = new Random();
 
         while (shipLength > 0) {
-            int startXCord = random.nextInt(8);
-            int startYCord = random.nextInt(8);
+            int startXCord = random.nextInt(gridSize);
+            int startYCord = random.nextInt(gridSize);
             boolean isVertical = random.nextBoolean();
             ShipDirection shipDirection = isVertical ? ShipDirection.VERTICAL : ShipDirection.HORIZONTAL;
 

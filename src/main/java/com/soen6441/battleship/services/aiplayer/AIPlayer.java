@@ -6,6 +6,7 @@ import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.Direction;
 import com.soen6441.battleship.enums.HitResult;
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
 import io.reactivex.Observable;
 
@@ -33,6 +34,8 @@ public class AIPlayer extends GamePlayer implements IAIPlayer {
     private boolean wasPreviousHitSuccessful = false;
 
     private final HitCallback hitCallback;
+
+    private final int gridSize = GameConfig.getsInstance().getGridSize();
 
     /**
      * Instantiates a new Game player.
@@ -95,9 +98,9 @@ public class AIPlayer extends GamePlayer implements IAIPlayer {
                         break;
                 }
 
-                if (cordsToHit.getX() < 8
+                if (cordsToHit.getX() < gridSize
                         && cordsToHit.getX() >= 0
-                        && cordsToHit.getY() < 8
+                        && cordsToHit.getY() < gridSize
                         && cordsToHit.getY() >= 0
                         && player.getGameGrid().getGrid().getCellState(cordsToHit.getX(), cordsToHit.getY()) != CellState.EMPTY_HIT
                         && player.getGameGrid().getGrid().getCellState(cordsToHit.getX(), cordsToHit.getY()) != CellState.SHIP_WITH_HIT
@@ -142,6 +145,6 @@ public class AIPlayer extends GamePlayer implements IAIPlayer {
      */
     private Coordinate getRandomHitCords() {
         Random random = new Random();
-        return new Coordinate(random.nextInt(8), random.nextInt(8));
+        return new Coordinate(random.nextInt(gridSize), random.nextInt(gridSize));
     }
 }

@@ -4,7 +4,7 @@ public class GameConfig {
     private static GameConfig sInstance;
     private String playerName = "Player";
     private boolean isSalvaVariation = false;
-    private int gridSize = 8;
+    private int gridSize = 10;
 
     private GameConfig() {
     }

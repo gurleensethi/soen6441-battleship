@@ -4,6 +4,7 @@ import com.soen6441.battleship.common.ButtonStyle;
 import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.ShipDirection;
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
@@ -28,7 +29,6 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
      */
     private int currentShipLength = 5;
     private int numOfShipsPlaced = 0;
-    private final int gridSize;
     private Map<String, Button> buttons = new HashMap<>();
     private Map<String, Coordinate> buttonCoordinates = new HashMap<>();
     private Set<String> shipButtonsIds = new HashSet<>();
@@ -37,11 +37,11 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     private PublishSubject<Boolean> isSelectingShipSubject = PublishSubject.create();
     private PublishSubject<Integer> numShipPlacedSubject = PublishSubject.create();
     private PublishSubject<Ship> shipAddedPublishSubject = PublishSubject.create();
+    private final int gridSize = GameConfig.getsInstance().getGridSize();
 
     private final IShipPlacementViewModel shipPlacementViewModel;
 
-    ShipPlacementGrid(int gridSize, IShipPlacementViewModel shipPlacementViewModel) {
-        this.gridSize = gridSize;
+    ShipPlacementGrid(IShipPlacementViewModel shipPlacementViewModel) {
         this.shipPlacementViewModel = shipPlacementViewModel;
 
         isSelectingShipSubject.onNext(this.isSelectingShip);
@@ -183,7 +183,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
         boolean canPlaceShip = this.shipPlacementViewModel.canPlaceShip(ship);
 
         if (shipDirection == ShipDirection.HORIZONTAL) {
-            int endX = Math.min(8, coordinate.getX() + shipLength);
+            int endX = Math.min(this.gridSize, coordinate.getX() + shipLength);
 
             for (int x = coordinate.getX(); x < endX; x++) {
                 String buttonId = buildButtonId(new Coordinate(x, coordinate.getY()));
@@ -196,7 +196,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                 }
             }
         } else {
-            int endY = Math.min(8, coordinate.getY() + shipLength);
+            int endY = Math.min(this.gridSize, coordinate.getY() + shipLength);
 
             for (int y = coordinate.getY(); y < endY; y++) {
                 String buttonId = buildButtonId(new Coordinate(coordinate.getX(), y));
@@ -232,7 +232,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
         this.numShipPlacedSubject.onNext(numOfShipsPlaced);
 
         if (shipDirection == ShipDirection.HORIZONTAL) {
-            if ((coordinate.getX() + shipLength - 1) < 8) {
+            if ((coordinate.getX() + shipLength - 1) < this.gridSize) {
                 logger.info(shipDirection.toString() + " " + shipLength + " " + coordinate.toString());
                 for (int i = coordinate.getX(); i < (coordinate.getX() + shipLength); i++) {
                     String buttonId = buildButtonId(new Coordinate(i, coordinate.getY()));
@@ -251,7 +251,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                 }
             }
         } else {
-            if ((coordinate.getY() + shipLength - 1) < 8) {
+            if ((coordinate.getY() + shipLength - 1) < this.gridSize) {
                 for (int j = coordinate.getY(); j < (coordinate.getY() + shipLength); j++) {
                     String buttonId = buildButtonId(new Coordinate(coordinate.getX(), j));
 

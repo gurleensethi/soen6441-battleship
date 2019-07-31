@@ -1,5 +1,6 @@
 package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -35,7 +36,7 @@ public class GamePlay3DScene implements IScene {
                 new Rotate(35, Rotate.X_AXIS),
                 new Rotate(-25, Rotate.Y_AXIS),
                 new Rotate(-20, Rotate.Z_AXIS),
-                new Translate(-20, 100, -450)
+                new Translate(-20, 120, -550)
         );
         camera.setNearClip(0.1);
         camera.setFarClip(10000);
@@ -50,8 +51,10 @@ public class GamePlay3DScene implements IScene {
 //            );
 //        });
 
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
+        int gridSize = GameConfig.getsInstance().getGridSize();
+
+        for (int x = 0; x < gridSize; x++) {
+            for (int y = 0; y < gridSize; y++) {
                 Box box = new Box(10, 10, 10);
                 box.setMaterial(new PhongMaterial(Color.SKYBLUE));
                 box.setOnMouseClicked(event -> {
@@ -60,12 +63,12 @@ public class GamePlay3DScene implements IScene {
                 box.setOnMouseEntered(event -> {
                     box.setMaterial(new PhongMaterial(Color.ORANGE));
                     root.getScene().setCursor(Cursor.HAND);
-                    box.getTransforms().addAll(new Translate(0, 0, -0.3));
+                    box.getTransforms().addAll(new Translate(0, 0, -0.5));
                 });
                 box.setOnMouseExited(event -> {
                     box.setMaterial(new PhongMaterial(Color.SKYBLUE));
                     root.getScene().setCursor(Cursor.DEFAULT);
-                    box.getTransforms().addAll(new Translate(0, 0, 0.3));
+                    box.getTransforms().addAll(new Translate(0, 0, 0.5));
                 });
                 root.getChildren().add(box);
                 box.getTransforms().addAll(new Translate(x * 11, y * 11, 0));
@@ -73,8 +76,8 @@ public class GamePlay3DScene implements IScene {
             }
         }
 
-        for (int x = 0; x < 8; x++) {
-            for (int y = 10; y < 18; y++) {
+        for (int x = 0; x < gridSize; x++) {
+            for (int y = 11; y < gridSize + 11; y++) {
                 Box box = new Box(10, 10, 10);
                 box.setOnMouseClicked(event -> {
                     System.out.println("OK");

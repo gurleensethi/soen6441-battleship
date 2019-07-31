@@ -48,7 +48,7 @@ public class ShipPlacementScene implements IScene {
     public ShipPlacementScene(IShipPlacementViewModel shipPlacementViewModel) {
         checkNotNull(shipPlacementViewModel);
         this.shipPlacementViewModel = shipPlacementViewModel;
-        this.shipPlacementGrid = new ShipPlacementGrid(8, shipPlacementViewModel);
+        this.shipPlacementGrid = new ShipPlacementGrid( shipPlacementViewModel);
     }
 
     /**

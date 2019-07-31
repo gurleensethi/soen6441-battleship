@@ -86,8 +86,10 @@ public class GameController implements IGameController {
         currentPlayerName = "player";
         turnChangeBehaviourSubject.onNext(currentPlayerName);
 
-        player = new GamePlayer("Player", new GameGrid(8));
-        enemy = new ProbabilityAIPlayer("AI", new GameGrid(8), player, coordinate ->
+        int gridSize = GameConfig.getsInstance().getGridSize();
+
+        player = new GamePlayer("Player", new GameGrid(gridSize));
+        enemy = new ProbabilityAIPlayer("AI", new GameGrid(gridSize), player, coordinate ->
                 this.hit(coordinate.getX(), coordinate.getY()));
 
         player.setIsMyTurn(playerTurnBehaviourSubject);
