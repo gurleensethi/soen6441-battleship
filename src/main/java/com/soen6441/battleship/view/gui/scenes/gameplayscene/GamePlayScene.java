@@ -139,14 +139,18 @@ public class GamePlayScene implements IScene {
                 turnTimerText
         );
 
-        if (GameConfig.getsInstance().isSalvaVariation()) {
-            final Text salvaVariationText = new Text("Playing in Salva variation.");
-            salvaVariationText.setFont(new Font(16));
+        String gameModeText;
 
-            root.getChildren().addAll(
-                    salvaVariationText
-            );
+        if (GameConfig.getsInstance().isSalvaVariation()) {
+            gameModeText = "Playing in Salva variation.";
+        } else {
+            gameModeText = "Playing in normal mode.";
         }
+
+        final Text salvaVariationText = new Text(gameModeText);
+        salvaVariationText.setFont(new Font(16));
+
+        root.getChildren().addAll(salvaVariationText);
 
         return root;
     }
