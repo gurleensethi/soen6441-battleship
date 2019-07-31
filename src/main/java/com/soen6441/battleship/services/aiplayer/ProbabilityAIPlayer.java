@@ -189,7 +189,6 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
 
         for (int shipLegth = 5; shipLegth > 0; shipLegth--) {
             if (!this.destroyedShips.contains(shipLegth)) {
-                logger.info("------>>>>>" + shipLegth);
                 for (int y = 0; y < this.cellDistributions.length; y++) {
                     for (int x = 0; x <= this.cellDistributions.length - shipLegth; x++) {
 
