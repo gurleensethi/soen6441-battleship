@@ -97,8 +97,6 @@ public class GameController implements IGameController {
         player.setIsMyTurn(playerTurnBehaviourSubject);
         enemy.setIsMyTurn(enemyTurnBehaviourSubject);
 
-        turnStrategy = new SimpleTurnStrategy();
-
         // Place random ships on board
         RandomShipPlacer randomShipPlacer = new RandomShipPlacer();
         randomShipPlacer.placeRandomShips(enemy.getGameGrid());
@@ -109,10 +107,12 @@ public class GameController implements IGameController {
         turnTimer.start();
         gameTimer.start();
 
-        if (gameConfig.isSalvaVariation()) {
-            this.turnStrategy = new SalvaTurnStrategy(this.player, this.enemy);
-        } else {
-            this.turnStrategy = new SimpleTurnStrategy();
+        if (this.turnStrategy == null) {
+            if (gameConfig.isSalvaVariation()) {
+                this.turnStrategy = new SalvaTurnStrategy(this.player, this.enemy);
+            } else {
+                this.turnStrategy = new SimpleTurnStrategy();
+            }
         }
     }
 
@@ -261,6 +261,10 @@ public class GameController implements IGameController {
         offlineGameInfo.setEnemyShips(enemy.getGameGrid().getShips());
         offlineGameInfo.setUnSunkPlayerShips(player.getGameGrid().getUnSunkShips());
         offlineGameInfo.setUnSunkEnemyShips(enemy.getGameGrid().getUnSunkShips());
+        if (turnStrategy instanceof SalvaTurnStrategy) {
+            offlineGameInfo.setPlayerSalvaCoordinates(((SalvaTurnStrategy) turnStrategy).getPlayerCoordinateHits());
+            offlineGameInfo.setPlayerSalvaTurns(((SalvaTurnStrategy) turnStrategy).getPlayerTurns());
+        }
         GameLoader gameLoader = new GameLoader();
         gameLoader.saveGame(offlineGameInfo);
     }
@@ -290,6 +294,10 @@ public class GameController implements IGameController {
 
         if (GameConfig.getsInstance().isSalvaVariation()) {
             turnStrategy = new SalvaTurnStrategy(this.player, this.enemy);
+            logger.info("Offline Salva Turns --> " + offlineGameInfo.getPlayerSalvaTurns());
+            logger.info("Offline Salva Coordinates --> " + offlineGameInfo.getPlayerSalvaCoordinates());
+            ((SalvaTurnStrategy) turnStrategy).setPlayerTurns(offlineGameInfo.getPlayerSalvaTurns());
+            ((SalvaTurnStrategy) turnStrategy).setPlayerCoordinateHits(offlineGameInfo.getPlayerSalvaCoordinates());
         } else {
             turnStrategy = new SimpleTurnStrategy();
         }

@@ -5,7 +5,6 @@ import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
-import com.soen6441.battleship.utils.GridUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,6 @@ public class SalvaTurnStrategy implements ITurnStrategy {
     private GamePlayer player;
     private GamePlayer enemy;
     private GamePlayer currentPlayer;
-    private int maxPlayerTurns = 5;
-    private int maxEnemyTurns = 5;
     private int playerTurns = 5;
     private int enemyTurns = 5;
     private List<Coordinate> playerCoordinateHits = new ArrayList<>();
@@ -43,6 +40,8 @@ public class SalvaTurnStrategy implements ITurnStrategy {
                 enemyTurns--;
             }
         }
+
+        logger.info(playerTurns + "<-------- Player Turns");
 
         if (playerTurns == 0) {
             this.currentPlayer = enemy;
@@ -94,5 +93,21 @@ public class SalvaTurnStrategy implements ITurnStrategy {
             logger.info(() -> "Switching turn to player.");
             currentPlayer = player;
         }
+    }
+
+    public int getPlayerTurns() {
+        return playerTurns;
+    }
+
+    public void setPlayerTurns(int playerTurns) {
+        this.playerTurns = playerTurns;
+    }
+
+    public List<Coordinate> getPlayerCoordinateHits() {
+        return playerCoordinateHits;
+    }
+
+    public void setPlayerCoordinateHits(List<Coordinate> playerCoordinateHits) {
+        this.playerCoordinateHits = playerCoordinateHits;
     }
 }

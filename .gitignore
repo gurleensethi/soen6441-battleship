@@ -1,3 +1,5 @@
 target/
 .idea
 javadoc
+output
+output_test
