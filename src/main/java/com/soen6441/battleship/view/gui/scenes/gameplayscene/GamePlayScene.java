@@ -10,8 +10,11 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -36,14 +39,23 @@ public class GamePlayScene implements IScene {
 
     @Override
     public Scene buildScene() {
-        Node enemyBoard = buildEnemyBoard();
-        Node playerBoard = buildPlayerBoard();
+//        Node enemyBoard = buildEnemyBoard();
+//        Node playerBoard = buildPlayerBoard();
+
+        GameGridPane3D gameGridPane3D = new GameGridPane3D();
+
+        gameViewModel.getPlayerGrid().subscribe(gameGridPane3D::updatePlayerGrid);
+        gameViewModel.getEnemyGrid().subscribe(grid -> {
+            gameGridPane3D.updateEnemyGrid(grid);
+        }, error -> {
+            error.printStackTrace();
+        });
+        gameGridPane3D.setOnCoordinateHit(coordinate -> gameViewModel.sendHit(coordinate.getX(), coordinate.getY()));
 
         // Set up left game box
         VBox gameBox = new VBox();
         gameBox.setSpacing(40);
-        gameBox.setPadding(new Insets(20, 20, 20, 20));
-        gameBox.getChildren().addAll(enemyBoard, playerBoard);
+        gameBox.getChildren().addAll(gameGridPane3D);
 
         // Set up sidebar
         Node sideBar = buildSideBar();
@@ -118,6 +130,7 @@ public class GamePlayScene implements IScene {
 
     private Node buildSideBar() {
         VBox root = new VBox();
+        root.setBackground(new Background(new BackgroundFill(Color.SKYBLUE, null, null)));
         root.setPadding(new Insets(16, 16, 16, 16));
 
         Text turnTimerText = new Text();

@@ -1,15 +1,20 @@
 package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
+import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.view.gui.scenes.IScene;
+import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.*;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -21,14 +26,28 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
-public class GamePlay3DScene implements IScene {
-    @Override
-    public Scene buildScene() {
+public class GamePlay3DScene extends HBox {
+    private static final String GRID_BOX = "GridBox:";
+    private static final int BOX_PADDING = 11;
+
+    private final int gridSize;
+
+    private final GridPane boxesGridPane = new GridPane();
+    private final StackPane overlayPane = new StackPane();
+    private IOnCoordinateHit onCoordinateHit;
+    private Map<String, Button> boxes = new HashMap<>();
+    private Map<String, Coordinate> boxCoordinates = new HashMap<>();
+    private Set<String> shipBoxIds = new HashSet<>();
+
+    public GamePlay3DScene() {
+        this.gridSize = GameConfig.getsInstance().getGridSize();
+    }
+
+
+    private void initUI() {
         Box testBox = new Box(5, 5, 5);
-
 
         // Create and position camera
         PerspectiveCamera camera = new PerspectiveCamera(true);
@@ -77,14 +96,14 @@ public class GamePlay3DScene implements IScene {
         }
 
         for (int x = 0; x < gridSize; x++) {
-            for (int y = 11; y < gridSize + 11; y++) {
+            for (int y = BOX_PADDING; y < gridSize + BOX_PADDING; y++) {
                 Box box = new Box(10, 10, 10);
                 box.setOnMouseClicked(event -> {
                     System.out.println("OK");
                 });
                 root.getChildren().add(box);
-                box.getTransforms().addAll(new Translate(x * 11, y * 11, 0));
-                animateSphere(box, x * 11, y * 11, x * 200);
+                box.getTransforms().addAll(new Translate(x * BOX_PADDING, y * BOX_PADDING, 0));
+                animateSphere(box, x * BOX_PADDING, y * BOX_PADDING, x * 200);
             }
         }
 
@@ -104,11 +123,7 @@ public class GamePlay3DScene implements IScene {
         Group group = new Group();
         group.getChildren().addAll(subScene);
 
-        HBox hBox = new HBox();
-
-        hBox.getChildren().addAll(group, new Text("this is a test for 2d"));
-
-        return new Scene(hBox);
+        this.getChildren().addAll(group, new Text("this is a test for 2d"));
     }
 
     private static void animateSphere(Box box, int x, int y, int millis) {
@@ -128,5 +143,21 @@ public class GamePlay3DScene implements IScene {
         tl.setAutoReverse(true);
         tl.setDelay(new Duration(millis));
         tl.play();
+    }
+
+    private String buildEnemyBoxId(int x, int y) {
+        return GRID_BOX + x + " " + y;
+    }
+
+    private String buildEnemyBoxId(Coordinate coordinate) {
+        return GRID_BOX + coordinate.getX() + " " + coordinate.getY();
+    }
+
+    private String buildPlayerBoxId(int x, int y) {
+        return GRID_BOX + (x + BOX_PADDING) + " " + (y + BOX_PADDING);
+    }
+
+    private String buildPlayerBoxId(Coordinate coordinate) {
+        return GRID_BOX + (coordinate.getX() + BOX_PADDING) + " " + (coordinate.getY() + BOX_PADDING);
     }
 }
