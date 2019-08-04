@@ -1,7 +1,9 @@
 package com.soen6441.battleship.data.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.soen6441.battleship.enums.CellState;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -10,7 +12,7 @@ import java.util.logging.Logger;
  * The origin (x=0, y=0) is kept at top left.
  * Bottom right coordinates are (x=gridSize-1, y=gridSize-1).
  */
-public class Grid {
+public class Grid implements Serializable {
     private static final Logger logger = Logger.getLogger(Grid.class.getName());
     /**
      * Size of the grid.

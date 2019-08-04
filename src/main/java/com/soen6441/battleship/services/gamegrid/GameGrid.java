@@ -14,6 +14,7 @@ import com.soen6441.battleship.utils.GridUtils;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -32,7 +33,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <li>Check if every ship on grid is destroyed: {@link GameGrid#areAllShipsDestroyed()}</li>
  * </ul>
  */
-public class GameGrid implements IGameGrid {
+public class GameGrid implements IGameGrid, Serializable {
     private final Logger logger = Logger.getLogger(GameGrid.class.getName());
 
     /**
@@ -43,8 +44,7 @@ public class GameGrid implements IGameGrid {
     /**
      * List of all the ships successfully added to the grid.
      */
-    private final List<Ship> ships = new ArrayList<>();
-
+    private List<Ship> ships = new ArrayList<>();
 
     private final BehaviorSubject<Grid> gridBehaviorSubject = BehaviorSubject.create();
 
@@ -52,6 +52,12 @@ public class GameGrid implements IGameGrid {
         this.grid = new Grid(gridSize);
         gridBehaviorSubject.onNext(this.grid);
         logger.info(() -> String.format("Grid created successfully: %s", grid));
+    }
+
+    public GameGrid(Grid grid) {
+        this.grid = grid;
+        gridBehaviorSubject.onNext(this.grid);
+        logger.info(() -> String.format("Grid loaded from file successfully: %s", grid));
     }
 
     /**
@@ -68,6 +74,10 @@ public class GameGrid implements IGameGrid {
     @Override
     public List<Ship> getShips() {
         return ships;
+    }
+
+    public void setShips(List<Ship> ships) {
+        this.ships = ships;
     }
 
     /**

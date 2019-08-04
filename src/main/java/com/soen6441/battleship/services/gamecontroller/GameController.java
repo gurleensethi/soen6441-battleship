@@ -3,9 +3,9 @@ package com.soen6441.battleship.services.gamecontroller;
 import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.data.model.GameOverInfo;
+import com.soen6441.battleship.data.model.OfflineGameInfo;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
-import com.soen6441.battleship.services.aiplayer.AIPlayer;
 import com.soen6441.battleship.services.aiplayer.ProbabilityAIPlayer;
 import com.soen6441.battleship.services.boardgenerator.RandomShipPlacer;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
@@ -13,11 +13,13 @@ import com.soen6441.battleship.services.gamecontroller.gamestrategy.ITurnStrateg
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.SalvaTurnStrategy;
 import com.soen6441.battleship.services.gamecontroller.gamestrategy.SimpleTurnStrategy;
 import com.soen6441.battleship.services.gamegrid.GameGrid;
+import com.soen6441.battleship.services.gameloader.GameLoader;
 import com.soen6441.battleship.services.scorecalculator.ScoreCalculator;
 import com.soen6441.battleship.utils.TimerUtil;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
+import java.util.Date;
 import java.util.logging.Logger;
 
 
@@ -243,5 +245,47 @@ public class GameController implements IGameController {
     public Long getFinalScore() {
         boolean didPlayerWin = this.enemy.getGameGrid().getUnSunkShips() == 0;
         return new ScoreCalculator().calculateScore(this.player.getTurnTimes(), didPlayerWin, enemy.getGameGrid().getUnSunkShips());
+    }
+
+    @Override
+    public void saveGame() {
+        OfflineGameInfo offlineGameInfo = new OfflineGameInfo();
+        offlineGameInfo.setPlayerGrid(player.getGameGrid().getGrid());
+        offlineGameInfo.setEnemyGrid(enemy.getGameGrid().getGrid());
+        offlineGameInfo.setGridSize(GameConfig.getsInstance().getGridSize());
+        offlineGameInfo.setStoreDate(new Date().getTime());
+        offlineGameInfo.setCurrentTurn(this.currentPlayerName);
+        offlineGameInfo.setSalva(GameConfig.getsInstance().isSalvaVariation());
+        offlineGameInfo.setPlayerTurns(player.getTurnTimes());
+        offlineGameInfo.setPlayerShips(player.getGameGrid().getShips());
+        offlineGameInfo.setEnemyShips(enemy.getGameGrid().getShips());
+        offlineGameInfo.setUnSunkPlayerShips(player.getGameGrid().getUnSunkShips());
+        offlineGameInfo.setUnSunkEnemyShips(enemy.getGameGrid().getUnSunkShips());
+        GameLoader gameLoader = new GameLoader();
+        gameLoader.saveGame(offlineGameInfo);
+    }
+
+    @Override
+    public void loadOfflineGame() {
+        GameLoader gameLoader = new GameLoader();
+        OfflineGameInfo offlineGameInfo = gameLoader.readSavedGame();
+
+        GameGrid playerGameGrid = new GameGrid(offlineGameInfo.getPlayerGrid());
+        playerGameGrid.setShips(offlineGameInfo.getPlayerShips());
+        this.player = new GamePlayer("player", playerGameGrid);
+        this.player.setTurnTimes(offlineGameInfo.getPlayerTurns());
+
+        GameGrid enemyGameGrid = new GameGrid(offlineGameInfo.getEnemyGrid());
+        enemyGameGrid.setShips(offlineGameInfo.getEnemyShips());
+
+        this.enemy = new ProbabilityAIPlayer("AI", enemyGameGrid, this.player, coordinate ->
+                this.hit(coordinate.getX(), coordinate.getY()));
+
+        this.currentPlayerName = offlineGameInfo.getCurrentTurn();
+
+        this.player.setIsMyTurn(playerTurnBehaviourSubject);
+        this.enemy.setIsMyTurn(enemyTurnBehaviourSubject);
+
+        turnStrategy = new SimpleTurnStrategy();
     }
 }

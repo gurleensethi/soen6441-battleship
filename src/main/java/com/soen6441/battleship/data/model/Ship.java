@@ -2,10 +2,12 @@ package com.soen6441.battleship.data.model;
 
 import com.soen6441.battleship.enums.ShipDirection;
 
+import java.io.Serializable;
+
 /**
  * Represents a single ship.
  */
-public class Ship {
+public class Ship implements Serializable {
     /**
      * Unique id of the ship.
      */

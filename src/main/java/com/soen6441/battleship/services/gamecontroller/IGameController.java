@@ -50,4 +50,8 @@ public interface IGameController {
     Long getFinalScore();
 
     void startGame();
+
+    void saveGame();
+
+    void loadOfflineGame();
 }
