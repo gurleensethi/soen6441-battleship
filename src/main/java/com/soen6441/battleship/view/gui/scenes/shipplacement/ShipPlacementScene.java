@@ -1,6 +1,8 @@
 package com.soen6441.battleship.view.gui.scenes.shipplacement;
 
 import com.soen6441.battleship.common.SceneRoutes;
+import com.soen6441.battleship.data.model.Ship;
+import com.soen6441.battleship.services.gamecontroller.GameController;
 import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
@@ -25,6 +27,7 @@ import javafx.scene.text.Text;
 
 import java.net.Inet4Address;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -48,7 +51,8 @@ public class ShipPlacementScene implements IScene {
     public ShipPlacementScene(IShipPlacementViewModel shipPlacementViewModel) {
         checkNotNull(shipPlacementViewModel);
         this.shipPlacementViewModel = shipPlacementViewModel;
-        this.shipPlacementGrid = new ShipPlacementGrid( shipPlacementViewModel);
+        this.shipPlacementGrid = new ShipPlacementGrid(shipPlacementViewModel,
+                shipPlacementViewModel.getPlayerGameGrid().getGridAsObservable());
     }
 
     /**
@@ -119,8 +123,16 @@ public class ShipPlacementScene implements IScene {
         doneButton.setDisable(true);
         doneButton.setText("Done");
         doneButton.setOnAction(onDoneHandler);
+        if (shipPlacementViewModel.getPlayerGameGrid().getShips().size() >= 5) {
+            doneButton.setDisable(false);
+        }
+
+        shipPlacementViewModel.getPlayerGameGrid().getGridAsObservable().subscribe(grid -> {
+            doneButton.setDisable(shipPlacementViewModel.getPlayerGameGrid().getShips().size() < 5);
+        });
+
         shipPlacedCountObservable.subscribe(count -> {
-            doneButton.setDisable(count != 5);
+
         });
 
         Pane spacing = new Pane();
@@ -144,9 +156,13 @@ public class ShipPlacementScene implements IScene {
         hBox.setSpacing(10);
         hBox.setPadding(new Insets(10, 10, 10, 10));
 
-        Text placedShipCountText = new Text("Ships Placed: 0/5");
+        int ships = shipPlacementViewModel.getPlayerGameGrid().getShips().size();
 
-        shipPlacedCountObservable.subscribe(count -> placedShipCountText.setText("Ships Placed: " + count + "/5"));
+        Text placedShipCountText = new Text(String.format("Ships Placed: %d/5", ships));
+
+        shipPlacedCountObservable.subscribe(count -> {
+            placedShipCountText.setText(String.format("Ships Placed: %d/5", shipPlacementViewModel.getPlayerGameGrid().getShips().size()));
+        });
 
         hBox.getChildren().addAll(placedShipCountText);
 
@@ -169,6 +185,12 @@ public class ShipPlacementScene implements IScene {
         Button ship4v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 4, "v 4");
         Button ship5v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 5, "v 5");
 
+        Button[] shipButtons = {ship1v, ship2v, ship3v, ship4v, ship5v};
+
+        for (Ship ship : shipPlacementViewModel.getPlayerGameGrid().getShips()) {
+            shipButtons[ship.getLength() - 1].setVisible(false);
+        }
+
         vBox.getChildren().addAll(verticalShipLabel, ship1v, ship2v, ship3v, ship4v, ship5v);
         return vBox;
     }
@@ -188,6 +210,12 @@ public class ShipPlacementScene implements IScene {
         Button ship3h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 3, "h 3");
         Button ship4h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 4, "h 4");
         Button ship5h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 5, "h 5");
+
+        Button[] shipButtons = {ship1h, ship2h, ship3h, ship4h, ship5h};
+
+        for (Ship ship : shipPlacementViewModel.getPlayerGameGrid().getShips()) {
+            shipButtons[ship.getLength() - 1].setVisible(false);
+        }
 
         vBox.getChildren().addAll(horizontalShipLabel, ship1h, ship2h, ship3h, ship4h, ship5h);
 

@@ -54,4 +54,6 @@ public interface IGameController {
     void saveGame();
 
     void loadOfflineGame();
+
+    boolean isGameComplete();
 }

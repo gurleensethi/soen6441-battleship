@@ -3,7 +3,7 @@ package com.soen6441.battleship.services.gamecontroller;
 import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.data.model.GameOverInfo;
-import com.soen6441.battleship.data.model.OfflineGameInfo;
+import com.soen6441.battleship.data.model.GameControllerInfo;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.aiplayer.ProbabilityAIPlayer;
@@ -249,7 +249,7 @@ public class GameController implements IGameController {
 
     @Override
     public void saveGame() {
-        OfflineGameInfo offlineGameInfo = new OfflineGameInfo();
+        GameControllerInfo offlineGameInfo = new GameControllerInfo();
         offlineGameInfo.setPlayerGrid(player.getGameGrid().getGrid());
         offlineGameInfo.setEnemyGrid(enemy.getGameGrid().getGrid());
         offlineGameInfo.setGridSize(GameConfig.getsInstance().getGridSize());
@@ -268,7 +268,7 @@ public class GameController implements IGameController {
     @Override
     public void loadOfflineGame() {
         GameLoader gameLoader = new GameLoader();
-        OfflineGameInfo offlineGameInfo = gameLoader.readSavedGame();
+        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame();
 
         GameGrid playerGameGrid = new GameGrid(offlineGameInfo.getPlayerGrid());
         playerGameGrid.setShips(offlineGameInfo.getPlayerShips());
@@ -286,6 +286,17 @@ public class GameController implements IGameController {
         this.player.setIsMyTurn(playerTurnBehaviourSubject);
         this.enemy.setIsMyTurn(enemyTurnBehaviourSubject);
 
-        turnStrategy = new SimpleTurnStrategy();
+        GameConfig.getsInstance().setSalvaVariation(offlineGameInfo.isSalva());
+
+        if (GameConfig.getsInstance().isSalvaVariation()) {
+            turnStrategy = new SalvaTurnStrategy(this.player, this.enemy);
+        } else {
+            turnStrategy = new SimpleTurnStrategy();
+        }
+    }
+
+    @Override
+    public boolean isGameComplete() {
+        return this.isGameOver;
     }
 }

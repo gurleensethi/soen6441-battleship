@@ -2,9 +2,13 @@ package com.soen6441.battleship.view.gui.scenes.shipplacement;
 
 import com.soen6441.battleship.common.ButtonStyle;
 import com.soen6441.battleship.data.model.Coordinate;
+import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
+import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
+import com.soen6441.battleship.services.gamecontroller.GameController;
+import com.soen6441.battleship.services.gamegrid.GameGrid;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
@@ -38,15 +42,32 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     private PublishSubject<Integer> numShipPlacedSubject = PublishSubject.create();
     private PublishSubject<Ship> shipAddedPublishSubject = PublishSubject.create();
     private final int gridSize = GameConfig.getsInstance().getGridSize();
+    private Observable<Grid> gridObservable;
 
     private final IShipPlacementViewModel shipPlacementViewModel;
 
-    ShipPlacementGrid(IShipPlacementViewModel shipPlacementViewModel) {
+    ShipPlacementGrid(IShipPlacementViewModel shipPlacementViewModel, Observable<Grid> gridObservable) {
         this.shipPlacementViewModel = shipPlacementViewModel;
+        this.gridObservable = gridObservable;
 
         isSelectingShipSubject.onNext(this.isSelectingShip);
         numShipPlacedSubject.onNext(this.numOfShipsPlaced);
         initUI();
+        initGridObservable();
+    }
+
+    private void initGridObservable() {
+        this.gridObservable.subscribe(grid -> {
+            shipButtonsIds.clear();
+            for (int x = 0; x < gridSize; x++) {
+                for (int y = 0; y < gridSize; y++) {
+                    if (grid.getCellState(x, y) == CellState.SHIP) {
+                        shipButtonsIds.add(buildButtonId(x, y));
+                    }
+                }
+            }
+            updateUI();
+        });
     }
 
     Observable<Boolean> getShipSelectionObservable() {
@@ -129,7 +150,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
 
                         success = placeShip(shipDirection, shipLength, buttonCoordinate);
 
-                        updateUI();
+//                        updateUI();
                     }
                     //let the source know whether the image was successfully transferred and used
                     event.setDropCompleted(success);
@@ -361,7 +382,7 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
 
                     isSelectingShip = false;
 
-                    updateUI();
+                    //updateUI();
                 }
 
                 this.numShipPlacedSubject.onNext(numOfShipsPlaced);
