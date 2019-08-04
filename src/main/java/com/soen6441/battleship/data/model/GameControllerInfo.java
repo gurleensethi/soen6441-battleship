@@ -17,6 +17,8 @@ public class GameControllerInfo implements Serializable {
     private int unSunkEnemyShips;
     private int playerSalvaTurns;
     private List<Coordinate> playerSalvaCoordinates;
+    private long gameTime;
+    private long turnTime;
 
     public long getStoreDate() {
         return storeDate;
@@ -120,5 +122,21 @@ public class GameControllerInfo implements Serializable {
 
     public void setPlayerSalvaCoordinates(List<Coordinate> playerSalvaCoordinates) {
         this.playerSalvaCoordinates = playerSalvaCoordinates;
+    }
+
+    public long getGameTime() {
+        return gameTime;
+    }
+
+    public void setGameTime(long gameTime) {
+        this.gameTime = gameTime;
+    }
+
+    public long getTurnTime() {
+        return turnTime;
+    }
+
+    public void setTurnTime(long turnTime) {
+        this.turnTime = turnTime;
     }
 }

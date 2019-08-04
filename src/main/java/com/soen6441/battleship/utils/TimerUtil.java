@@ -11,8 +11,8 @@ import java.util.TimerTask;
 
 public class TimerUtil {
     private boolean isRunning = false;
-    private long startTime;
-    private long stopTime;
+    private long startTime = 0;
+    private long stopTime = 0;
     private BehaviorSubject<Long> timerListener = BehaviorSubject.create();
 
     public static String printableTime(long milliseconds) {
@@ -41,7 +41,10 @@ public class TimerUtil {
         }
 
         isRunning = true;
-        startTime = new Date().getTime();
+
+        if (startTime == 0) {
+            startTime = new Date().getTime();
+        }
     }
 
     public long stop() {
@@ -66,5 +69,21 @@ public class TimerUtil {
 
     public boolean isRunning() {
         return this.isRunning;
+    }
+
+    public long getTime() {
+        return new Date().getTime() - startTime;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setTimeElapsed(long gameTime) {
+        this.startTime = new Date().getTime() - gameTime;
     }
 }
