@@ -108,6 +108,8 @@ public class SalvaTurnStrategy implements ITurnStrategy {
     }
 
     public void setPlayerCoordinateHits(List<Coordinate> playerCoordinateHits) {
-        this.playerCoordinateHits = playerCoordinateHits;
+        if (playerCoordinateHits != null) {
+            this.playerCoordinateHits = playerCoordinateHits;
+        }
     }
 }
