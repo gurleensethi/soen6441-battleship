@@ -1,8 +1,8 @@
 package com.soen6441.battleship.view.gui.scenes.shipplacement;
 
+import com.soen6441.battleship.common.ButtonStyle;
 import com.soen6441.battleship.common.SceneRoutes;
 import com.soen6441.battleship.data.model.Ship;
-import com.soen6441.battleship.services.gamecontroller.GameController;
 import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
@@ -25,9 +25,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import java.net.Inet4Address;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -41,6 +39,7 @@ public class ShipPlacementScene implements IScene {
     private final IShipPlacementViewModel shipPlacementViewModel;
     private Map<Button, Integer> allShips = new HashMap<>();
     private final ShipPlacementGrid shipPlacementGrid;
+    private final ShipPlacementGrid3D shipPlacementGrid3D;
 
 
     /**
@@ -52,6 +51,8 @@ public class ShipPlacementScene implements IScene {
         checkNotNull(shipPlacementViewModel);
         this.shipPlacementViewModel = shipPlacementViewModel;
         this.shipPlacementGrid = new ShipPlacementGrid(shipPlacementViewModel,
+                shipPlacementViewModel.getPlayerGameGrid().getGridAsObservable());
+        this.shipPlacementGrid3D = new ShipPlacementGrid3D(shipPlacementViewModel,
                 shipPlacementViewModel.getPlayerGameGrid().getGridAsObservable());
     }
 
@@ -83,7 +84,7 @@ public class ShipPlacementScene implements IScene {
 
 
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(infoBar, toolbar, shipPlacementGrid);
+        vBox.getChildren().addAll(infoBar, toolbar, shipPlacementGrid3D);
 
         HBox hBox = new HBox();
         hBox.getChildren().addAll(vBox, verticalShipBar, horizontalShipBar);
@@ -108,6 +109,7 @@ public class ShipPlacementScene implements IScene {
             Observable<Integer> shipPlacedCountObservable
     ) {
         HBox hBox = new HBox();
+        hBox.setBackground(new Background(new BackgroundFill(Color.SKYBLUE, null, null)));
         hBox.setSpacing(10);
         hBox.setPadding(new Insets(10, 10, 10, 10));
 
@@ -153,6 +155,7 @@ public class ShipPlacementScene implements IScene {
             Observable<Integer> shipPlacedCountObservable
     ) {
         HBox hBox = new HBox();
+        hBox.setBackground(new Background(new BackgroundFill(Color.SKYBLUE, null, null)));
         hBox.setSpacing(10);
         hBox.setPadding(new Insets(10, 10, 10, 10));
 
@@ -172,6 +175,7 @@ public class ShipPlacementScene implements IScene {
     private Node buildVerticalShipButtons() {
 
         VBox vBox = new VBox(10);
+        vBox.setBackground(new Background(new BackgroundFill(Color.SKYBLUE, null, null)));
         vBox.setPadding(new Insets(100, 10, 10, 10));
         Text verticalShipLabel = new Text("Vertical");
         verticalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -198,6 +202,7 @@ public class ShipPlacementScene implements IScene {
     private Node buildHorizontalShipButtons() {
 
         VBox vBox = new VBox(10);
+        vBox.setBackground(new Background(new BackgroundFill(Color.SKYBLUE, null, null)));
         vBox.setPadding(new Insets(100, 10, 10, 10));
         Text horizontalShipLabel = new Text("Horizontal");
         horizontalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -228,6 +233,7 @@ public class ShipPlacementScene implements IScene {
         //TODO: Utilize shipSize
 
         Button shipButton = new Button();
+        shipButton.setStyle(ButtonStyle.SHIP_PLACEMENT);
         allShips.put(shipButton, shipSize);
         shipButton.setId(shipId);
         Image img = new Image(imageURL);
@@ -246,7 +252,8 @@ public class ShipPlacementScene implements IScene {
 
             //Put ImageView on dragboard
             ClipboardContent cbContent = new ClipboardContent();
-            cbContent.putImage(img);
+            Image shipImage = new Image(imageURL, 100, 100, false, false);
+            cbContent.putImage(shipImage);
             db.setContent(cbContent);
             event.consume();
 
