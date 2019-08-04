@@ -2,7 +2,6 @@ package com.soen6441.battleship.view.gui.navigator;
 
 import com.soen6441.battleship.exceptions.InvalidRouteException;
 import com.soen6441.battleship.exceptions.NavigatorNotInitialisedException;
-import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.view.gui.scenes.ISceneBuilder;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,6 +22,7 @@ public class SceneNavigator {
     private static SceneNavigator sInstance;
     private Stage primaryStage;
     private Map<String, ISceneBuilder> routes = new HashMap<>();
+    private String currentScene = "";
 
     /**
      * Init.
@@ -48,6 +48,7 @@ public class SceneNavigator {
 
     /**
      * Constructor for the class sceneNavigator
+     *
      * @param primaryStage
      */
     private SceneNavigator(Stage primaryStage) {
@@ -58,6 +59,7 @@ public class SceneNavigator {
      * Register route.
      * This method register route takes the routename and Scenebuilder object and adds to routes map
      * for next route.
+     *
      * @param routeName    the route name
      * @param sceneBuilder the scene builder
      */
@@ -71,13 +73,19 @@ public class SceneNavigator {
     /**
      * Navigate.
      * This method Navigate, navigates to another scene when route map has any route initiated in it.
+     *
      * @param route the route
      */
     public void navigate(String route) {
         if (!routes.containsKey(route)) {
             throw new InvalidRouteException();
         }
+        this.currentScene = route;
         Scene scene = routes.get(route).buildScene().buildScene();
         primaryStage.setScene(scene);
+    }
+
+    public String getCurrentScene() {
+        return currentScene;
     }
 }

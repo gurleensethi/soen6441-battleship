@@ -1,7 +1,9 @@
 package com.soen6441.battleship.view.gui;
 
 import com.soen6441.battleship.common.SceneRoutes;
+import com.soen6441.battleship.data.model.OfflineGameInfo;
 import com.soen6441.battleship.services.gamecontroller.GameController;
+import com.soen6441.battleship.services.gameloader.GameLoader;
 import com.soen6441.battleship.view.IView;
 import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
 import com.soen6441.battleship.view.gui.scenes.gameplayscene.GamePlay3DScene;
@@ -14,6 +16,8 @@ import com.soen6441.battleship.viewmodels.shipplacementviewmodel.ShipPlacementVi
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.util.logging.Logger;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -22,6 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The scenes gives instances to this class to load into application.
  */
 public class GUIView extends Application implements IView {
+    private Logger logger = Logger.getLogger(GUIView.class.getName());
 
     private IShipPlacementViewModel shipPlacementViewModel;
 
@@ -55,6 +60,33 @@ public class GUIView extends Application implements IView {
         // TODO: Get ShipPlacementViewModel from somewhere else, ideally use DI to inject it.
         primaryStage.show();
 
-        SceneNavigator.getInstance().navigate(SceneRoutes.INITIAL_USER_INPUT);
+        // Load offline game
+        GameLoader gameLoader = new GameLoader();
+        OfflineGameInfo offlineGameInfo = gameLoader.readOfflineGameInfo();
+
+        if (offlineGameInfo != null && !offlineGameInfo.isGameOver()) {
+            GameController.getInstance().loadOfflineGame();
+            SceneNavigator.getInstance().navigate(offlineGameInfo.getCurrentRouteName());
+        } else {
+            SceneNavigator.getInstance().navigate(SceneRoutes.INITIAL_USER_INPUT);
+        }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        GameLoader gameLoader = new GameLoader();
+
+        OfflineGameInfo offlineGameInfo = new OfflineGameInfo();
+        offlineGameInfo.setCurrentRouteName(SceneNavigator.getInstance().getCurrentScene());
+        offlineGameInfo.setGameOver(GameController.getInstance().isGameComplete());
+
+        gameLoader.saveOfflineGameInfo(offlineGameInfo);
+
+        if (!GameController.getInstance().isGameComplete()) {
+            GameController.getInstance().saveGame();
+        } else {
+            gameLoader.deleteFile();
+        }
     }
 }

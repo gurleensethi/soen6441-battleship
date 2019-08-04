@@ -1,6 +1,9 @@
 package com.soen6441.battleship.viewmodels.shipplacementviewmodel;
 
+import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
+import com.soen6441.battleship.services.gamegrid.GameGrid;
+import io.reactivex.Observable;
 
 /**
  * The interface Ship placement view model.
@@ -20,4 +23,6 @@ public interface IShipPlacementViewModel {
      * @param ship the ship
      */
     boolean canPlaceShip(Ship ship);
+
+    GameGrid getPlayerGameGrid();
 }

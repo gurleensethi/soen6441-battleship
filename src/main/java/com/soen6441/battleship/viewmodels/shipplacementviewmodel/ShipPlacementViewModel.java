@@ -1,8 +1,11 @@
 package com.soen6441.battleship.viewmodels.shipplacementviewmodel;
 
 import com.soen6441.battleship.data.model.GamePlayer;
+import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.services.gamecontroller.IGameController;
+import com.soen6441.battleship.services.gamegrid.GameGrid;
+import io.reactivex.Observable;
 
 import java.util.logging.Logger;
 
@@ -39,5 +42,10 @@ public class ShipPlacementViewModel implements IShipPlacementViewModel {
     @Override
     public boolean canPlaceShip(Ship ship) {
         return player.getGameGrid().canPlaceShip(ship);
+    }
+
+    @Override
+    public GameGrid getPlayerGameGrid() {
+        return gameController.createOrGetPlayer("player").getGameGrid();
     }
 }

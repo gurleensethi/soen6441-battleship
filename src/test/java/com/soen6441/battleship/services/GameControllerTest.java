@@ -6,13 +6,18 @@ import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamecontroller.GameController;
+import com.soen6441.battleship.services.gamegrid.GameGrid;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * The type GameController test.
@@ -22,7 +27,7 @@ public class GameControllerTest {
     private Ship gameShip;
 
     /**
-     *Initial setup.
+     * Initial setup.
      */
     @Before()
     public void setUp() {
@@ -105,7 +110,6 @@ public class GameControllerTest {
     }
 
 
-
     /**
      * Another turn on successful hit.
      */
@@ -142,13 +146,19 @@ public class GameControllerTest {
         testObserver.assertValueAt(1, "enemy");
     }
 
-
-
+    @Test()
+    public void gameControllerStoresCorrectData() {
+        placeShipAtTopOnEnemy();
+        gameController.saveGame();
+        hardResetGameController();
+        gameController.loadOfflineGame();
+        GamePlayer enemyPlayer = gameController.createOrGetPlayer("enemy");
+        assertEquals(1, enemyPlayer.getGameGrid().getShips().size());
+    }
 
     /**
-     *  Places a enemy ship at top right corner of enemy board.
+     * Places a enemy ship at top right corner of enemy board.
      */
-
     private void placeShipAtTopOnEnemy() {
         GamePlayer enemyPlayer = gameController.createOrGetPlayer("enemy");
         enemyPlayer.getGameGrid().getShips().add(gameShip);
@@ -157,9 +167,8 @@ public class GameControllerTest {
     }
 
     /**
-     *  Reset GameController object.
+     * Reset GameController object.
      */
-
     private void hardResetGameController() {
         try {
             Constructor<GameController> constructor = (Constructor<GameController>) GameController.class.getDeclaredConstructors()[0];

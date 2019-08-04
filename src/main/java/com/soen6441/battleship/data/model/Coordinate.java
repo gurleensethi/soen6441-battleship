@@ -1,11 +1,12 @@
 package com.soen6441.battleship.data.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Represents a single point on an xy plane (Grid in our case).
  */
-public class Coordinate {
+public class Coordinate implements Serializable {
     /**
      * X coordinate.
      */
