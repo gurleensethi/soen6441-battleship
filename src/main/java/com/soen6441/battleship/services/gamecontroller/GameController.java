@@ -269,13 +269,13 @@ public class GameController implements IGameController {
             offlineGameInfo.setPlayerSalvaTurns(((SalvaTurnStrategy) turnStrategy).getPlayerTurns());
         }
         GameLoader gameLoader = new GameLoader();
-        gameLoader.saveGame(offlineGameInfo);
+        gameLoader.saveGame(GameConfig.getsInstance().getPlayerName(), offlineGameInfo);
     }
 
     @Override
     public void loadOfflineGame() {
         GameLoader gameLoader = new GameLoader();
-        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame();
+        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame(GameConfig.getsInstance().getPlayerName());
 
         GameGrid playerGameGrid = new GameGrid(offlineGameInfo.getPlayerGrid());
         playerGameGrid.setShips(offlineGameInfo.getPlayerShips());

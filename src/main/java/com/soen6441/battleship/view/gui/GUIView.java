@@ -2,6 +2,7 @@ package com.soen6441.battleship.view.gui;
 
 import com.soen6441.battleship.common.SceneRoutes;
 import com.soen6441.battleship.data.model.OfflineGameInfo;
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamecontroller.GameController;
 import com.soen6441.battleship.services.gameloader.GameLoader;
 import com.soen6441.battleship.view.IView;
@@ -60,16 +61,7 @@ public class GUIView extends Application implements IView {
         // TODO: Get ShipPlacementViewModel from somewhere else, ideally use DI to inject it.
         primaryStage.show();
 
-        // Load offline game
-        GameLoader gameLoader = new GameLoader();
-        OfflineGameInfo offlineGameInfo = gameLoader.readOfflineGameInfo();
-
-        if (offlineGameInfo != null && !offlineGameInfo.isGameOver()) {
-            GameController.getInstance().loadOfflineGame();
-            SceneNavigator.getInstance().navigate(offlineGameInfo.getCurrentRouteName());
-        } else {
-            SceneNavigator.getInstance().navigate(SceneRoutes.INITIAL_USER_INPUT);
-        }
+        SceneNavigator.getInstance().navigate(SceneRoutes.INITIAL_USER_INPUT);
     }
 
     @Override
@@ -81,12 +73,12 @@ public class GUIView extends Application implements IView {
         offlineGameInfo.setCurrentRouteName(SceneNavigator.getInstance().getCurrentScene());
         offlineGameInfo.setGameOver(GameController.getInstance().isGameComplete());
 
-        gameLoader.saveOfflineGameInfo(offlineGameInfo);
+        gameLoader.saveOfflineGameInfo(GameConfig.getsInstance().getPlayerName(), offlineGameInfo);
 
         if (!GameController.getInstance().isGameComplete()) {
             GameController.getInstance().saveGame();
         } else {
-            gameLoader.deleteFile();
+            gameLoader.deleteFile(GameConfig.getsInstance().getPlayerName());
         }
     }
 }

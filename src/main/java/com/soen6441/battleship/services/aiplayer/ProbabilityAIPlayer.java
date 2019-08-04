@@ -3,6 +3,7 @@ package com.soen6441.battleship.services.aiplayer;
 import com.soen6441.battleship.data.interfaces.HitCallback;
 import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.GamePlayer;
+import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.data.model.Ship;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.Direction;
@@ -129,22 +130,26 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
     private void updateStackWithCoordinates(Coordinate coordinate) {
 
         // TOP
-        if (canHit(new Coordinate(coordinate.getX(), coordinate.getY() - 1))) {
+        Coordinate topCoordinates = new Coordinate(coordinate.getX(), coordinate.getY() - 1);
+        if (canHit(topCoordinates) && !isSurroundedByDestroyedShip(topCoordinates)) {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
         }
 
         // Bottom
-        if (canHit(new Coordinate(coordinate.getX(), coordinate.getY() + 1))) {
+        Coordinate bottomCoordinates = new Coordinate(coordinate.getX(), coordinate.getY() + 1);
+        if (canHit(bottomCoordinates) && !isSurroundedByDestroyedShip(bottomCoordinates)) {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX(), coordinate.getY() + 1));
         }
 
         // Left
-        if (canHit(new Coordinate(coordinate.getX() - 1, coordinate.getY()))) {
+        Coordinate leftCoordinates = new Coordinate(coordinate.getX() - 1, coordinate.getY());
+        if (canHit(leftCoordinates) && !isSurroundedByDestroyedShip(leftCoordinates)) {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
         }
 
         // Right
-        if (canHit(new Coordinate(coordinate.getX() + 1, coordinate.getY()))) {
+        Coordinate rightCoordinates = new Coordinate(coordinate.getX() + 1, coordinate.getY());
+        if (canHit(rightCoordinates) && !isSurroundedByDestroyedShip(rightCoordinates)) {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX() + 1, coordinate.getY()));
         }
     }
@@ -192,20 +197,26 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
                 for (int y = 0; y < this.cellDistributions.length; y++) {
                     for (int x = 0; x <= this.cellDistributions.length - shipLegth; x++) {
 
+                        // If there is a destroyed ship in surroundings the distribution is zero.
+
                         int horizontalWindow;
 
                         for (horizontalWindow = x; horizontalWindow < x + shipLegth; horizontalWindow++) {
                             Coordinate coordinate = new Coordinate(horizontalWindow, y);
 
-                            CellState cellState = playerGameGrid.getGrid().getCellInfo(coordinate).getState();
+                            if (isSurroundedByDestroyedShip(coordinate)) {
+                                this.cellDistributions[horizontalWindow][y] = 0;
+                            } else {
+                                CellState cellState = playerGameGrid.getGrid().getCellInfo(coordinate).getState();
 
-                            if (cellState == CellState.EMPTY_HIT
-                                    || cellState == CellState.SHIP_WITH_HIT
-                                    || cellState == CellState.DESTROYED_SHIP) {
-                                break;
+                                if (cellState == CellState.EMPTY_HIT
+                                        || cellState == CellState.SHIP_WITH_HIT
+                                        || cellState == CellState.DESTROYED_SHIP) {
+                                    break;
+                                }
+
+                                this.cellDistributions[horizontalWindow][y]++;
                             }
-
-                            this.cellDistributions[horizontalWindow][y]++;
                         }
 
                         if (horizontalWindow != (x + shipLegth)) {
@@ -219,15 +230,19 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
                         for (verticalWindow = x; verticalWindow < x + shipLegth; verticalWindow++) {
                             Coordinate coordinate = new Coordinate(y, verticalWindow);
 
-                            CellState cellState = playerGameGrid.getGrid().getCellInfo(coordinate).getState();
+                            if (isSurroundedByDestroyedShip(coordinate)) {
+                                this.cellDistributions[y][verticalWindow] = 0;
+                            } else {
+                                CellState cellState = playerGameGrid.getGrid().getCellInfo(coordinate).getState();
 
-                            if (cellState == CellState.EMPTY_HIT
-                                    || cellState == CellState.SHIP_WITH_HIT
-                                    || cellState == CellState.DESTROYED_SHIP) {
-                                break;
+                                if (cellState == CellState.EMPTY_HIT
+                                        || cellState == CellState.SHIP_WITH_HIT
+                                        || cellState == CellState.DESTROYED_SHIP) {
+                                    break;
+                                }
+
+                                this.cellDistributions[y][verticalWindow]++;
                             }
-
-                            this.cellDistributions[y][verticalWindow]++;
                         }
 
                         if (verticalWindow != (x + shipLegth)) {
@@ -252,12 +267,14 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
     }
 
     private void printDistributions() {
+        StringBuilder stringBuffer = new StringBuilder();
         for (int i = 0; i < this.cellDistributions.length; i++) {
             for (int j = 0; j < this.cellDistributions.length; j++) {
-                System.out.print(this.cellDistributions[j][i] + "  ");
+                stringBuffer.append(this.cellDistributions[j][i] + "  ");
             }
-            System.out.println();
+            stringBuffer.append("\n");
         }
+        logger.info(stringBuffer.toString());
     }
 
     private Coordinate getHittableCoordinate() {
@@ -280,5 +297,66 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
         }
 
         return coordinate;
+    }
+
+    private boolean isSurroundedByDestroyedShip(Coordinate coordinate) {
+        Grid grid = player.getGameGrid().getGrid();
+
+        if (isValidCell(coordinate.getX(), coordinate.getY() - 1)) {
+            if (grid.getCellState(coordinate.getX(), coordinate.getY() - 1) == CellState.DESTROYED_SHIP) {
+                return true;
+            }
+        }
+
+        if (isValidCell(coordinate.getX(), coordinate.getY() + 1)) {
+            if (grid.getCellState(coordinate.getX(), coordinate.getY() + 1) == CellState.DESTROYED_SHIP) {
+                return true;
+            }
+        }
+
+        if (isValidCell(coordinate.getX() - 1, coordinate.getY())) {
+            if (grid.getCellState(coordinate.getX() - 1, coordinate.getY()) == CellState.DESTROYED_SHIP) {
+                return true;
+            }
+        }
+
+        if (isValidCell(coordinate.getX() + 1, coordinate.getY())) {
+            if (grid.getCellState(coordinate.getX() + 1, coordinate.getY()) == CellState.DESTROYED_SHIP) {
+                return true;
+            }
+        }
+
+        if (isValidCell(coordinate.getX() - 1, coordinate.getY() - 1)) {
+            if (grid.getCellState(coordinate.getX() - 1, coordinate.getY() - 1) == CellState.DESTROYED_SHIP) {
+                return true;
+            }
+        }
+
+        if (isValidCell(coordinate.getX() + 1, coordinate.getY() - 1)) {
+            if (grid.getCellState(coordinate.getX() + 1, coordinate.getY() - 1) == CellState.DESTROYED_SHIP) {
+                return true;
+            }
+        }
+
+        if (isValidCell(coordinate.getX() - 1, coordinate.getY() + 1)) {
+            if (grid.getCellState(coordinate.getX() - 1, coordinate.getY() + 1) == CellState.DESTROYED_SHIP) {
+                return true;
+            }
+        }
+
+        if (isValidCell(coordinate.getX() + 1, coordinate.getY() + 1)) {
+            if (grid.getCellState(coordinate.getX() + 1, coordinate.getY() + 1) == CellState.DESTROYED_SHIP) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isValidCell(int x, int y) {
+        return x >= 0
+                && x < gridSize
+                && y >= 0
+                && y < gridSize;
     }
 }
