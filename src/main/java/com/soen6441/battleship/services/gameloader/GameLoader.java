@@ -37,18 +37,18 @@ public class GameLoader {
     }
 
     public boolean doesFileExist(String fileName) {
-        File file = new File(folderPrefix + "output/", fileName);
+        File file = new File(folderPrefix + "output/" + fileName);
         return file.exists();
     }
 
     public void deleteFile(String fileName) {
-        File file = new File(folderPrefix + "output/", fileName);
+        File file = new File(folderPrefix + "output/" + fileName);
         file.delete();
     }
 
     public void deleteGameFiles(String fileName) {
-        File controllerFile = new File(folderPrefix + "output/", fileName);
-        File gameInfoFile = new File(folderPrefix + "output/", fileName + "_gameinfo");
+        File controllerFile = new File(folderPrefix + "output/" + fileName);
+        File gameInfoFile = new File(folderPrefix + "output/" + fileName + "_gameinfo");
         controllerFile.delete();
         gameInfoFile.delete();
     }
@@ -56,7 +56,7 @@ public class GameLoader {
     private void storeAsSerializable(String fileName, GameControllerInfo gameInfo) {
         try {
             checkAndCreateFileFolder(folderPrefix + "output/", fileName);
-            File file = new File(folderPrefix + "output/", fileName);
+            File file = new File(folderPrefix + "output/" + fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(gameInfo);
@@ -75,7 +75,7 @@ public class GameLoader {
         }
 
         if (fileName != null) {
-            File file = new File(fileName);
+            File file = new File(folderName + fileName);
 
             if (!file.exists()) {
                 file.createNewFile();
