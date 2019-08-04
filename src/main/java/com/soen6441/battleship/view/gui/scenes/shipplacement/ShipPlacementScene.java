@@ -160,8 +160,6 @@ public class ShipPlacementScene implements IScene {
         Text verticalShipLabel = new Text("Vertical");
         verticalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         verticalShipLabel.setFill(Color.BLACK);
-//        verticalShipLabel.setStrokeWidth(0.5);
-//        verticalShipLabel.setStroke(Color.BLACK);
 
         Button ship1v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 1, "v 1");
         Button ship2v = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 2, "v 2");
@@ -180,8 +178,6 @@ public class ShipPlacementScene implements IScene {
         Text horizontalShipLabel = new Text("Horizontal");
         horizontalShipLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         horizontalShipLabel.setFill(Color.BLACK);
-//        horizontalShipLabel.setStrokeWidth(0.5);
-//        horizontalShipLabel.setStroke(Color.BLACK);
 
         Button ship1h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 1, "h 1");
         Button ship2h = createShipButtons("https://static.thenounproject.com/png/12287-200.png", 2, "h 2");
