@@ -16,6 +16,7 @@ import java.util.Date;
 import static org.junit.Assert.*;
 
 public class GameLoaderTest {
+    private static final String TEST_FILE = "test_file";
     private GameLoader gameLoader;
     private Grid playerGrid;
     private Ship ship;
@@ -38,7 +39,7 @@ public class GameLoaderTest {
         gameInfo.setStoreDate(new Date().getTime());
         gameInfo.setPlayerGrid(playerGrid);
 
-        gameLoader.saveGame(gameInfo);
+        gameLoader.saveGame(TEST_FILE, gameInfo);
         File savedFiled = new File("output_test/output/gamecontroller.txt");
         assertTrue(savedFiled.exists());
     }
@@ -48,7 +49,7 @@ public class GameLoaderTest {
         GameControllerInfo gameInfo = new GameControllerInfo();
         gameInfo.setStoreDate(123);
         gameInfo.setPlayerGrid(playerGrid);
-        gameLoader.saveGame(gameInfo);
+        gameLoader.saveGame(TEST_FILE, gameInfo);
         File savedFiled = new File("output_test/output/gamecontroller.txt");
         FileInputStream fileInputStream = new FileInputStream(savedFiled);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -61,8 +62,8 @@ public class GameLoaderTest {
         GameControllerInfo gameInfo = new GameControllerInfo();
         gameInfo.setStoreDate(123);
         gameInfo.setPlayerGrid(playerGrid);
-        gameLoader.saveGame(gameInfo);
-        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame();
+        gameLoader.saveGame(TEST_FILE, gameInfo);
+        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame(TEST_FILE);
         assertEquals(123, offlineGameInfo.getStoreDate());
     }
 
@@ -72,8 +73,8 @@ public class GameLoaderTest {
         gameInfo.setStoreDate(123);
         playerGrid.updateCellStatus(0, 0, CellState.DESTROYED_SHIP);
         gameInfo.setPlayerGrid(playerGrid);
-        gameLoader.saveGame(gameInfo);
-        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame();
+        gameLoader.saveGame(TEST_FILE, gameInfo);
+        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame(TEST_FILE);
         assertEquals(CellState.DESTROYED_SHIP, offlineGameInfo.getPlayerGrid().getCellState(0, 0));
     }
 
@@ -86,9 +87,9 @@ public class GameLoaderTest {
             playerGrid.updateCellStatus(x, 0, CellState.SHIP);
         }
         gameInfo.setPlayerGrid(playerGrid);
-        gameLoader.saveGame(gameInfo);
+        gameLoader.saveGame(TEST_FILE, gameInfo);
 
-        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame();
+        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame(TEST_FILE);
         assertEquals(CellState.SHIP, offlineGameInfo.getPlayerGrid().getCellState(0, 0));
         assertEquals(4, offlineGameInfo.getPlayerGrid().getCellInfo(0, 0).getShip().getLength());
         assertEquals(ShipDirection.HORIZONTAL, offlineGameInfo.getPlayerGrid().getCellInfo(0, 0).getShip().getDirection());
@@ -104,9 +105,9 @@ public class GameLoaderTest {
         }
         ship.setHits(1);
         gameInfo.setPlayerGrid(playerGrid);
-        gameLoader.saveGame(gameInfo);
+        gameLoader.saveGame(TEST_FILE, gameInfo);
 
-        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame();
+        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame(TEST_FILE);
         assertEquals(1, offlineGameInfo.getPlayerGrid().getCellInfo(0, 0).getShip().getHits());
     }
 
@@ -114,9 +115,9 @@ public class GameLoaderTest {
     public void turnsAreStored() throws Exception {
         GameControllerInfo gameInfo = new GameControllerInfo();
         gameInfo.setPlayerTurns(Arrays.asList(1000L, 1200L));
-        gameLoader.saveGame(gameInfo);
+        gameLoader.saveGame(TEST_FILE, gameInfo);
 
-        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame();
+        GameControllerInfo offlineGameInfo = gameLoader.readSavedGame(TEST_FILE);
         assertEquals(2, offlineGameInfo.getPlayerTurns().size());
         assertTrue(offlineGameInfo.getPlayerTurns().contains(1000L));
         assertTrue(offlineGameInfo.getPlayerTurns().contains(1200L));

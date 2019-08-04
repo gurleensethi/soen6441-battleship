@@ -6,8 +6,6 @@ import com.soen6441.battleship.data.model.OfflineGameInfo;
 import java.io.*;
 
 public class GameLoader {
-    private static final String GAME_CONTROLLER_FILE = "gamecontroller.txt";
-    private static final String OFFLINE_GAME_INFO_FILE = "gameinfo.txt";
     private String folderPrefix = "";
 
     public GameLoader() {
@@ -30,28 +28,35 @@ public class GameLoader {
         }
     }
 
-    public void saveGame(GameControllerInfo gameInfo) {
-        storeAsSerializable(gameInfo);
+    public void saveGame(String fileName, GameControllerInfo gameInfo) {
+        storeAsSerializable(fileName, gameInfo);
     }
 
-    public GameControllerInfo readSavedGame() {
-        return readOfflineFile();
+    public GameControllerInfo readSavedGame(String fileName) {
+        return readOfflineFile(fileName);
     }
 
-    public boolean doesFileExist() {
-        File file = new File(folderPrefix + "output", GAME_CONTROLLER_FILE);
+    public boolean doesFileExist(String fileName) {
+        File file = new File(folderPrefix + "output/", fileName);
         return file.exists();
     }
 
-    public void deleteFile() {
-        File file = new File(folderPrefix + "output", GAME_CONTROLLER_FILE);
+    public void deleteFile(String fileName) {
+        File file = new File(folderPrefix + "output/", fileName);
         file.delete();
     }
 
-    private void storeAsSerializable(GameControllerInfo gameInfo) {
+    public void deleteGameFiles(String fileName) {
+        File controllerFile = new File(folderPrefix + "output/", fileName);
+        File gameInfoFile = new File(folderPrefix + "output/", fileName + "_gameinfo");
+        controllerFile.delete();
+        gameInfoFile.delete();
+    }
+
+    private void storeAsSerializable(String fileName, GameControllerInfo gameInfo) {
         try {
-            checkAndCreateFileFolder(folderPrefix + "output", GAME_CONTROLLER_FILE);
-            File file = new File(folderPrefix + "output", GAME_CONTROLLER_FILE);
+            checkAndCreateFileFolder(folderPrefix + "output/", fileName);
+            File file = new File(folderPrefix + "output/", fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(gameInfo);
@@ -78,9 +83,9 @@ public class GameLoader {
         }
     }
 
-    private GameControllerInfo readOfflineFile() {
+    private GameControllerInfo readOfflineFile(String fileName) {
         try {
-            File savedFiled = new File(this.folderPrefix + "output/" + GAME_CONTROLLER_FILE);
+            File savedFiled = new File(this.folderPrefix + "output/" + fileName);
             FileInputStream fileInputStream = null;
             fileInputStream = new FileInputStream(savedFiled);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -91,10 +96,10 @@ public class GameLoader {
         return null;
     }
 
-    public void saveOfflineGameInfo(OfflineGameInfo offlineGameInfo) {
+    public void saveOfflineGameInfo(String fileName, OfflineGameInfo offlineGameInfo) {
         try {
-            checkAndCreateFileFolder(folderPrefix + "output", OFFLINE_GAME_INFO_FILE);
-            File file = new File(folderPrefix + "output", OFFLINE_GAME_INFO_FILE);
+            checkAndCreateFileFolder(folderPrefix + "output/", fileName + "_gameinfo");
+            File file = new File(folderPrefix + "output/", fileName + "_gameinfo");
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(offlineGameInfo);
@@ -103,9 +108,9 @@ public class GameLoader {
         }
     }
 
-    public OfflineGameInfo readOfflineGameInfo() {
+    public OfflineGameInfo readOfflineGameInfo(String fileName) {
         try {
-            File savedFiled = new File(this.folderPrefix + "output/" + OFFLINE_GAME_INFO_FILE);
+            File savedFiled = new File(this.folderPrefix + "output/" + fileName + "_gameinfo");
             FileInputStream fileInputStream = null;
             fileInputStream = new FileInputStream(savedFiled);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
