@@ -28,7 +28,7 @@ import javafx.util.Duration;
 
 import java.util.*;
 
-public class GamePlay3DScene extends HBox {
+public class GameGridPane3D extends HBox {
     private static final String GRID_BOX = "GridBox:";
     private static final int BOX_PADDING = 11;
 
@@ -41,8 +41,9 @@ public class GamePlay3DScene extends HBox {
     private Map<String, Coordinate> boxCoordinates = new HashMap<>();
     private Set<String> shipBoxIds = new HashSet<>();
 
-    public GamePlay3DScene() {
+    public GameGridPane3D() {
         this.gridSize = GameConfig.getsInstance().getGridSize();
+        initUI();
     }
 
 

@@ -36,14 +36,14 @@ public class GamePlayScene implements IScene {
 
     @Override
     public Scene buildScene() {
-        Node enemyBoard = buildEnemyBoard();
-        Node playerBoard = buildPlayerBoard();
+//        Node enemyBoard = buildEnemyBoard();
+//        Node playerBoard = buildPlayerBoard();
 
         // Set up left game box
         VBox gameBox = new VBox();
         gameBox.setSpacing(40);
         gameBox.setPadding(new Insets(20, 20, 20, 20));
-        gameBox.getChildren().addAll(enemyBoard, playerBoard);
+        gameBox.getChildren().addAll(new GameGridPane3D());
 
         // Set up sidebar
         Node sideBar = buildSideBar();

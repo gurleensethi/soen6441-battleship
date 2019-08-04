@@ -53,9 +53,9 @@ public class GUIView extends Application implements IView {
             return new GamePlayScene(new GameViewModel(GameController.getInstance()));
         });
 
-        SceneNavigator.getInstance().registerRoute("3d", () -> {
-            return new GamePlay3DScene();
-        });
+//        SceneNavigator.getInstance().registerRoute("3d", () -> {
+//            return new GamePlay3DScene();
+//        });
 
         // TODO: Get ShipPlacementViewModel from somewhere else, ideally use DI to inject it.
         primaryStage.show();
