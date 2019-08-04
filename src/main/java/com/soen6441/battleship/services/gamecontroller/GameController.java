@@ -206,6 +206,7 @@ public class GameController implements IGameController {
     }
 
     private void notifyTurns() {
+        turnTimer.reset();
         turnTimer.start();
         this.playerTurnBehaviourSubject.onNext(currentPlayerName.equals("player"));
         this.enemyTurnBehaviourSubject.onNext(currentPlayerName.equals("enemy"));
@@ -261,6 +262,8 @@ public class GameController implements IGameController {
         offlineGameInfo.setEnemyShips(enemy.getGameGrid().getShips());
         offlineGameInfo.setUnSunkPlayerShips(player.getGameGrid().getUnSunkShips());
         offlineGameInfo.setUnSunkEnemyShips(enemy.getGameGrid().getUnSunkShips());
+        offlineGameInfo.setGameTime(this.gameTimer.getTime());
+        offlineGameInfo.setTurnTime(this.turnTimer.getTime());
         if (turnStrategy instanceof SalvaTurnStrategy) {
             offlineGameInfo.setPlayerSalvaCoordinates(((SalvaTurnStrategy) turnStrategy).getPlayerCoordinateHits());
             offlineGameInfo.setPlayerSalvaTurns(((SalvaTurnStrategy) turnStrategy).getPlayerTurns());
@@ -301,6 +304,9 @@ public class GameController implements IGameController {
         } else {
             turnStrategy = new SimpleTurnStrategy();
         }
+
+        this.turnTimer.setTimeElapsed(offlineGameInfo.getTurnTime());
+        this.gameTimer.setTimeElapsed(offlineGameInfo.getGameTime());
     }
 
     @Override
