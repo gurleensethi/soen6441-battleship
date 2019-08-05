@@ -57,7 +57,6 @@ public class Coordinate implements Serializable {
         return x == that.x &&
                 y == that.y;
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(x, y);

@@ -23,6 +23,13 @@ public class CellInfo implements Serializable {
      */
     private Ship ship;
 
+    /**
+     * Provides info of a cell on grid.
+     *
+     * @param state - Cell state object.
+     * @param ship - ship object.
+     */
+
     public CellInfo(CellState state, Ship ship) {
         this.state = state;
         this.ship = ship;
