@@ -7,6 +7,13 @@ import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import io.reactivex.Observable;
 
+/**
+ * Interface:
+ * <ul>
+ *     <li>To set the game strategy: Simple or Salve.
+ * </ul>
+ *
+ */
 
 public interface ITurnStrategy {
     /**
@@ -17,5 +24,11 @@ public interface ITurnStrategy {
      */
     GamePlayer getNextTurn(GamePlayer player, GamePlayer enemy, HitResult result);
 
+    /**
+     * Get he hit result on a cell.
+     * @param player - player type
+     * @param coordinate - cell coordinates on which hit has been made
+     * @throws CoordinatesOutOfBoundsException
+     */
     HitResult hit(GamePlayer player, Coordinate coordinate) throws CoordinatesOutOfBoundsException;
 }

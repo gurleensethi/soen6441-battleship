@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * The type SalvaTurnStrategy defines the behavior when the game runs in Salva mode.
+ */
+
 public class SalvaTurnStrategy implements ITurnStrategy {
     private static final Logger logger = Logger.getLogger(SimpleTurnStrategy.class.getName());
     private GamePlayer player;
@@ -25,6 +29,14 @@ public class SalvaTurnStrategy implements ITurnStrategy {
         currentPlayer = player;
     }
 
+
+    /**
+     * Get turn of next player, depending on hit made.
+     * @param player - current player object
+     * @param enemy - other player object
+     * @param result Result of previous hit
+     * @return Player to which the turn should be switched.
+     */
     @Override
     public GamePlayer getNextTurn(GamePlayer player, GamePlayer enemy, HitResult result) {
         if (this.player == null || this.enemy == null) {
@@ -58,6 +70,13 @@ public class SalvaTurnStrategy implements ITurnStrategy {
         return currentPlayer;
     }
 
+
+    /**
+     * Get he hit result on a cell.
+     * @param playerToHit - player who's grid is being hit
+     * @param coordinate - cell coordinates on which hits are being made
+     * @throws CoordinatesOutOfBoundsException
+     */
     @Override
     public HitResult hit(GamePlayer playerToHit, Coordinate coordinate) throws CoordinatesOutOfBoundsException {
         // If manual player is playing
@@ -84,6 +103,9 @@ public class SalvaTurnStrategy implements ITurnStrategy {
         }
     }
 
+    /**
+     * Method to switch turns between players.
+     */
     private void switchCurrentPlayer() {
         logger.info(() -> " " + (currentPlayer == player));
         if (currentPlayer == player) {
