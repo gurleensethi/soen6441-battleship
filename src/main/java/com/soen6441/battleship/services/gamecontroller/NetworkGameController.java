@@ -104,6 +104,7 @@ public class NetworkGameController implements IGameController {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         logger.info("Player grid update...");
+                        logger.info("Player -> " + dataSnapshot.getKey());
                         Grid grid = dataSnapshot.getValue(Grid.class);
                         player.getGameGrid().updateGrid(grid);
                     }
@@ -122,6 +123,7 @@ public class NetworkGameController implements IGameController {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         logger.info("Enemy grid update...");
+                        logger.info("Enemy -> " + dataSnapshot.getKey());
                         Grid grid = dataSnapshot.getValue(Grid.class);
                         enemy.getGameGrid().updateGrid(grid);
                     }
