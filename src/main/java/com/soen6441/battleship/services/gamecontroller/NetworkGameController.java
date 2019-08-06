@@ -16,6 +16,7 @@ import com.soen6441.battleship.services.scorecalculator.ScoreCalculator;
 import com.soen6441.battleship.utils.TimerUtil;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+import javafx.application.Platform;
 
 import java.util.Date;
 import java.util.List;
@@ -112,7 +113,9 @@ public class NetworkGameController implements IGameController {
                                 player.getGameGrid().updateGrid(grid);
                             }
 
-                            handleIsGameOver();
+                            Platform.runLater(() -> {
+                                handleIsGameOver();
+                            });
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -139,7 +142,9 @@ public class NetworkGameController implements IGameController {
                                 enemy.getGameGrid().updateGrid(grid);
                             }
 
-                            handleIsGameOver();
+                            Platform.runLater(() -> {
+                                handleIsGameOver();
+                            });
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -218,12 +223,14 @@ public class NetworkGameController implements IGameController {
      */
     @Override
     public void hit(int x, int y) {
+        handleIsGameOver();
         if (!currentPlayerName.equals("player")) {
             return;
         }
 
         // Return if game is over
         if (isGameOver) {
+            handleIsGameOver();
             return;
         }
 
@@ -270,6 +277,9 @@ public class NetworkGameController implements IGameController {
         // Check if all ships of enemy or player are destroyed.
         boolean areAllShipsOnEnemyHit = enemy.getGameGrid().areAllShipsDestroyed();
         boolean areAllShipsOnPlayerHit = player.getGameGrid().areAllShipsDestroyed();
+
+        logger.info(areAllShipsOnEnemyHit + "<-- Enemy");
+        logger.info(areAllShipsOnPlayerHit + "<-- Player");
 
         this.isGameOver = areAllShipsOnEnemyHit || areAllShipsOnPlayerHit;
 
