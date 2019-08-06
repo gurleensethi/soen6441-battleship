@@ -218,7 +218,7 @@ public class NetworkGameController implements IGameController {
             e.printStackTrace();
         }
 
-        handleIsGameOver();
+        //handleIsGameOver();
 
         if (!isGameOver) {
             notifyTurns();

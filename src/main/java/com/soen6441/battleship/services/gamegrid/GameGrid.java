@@ -406,5 +406,20 @@ public class GameGrid implements IGameGrid, Serializable {
     public void updateGrid(Grid grid) {
         this.grid = grid;
         gridBehaviorSubject.onNext(this.grid);
+
+        int gridSize = GameConfig.getsInstance().getGridSize();
+
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                int shipLength = this.grid.getCellInfo(new Coordinate(i, j)).getShip().getLength();
+
+                for (Ship ship : ships) {
+                    if (shipLength == ship.getLength()) {
+                        this.grid.getCellInfo(new Coordinate(i, j)).setShip(ship);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

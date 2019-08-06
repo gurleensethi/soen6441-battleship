@@ -78,7 +78,10 @@ public class GameController implements IGameController {
         if (sGameController == null) {
             sGameController = new GameController();
         }
-        return NetworkGameController.getInstance();
+        if (GameConfig.getsInstance().isNetworkPlay()) {
+            return NetworkGameController.getInstance();
+        }
+        return sGameController;
     }
 
     /**
