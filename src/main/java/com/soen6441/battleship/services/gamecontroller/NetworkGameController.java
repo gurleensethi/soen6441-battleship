@@ -111,6 +111,8 @@ public class NetworkGameController implements IGameController {
                             if (grid != null) {
                                 player.getGameGrid().updateGrid(grid);
                             }
+
+                            handleIsGameOver();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -136,6 +138,8 @@ public class NetworkGameController implements IGameController {
                             if (grid != null) {
                                 enemy.getGameGrid().updateGrid(grid);
                             }
+
+                            handleIsGameOver();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -242,17 +246,17 @@ public class NetworkGameController implements IGameController {
 //                currentPlayerName = "enemy";
 //            }
 
-            FirebaseDatabase.getInstance().getReference("games")
-                    .child(room)
-                    .child("playerTurn")
-                    .setValueAsync(GameConfig.getsInstance().getFBEnemyName());
+            if (result != HitResult.HIT) {
+                FirebaseDatabase.getInstance().getReference("games")
+                        .child(room)
+                        .child("playerTurn")
+                        .setValueAsync(GameConfig.getsInstance().getFBEnemyName());
+            }
 
             turnChangeBehaviourSubject.onNext(this.currentPlayerName);
         } catch (CoordinatesOutOfBoundsException e) {
             e.printStackTrace();
         }
-
-        //handleIsGameOver();
 
         if (!isGameOver) {
             notifyTurns();
