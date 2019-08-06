@@ -1,5 +1,6 @@
 package com.soen6441.battleship.app;
 
+import com.soen6441.battleship.services.firebasemanager.FirebaseManager;
 import com.soen6441.battleship.services.gamecontroller.GameController;
 import com.soen6441.battleship.services.gamecontroller.IGameController;
 import com.soen6441.battleship.view.IView;
@@ -14,6 +15,7 @@ import com.soen6441.battleship.viewmodels.shipplacementviewmodel.ShipPlacementVi
  */
 public class AppWithGUI {
     public static void main(String[] args) {
+        new FirebaseManager().init();
         IGameController gameController = GameController.getInstance();
         IGameViewModel gameViewModel = new GameViewModel(gameController);
         IShipPlacementViewModel shipPlacementViewModel = new ShipPlacementViewModel(gameController);

@@ -2,8 +2,12 @@ package com.soen6441.battleship.view.gui.scenes.initialuserinputscene;
 
 import com.soen6441.battleship.common.SceneRoutes;
 import com.soen6441.battleship.data.model.OfflineGameInfo;
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.services.gamecontroller.GameController;
 import com.soen6441.battleship.services.gameloader.GameLoader;
+import com.soen6441.battleship.services.networkmanager.NetworkClient;
+import com.soen6441.battleship.services.networkmanager.NetworkEvent;
+import com.soen6441.battleship.services.networkmanager.NetworkServer;
 import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
 import com.soen6441.battleship.viewmodels.initiuserviewmodel.InitUserViewModel;
 import javafx.beans.value.ChangeListener;
@@ -93,6 +97,55 @@ public class UserInputSceneController {
             } else {
                 SceneNavigator.getInstance().navigate(SceneRoutes.SHIP_PLACEMENT);
             }
+        }
+    }
+
+    @FXML
+    void startGameServer(ActionEvent event) {
+        //Alert message for the invalid inputs
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        if (nameField.getText().trim().isEmpty()
+                || nameField.getText() == null
+                || !Pattern.matches(".*[a-zA-Z]+.*", nameField.getText())) {
+
+            alert.setTitle("Warning Dialog");
+            alert.setHeaderText("Invalid input type from user!");
+            alert.setContentText("Player Name should be in alphabets from A-Z !");
+            alert.showAndWait();
+            logger.config("Empty or invalid name field.");
+        } else {
+            playerName = nameField.getText();
+            initUserViewModel.setName(playerName);
+
+            GameConfig.getsInstance().setNetworkPlay(true);
+            GameConfig.getsInstance().setServer(true);
+            //NetworkServer.getInstance();
+            //NetworkClient.getInstance().init(NetworkEvent.Players.PLAYER1, playerName);
+            SceneNavigator.getInstance().navigate(SceneRoutes.SHIP_PLACEMENT);
+        }
+    }
+
+    @FXML
+    void connectGameServer(ActionEvent event) {
+        //Alert message for the invalid inputs
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        if (nameField.getText().trim().isEmpty()
+                || nameField.getText() == null
+                || !Pattern.matches(".*[a-zA-Z]+.*", nameField.getText())) {
+
+            alert.setTitle("Warning Dialog");
+            alert.setHeaderText("Invalid input type from user!");
+            alert.setContentText("Player Name should be in alphabets from A-Z !");
+            alert.showAndWait();
+            logger.config("Empty or invalid name field.");
+        } else {
+            playerName = nameField.getText();
+            initUserViewModel.setName(playerName);
+
+            GameConfig.getsInstance().setNetworkPlay(true);
+            GameConfig.getsInstance().setServer(false);
+            //NetworkClient.getInstance().init(NetworkEvent.Players.PLAYER2, playerName);
+            SceneNavigator.getInstance().navigate(SceneRoutes.SHIP_PLACEMENT);
         }
     }
 }

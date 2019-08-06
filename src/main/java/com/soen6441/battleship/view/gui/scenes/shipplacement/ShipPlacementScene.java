@@ -1,8 +1,10 @@
 package com.soen6441.battleship.view.gui.scenes.shipplacement;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.soen6441.battleship.common.ButtonStyle;
 import com.soen6441.battleship.common.SceneRoutes;
 import com.soen6441.battleship.data.model.Ship;
+import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.view.gui.navigator.SceneNavigator;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.shipplacementviewmodel.IShipPlacementViewModel;
@@ -69,7 +71,18 @@ public class ShipPlacementScene implements IScene {
         // TODO: Move this to a separate Node class, maybe even fxml file.
         Node toolbar = buildToolbar(
                 event -> shipPlacementGrid.cancelShipSelection(),
-                event -> SceneNavigator.getInstance().navigate(SceneRoutes.GAME_PLAY),
+                event -> {
+                    if (GameConfig.getsInstance().isNetworkPlay()) {
+                        String roomName = GameConfig.getsInstance().getRoomName();
+                        String playerName = GameConfig.getsInstance().getFBPlayerName();
+
+                        FirebaseDatabase.getInstance().getReference("games")
+                                .child(roomName)
+                                .child(playerName)
+                                .setValueAsync(shipPlacementViewModel.getPlayerGameGrid().getGrid().coordinatesList);
+                    }
+                    SceneNavigator.getInstance().navigate(SceneRoutes.GAME_PLAY);
+                },
                 shipPlacementGrid.getShipSelectionObservable(),
                 shipPlacementGrid.getSelectedShipCountObservable()
         );

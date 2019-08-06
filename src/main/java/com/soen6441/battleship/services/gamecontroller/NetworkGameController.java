@@ -1,9 +1,7 @@
 package com.soen6441.battleship.services.gamecontroller;
 
-import com.soen6441.battleship.data.model.Coordinate;
-import com.soen6441.battleship.data.model.GamePlayer;
-import com.soen6441.battleship.data.model.GameOverInfo;
-import com.soen6441.battleship.data.model.GameControllerInfo;
+import com.google.firebase.database.*;
+import com.soen6441.battleship.data.model.*;
 import com.soen6441.battleship.enums.HitResult;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.aiplayer.ProbabilityAIPlayer;
@@ -22,26 +20,12 @@ import io.reactivex.subjects.BehaviorSubject;
 import java.util.Date;
 import java.util.logging.Logger;
 
-
-/**
- * <p>GameController is the entity which drives the game.
- * Singleton class.
- *
- * <p>Major controls include:
- * <ul>
- * <li>Creating grids -  {@link com.soen6441.battleship.services.gamecontroller.GameController#GameController}
- * <li>Tracking turns - {@link com.soen6441.battleship.services.gamecontroller.GameController#hit}
- * <li>Handle game winner - {@link GameController#handleIsGameOver}
- * </ul>
- * <p>
- * Implements {@link com.soen6441.battleship.services.gamecontroller.IGameController} interface.
- */
-public class GameController implements IGameController {
+public class NetworkGameController implements IGameController {
     private static final Logger logger = Logger.getLogger(GameController.class.getName());
     /**
      * GameController static instance
      */
-    private static GameController sGameController;
+    private static NetworkGameController sGameController;
 
     /**
      * Player with active turn.
@@ -67,6 +51,11 @@ public class GameController implements IGameController {
 
     private ITurnStrategy turnStrategy;
 
+    private String fbPlayerName = GameConfig.getsInstance().getFBPlayerName();
+    private String fbEnemyName = GameConfig.getsInstance().getFBEnemyName();
+    private String room = GameConfig.getsInstance().getRoomName();
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("games").child(room);
+
     private GameConfig gameConfig = GameConfig.getsInstance();
 
     /**
@@ -74,17 +63,17 @@ public class GameController implements IGameController {
      *
      * @return The instance of GameController.
      */
-    public static IGameController getInstance() {
+    public static NetworkGameController getInstance() {
         if (sGameController == null) {
-            sGameController = new GameController();
+            sGameController = new NetworkGameController();
         }
-        return NetworkGameController.getInstance();
+        return sGameController;
     }
 
     /**
      * Constructor method to the class
      */
-    private GameController() {
+    private NetworkGameController() {
         currentPlayerName = "player";
         turnChangeBehaviourSubject.onNext(currentPlayerName);
 
@@ -114,6 +103,19 @@ public class GameController implements IGameController {
                 this.turnStrategy = new SimpleTurnStrategy();
             }
         }
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Object playerGrid = dataSnapshot.getValue();
+                logger.info("Player grid is here: " + playerGrid);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
@@ -132,7 +134,7 @@ public class GameController implements IGameController {
 
     /**
      * Interface method : {@link com.soen6441.battleship.services.gamecontroller.IGameController}
-     * <p>Calls {@link GameController#handleIsGameOver()} to check if a player has won.
+     * <p>Calls {@link NetworkGameController#handleIsGameOver()} to check if a player has won.
      *
      * @param x - x coordinate to hit on grid
      * @param y - y coordinate to hit on grid

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.soen6441.battleship.enums.CellState;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -23,18 +25,23 @@ public class Grid implements Serializable {
     /**
      * 2-D array of all the individual cells inside the grid.
      */
-    private final CellInfo[][] coordinates;
+    public List<List<CellInfo>> coordinatesList;
 
     /**
      * @param gridSize size of the grid. Should be greater than 0.
      */
     public Grid(int gridSize) {
+        this.coordinatesList = new ArrayList<>(gridSize);
         this.gridSize = gridSize;
-        this.coordinates = new CellInfo[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++) {
+            List<CellInfo> subList = new ArrayList<>(gridSize);
+
             for (int j = 0; j < gridSize; j++) {
-                this.coordinates[i][j] = new CellInfo(CellState.EMPTY, null);
+                subList.add(j, new CellInfo(CellState.EMPTY, null));
+
             }
+
+            coordinatesList.add(i, subList);
         }
     }
 
@@ -55,7 +62,7 @@ public class Grid implements Serializable {
      * @return {@link CellState} of cell at xy.
      */
     public CellState getCellState(int x, int y) {
-        return this.coordinates[y][x].getState();
+        return coordinatesList.get(y).get(x).getState();
     }
 
     /**
@@ -66,7 +73,7 @@ public class Grid implements Serializable {
      * @param state new state of the cell.
      */
     public void updateCellStatus(int x, int y, CellState state) {
-        coordinates[y][x].setState(state);
+        coordinatesList.get(y).get(x).setState(state);
     }
 
     /**
@@ -77,7 +84,7 @@ public class Grid implements Serializable {
      * @param ship to be placed on the cell.
      */
     public void setShipOnCell(int x, int y, Ship ship) {
-        coordinates[y][x].setShip(ship);
+        coordinatesList.get(y).get(x).setShip(ship);
     }
 
     /**
@@ -86,7 +93,7 @@ public class Grid implements Serializable {
      * @return {@link CellInfo} at particular x y coordinate.
      */
     public CellInfo getCellInfo(int x, int y) {
-        return this.coordinates[y][x];
+        return coordinatesList.get(y).get(x);
     }
 
     /**
@@ -94,14 +101,14 @@ public class Grid implements Serializable {
      * @return {@link CellInfo} at particular x y coordinate.
      */
     public CellInfo getCellInfo(Coordinate coordinate) {
-        return this.coordinates[coordinate.getY()][coordinate.getX()];
+        return coordinatesList.get(coordinate.getY()).get(coordinate.getX());
     }
 
     @Override
     public String toString() {
         return "Grid{" +
                 "gridSize=" + gridSize +
-                ", coordinates=" + Arrays.toString(coordinates) +
+                ", coordinates=" + Arrays.toString(new String[]{"test"}) +
                 '}';
     }
 }
