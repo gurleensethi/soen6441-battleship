@@ -77,15 +77,10 @@ public class NetworkGameController implements IGameController {
         int gridSize = GameConfig.getsInstance().getGridSize();
 
         player = new GamePlayer("Player", new GameGrid(gridSize));
-        enemy = new ProbabilityAIPlayer("AI", new GameGrid(gridSize), player, coordinate ->
-                this.hit(coordinate.getX(), coordinate.getY()));
+        enemy = new GamePlayer("Enemy", new GameGrid(gridSize));
 
         player.setIsMyTurn(playerTurnBehaviourSubject);
         enemy.setIsMyTurn(enemyTurnBehaviourSubject);
-
-        // Place random ships on board
-        RandomShipPlacer randomShipPlacer = new RandomShipPlacer();
-        randomShipPlacer.placeRandomShips(enemy.getGameGrid());
     }
 
     @Override
@@ -195,17 +190,9 @@ public class NetworkGameController implements IGameController {
         logger.info(() -> String.format("%s has sent a hit on x: %d, y: %d", this.currentPlayerName, x, y));
 
         try {
-            long timeTaken = turnTimer.stop();
 
-            if (currentPlayerName.equals("player")) {
-                player.addTimeTaken(timeTaken);
-            } else {
-                enemy.addTimeTaken(timeTaken);
-            }
 
-            GamePlayer playerToHit = enemy;
-
-            HitResult result = playerToHit.getGameGrid().hit(x, y);
+            HitResult result = enemy.getGameGrid().hit(x, y);
 
             updatePlayerAndEnemyGrid();
 
