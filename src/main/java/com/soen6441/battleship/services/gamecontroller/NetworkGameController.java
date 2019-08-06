@@ -102,16 +102,14 @@ public class NetworkGameController implements IGameController {
         }
 
         String fbPlayerName = GameConfig.getsInstance().getFBPlayerName();
-        String enemyPlayerName = GameConfig.getsInstance().getFBPlayerName();
         FirebaseDatabase.getInstance().getReference("games")
                 .child(room)
                 .child(fbPlayerName)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        logger.info("Value changed");
+                        logger.info("Player grid update...");
                         Grid grid = dataSnapshot.getValue(Grid.class);
-
                         player.getGameGrid().updateGrid(grid);
                     }
 
@@ -121,14 +119,15 @@ public class NetworkGameController implements IGameController {
                     }
                 });
 
+        String enemyPlayerName = GameConfig.getsInstance().getFBPlayerName();
         FirebaseDatabase.getInstance().getReference("games")
                 .child(room)
                 .child(enemyPlayerName)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        logger.info("Enemy grid update...");
                         Grid grid = dataSnapshot.getValue(Grid.class);
-
                         enemy.getGameGrid().updateGrid(grid);
                     }
 
@@ -204,7 +203,7 @@ public class NetworkGameController implements IGameController {
                 enemy.addTimeTaken(timeTaken);
             }
 
-            GamePlayer playerToHit = currentPlayerName.equals("player") ? enemy : player;
+            GamePlayer playerToHit = enemy;
 
             HitResult result = playerToHit.getGameGrid().hit(x, y);
 
