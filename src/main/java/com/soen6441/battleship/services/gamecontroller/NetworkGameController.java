@@ -19,6 +19,7 @@ import io.reactivex.subjects.BehaviorSubject;
 import javafx.application.Platform;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -112,10 +113,6 @@ public class NetworkGameController implements IGameController {
                             if (grid != null) {
                                 player.getGameGrid().updateGrid(grid);
                             }
-
-                            Platform.runLater(() -> {
-                                handleIsGameOver();
-                            });
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -141,10 +138,6 @@ public class NetworkGameController implements IGameController {
                             if (grid != null) {
                                 enemy.getGameGrid().updateGrid(grid);
                             }
-
-                            Platform.runLater(() -> {
-                                handleIsGameOver();
-                            });
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -177,6 +170,7 @@ public class NetworkGameController implements IGameController {
                     }
                 });
 
+
         FirebaseDatabase.getInstance().getReference("games")
                 .child(room)
                 .child("playerTurn")
@@ -191,6 +185,41 @@ public class NetworkGameController implements IGameController {
                         }
 
                         turnChangeBehaviourSubject.onNext(currentPlayerName);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+        FirebaseDatabase.getInstance().getReference("games")
+                .child(room)
+                .child("gameStatus")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try {
+                            GenericTypeIndicator<HashMap<String, Object>> t = new GenericTypeIndicator<HashMap<String, Object>>() {
+                            };
+                            HashMap<String, Object> map = dataSnapshot.getValue(t);
+                            if (map.containsKey("isGameOver")) {
+                                if (((Boolean) map.get("isGameOver"))) {
+                                    String playerWhoWon = (String) map.get("playerWon");
+                                    logger.info("Game is over, winning player: " + playerWhoWon);
+
+                                    Platform.runLater(() -> {
+                                        showAlert(playerWhoWon.equals(fbPlayerName));
+                                    });
+                                } else {
+                                    logger.info("Game is not over.");
+                                }
+                            } else {
+                                logger.info("Map doesn't contain isGameOver");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -223,7 +252,6 @@ public class NetworkGameController implements IGameController {
      */
     @Override
     public void hit(int x, int y) {
-        handleIsGameOver();
         if (!currentPlayerName.equals("player")) {
             return;
         }
@@ -242,6 +270,8 @@ public class NetworkGameController implements IGameController {
             HitResult result = enemy.getGameGrid().hit(x, y);
 
             updatePlayerAndEnemyGrid();
+
+            handleIsGameOver();
 
             //HitResult result = this.turnStrategy.hit(playerToHit, new Coordinate(x, y));
 
@@ -270,6 +300,24 @@ public class NetworkGameController implements IGameController {
         }
     }
 
+    private void showAlert(boolean didPlayerWin) {
+        logger.info("Did player win : " + didPlayerWin);
+        GameOverInfo gameOverInfo = new GameOverInfo(this.isGameOver, didPlayerWin);
+        this.isGameOverBehaviourSubject.onNext(gameOverInfo);
+
+        // Timers is stopped because we don't need it anymore as game
+        // is over.
+        if (isGameOver) {
+            if (turnTimer.isRunning()) {
+                turnTimer.stop();
+            }
+
+            if (gameTimer.isRunning()) {
+                gameTimer.stop();
+            }
+        }
+    }
+
     /**
      * Declares a winner by checking if all ships of either side are destroyed.
      */
@@ -283,19 +331,22 @@ public class NetworkGameController implements IGameController {
 
         this.isGameOver = areAllShipsOnEnemyHit || areAllShipsOnPlayerHit;
 
-        GameOverInfo gameOverInfo = new GameOverInfo(this.isGameOver, areAllShipsOnEnemyHit);
-        this.isGameOverBehaviourSubject.onNext(gameOverInfo);
+        FirebaseDatabase.getInstance().getReference("games")
+                .child(room)
+                .child("gameStatus")
+                .child("isGameOver")
+                .setValueAsync(isGameOver);
 
-        // Timers is stopped because we don't need it anymore as game
-        // is over.
         if (isGameOver) {
-            if (turnTimer.isRunning()) {
-                turnTimer.stop();
-            }
+            String playerWhoWon = areAllShipsOnEnemyHit ?
+                    GameConfig.getsInstance().getFBPlayerName() :
+                    GameConfig.getsInstance().getFBEnemyName();
 
-            if (gameTimer.isRunning()) {
-                gameTimer.stop();
-            }
+            FirebaseDatabase.getInstance().getReference("games")
+                    .child(room)
+                    .child("gameStatus")
+                    .child("playerWon")
+                    .setValueAsync(playerWhoWon);
         }
     }
 
