@@ -18,6 +18,7 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class NetworkGameController implements IGameController {
@@ -139,6 +140,27 @@ public class NetworkGameController implements IGameController {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         databaseError.toException().printStackTrace();
+                    }
+                });
+
+        FirebaseDatabase.getInstance().getReference("games")
+                .child(room)
+                .child(enemyPlayerName + "_ships")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try {
+                            GenericTypeIndicator<List<Ship>> t = new GenericTypeIndicator<List<Ship>>() {
+                            };
+                            enemy.getGameGrid().setShips(dataSnapshot.getValue(t));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
 
