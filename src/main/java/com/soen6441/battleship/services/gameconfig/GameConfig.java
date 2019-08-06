@@ -7,7 +7,7 @@ public class GameConfig {
     private int gridSize = 10;
     private boolean isNetworkPlay = false;
     private String roomName = "default";
-    private boolean isServer = false;
+    private boolean isServer;
 
     private GameConfig() {
     }
@@ -76,6 +76,7 @@ public class GameConfig {
     }
 
     public String getFBPlayerName() {
+        System.out.println(this.isServer);
         if (this.isServer) {
             return "Player1";
         } else {

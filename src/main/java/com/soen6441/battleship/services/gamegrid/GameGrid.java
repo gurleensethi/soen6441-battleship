@@ -39,7 +39,7 @@ public class GameGrid implements IGameGrid, Serializable {
     /**
      * Grid Model
      */
-    private final Grid grid;
+    private Grid grid;
 
     /**
      * List of all the ships successfully added to the grid.
@@ -400,5 +400,11 @@ public class GameGrid implements IGameGrid, Serializable {
                 "grid=" + grid +
                 ", ships=" + ships +
                 '}';
+    }
+
+    @Override
+    public void updateGrid(Grid grid) {
+        this.grid = grid;
+        gridBehaviorSubject.onNext(this.grid);
     }
 }

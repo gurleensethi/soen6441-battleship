@@ -11,37 +11,37 @@ public class Ship implements Serializable {
     /**
      * Unique id of the ship.
      */
-    private final String uniqueID;
+    private String uniqueID;
 
     /**
      * A name for the ship.
      */
-    private final String name;
+    private String name;
 
     /**
      * Starting x-coordinate of the ship.
      */
-    private final int startX;
+    private int startX;
 
     /**
      * Starting y-coordinate of the ship.
      */
-    private final int startY;
+    private int startY;
 
     /**
      * Ending x-coordinate of the ship. (Inclusive)
      */
-    private final int endX;
+    private int endX;
 
     /**
      * Ending y-coordinate of the ship. (Inclusive)
      */
-    private final int endY;
+    private int endY;
 
     /**
      * Length of the ship.
      */
-    private final int length;
+    private int length;
 
     /**
      * Total hits that have been take on this ship.
@@ -51,7 +51,7 @@ public class Ship implements Serializable {
     /**
      * Direction of the ship. Can be vertical or horizontal.
      */
-    private final ShipDirection direction;
+    private ShipDirection direction;
 
     /**
      * Builder pattern for building a ship
@@ -102,6 +102,8 @@ public class Ship implements Serializable {
             return new Ship(this);
         }
     }
+
+    public Ship() {}
 
     private Ship(Builder builder) {
         this.uniqueID = builder.uniqueId;

@@ -20,12 +20,15 @@ public class Grid implements Serializable {
      * Size of the grid.
      * For example if gridSize=8, the plane will be 8x8.
      */
-    private final int gridSize;
+    private int gridSize;
 
     /**
      * 2-D array of all the individual cells inside the grid.
      */
     public List<List<CellInfo>> coordinatesList;
+
+    public Grid() {
+    }
 
     /**
      * @param gridSize size of the grid. Should be greater than 0.

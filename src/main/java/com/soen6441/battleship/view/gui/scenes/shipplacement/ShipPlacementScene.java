@@ -79,7 +79,7 @@ public class ShipPlacementScene implements IScene {
                         FirebaseDatabase.getInstance().getReference("games")
                                 .child(roomName)
                                 .child(playerName)
-                                .setValueAsync(shipPlacementViewModel.getPlayerGameGrid().getGrid().coordinatesList);
+                                .setValueAsync(shipPlacementViewModel.getPlayerGameGrid().getGrid());
                     }
                     SceneNavigator.getInstance().navigate(SceneRoutes.GAME_PLAY);
                 },
