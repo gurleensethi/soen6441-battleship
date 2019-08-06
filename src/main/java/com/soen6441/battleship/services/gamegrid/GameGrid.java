@@ -403,23 +403,29 @@ public class GameGrid implements IGameGrid, Serializable {
     }
 
     @Override
-    public void updateGrid(Grid grid) {
-        this.grid = grid;
-        gridBehaviorSubject.onNext(this.grid);
-
+    public void updateGrid(Grid newGrid) {
         int gridSize = GameConfig.getsInstance().getGridSize();
 
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
-                int shipLength = this.grid.getCellInfo(new Coordinate(i, j)).getShip().getLength();
+                if (newGrid.getCellInfo(new Coordinate(i, j)).getShip() != null) {
+                    int shipLength = newGrid.getCellInfo(new Coordinate(i, j)).getShip().getLength();
 
-                for (Ship ship : ships) {
-                    if (shipLength == ship.getLength()) {
-                        this.grid.getCellInfo(new Coordinate(i, j)).setShip(ship);
-                        break;
+                    logger.info("breaking ship at " + shipLength + " ");
+
+                    for (Ship ship : ships) {
+                        logger.info("breaking ship at " + shipLength + " " + ship.getLength());
+                        if (shipLength == ship.getLength()) {
+                            logger.info("breaking ship at " + i + " " + j);
+                            newGrid.getCellInfo(new Coordinate(i, j)).setShip(ship);
+                            break;
+                        }
                     }
                 }
             }
         }
+
+        this.grid = newGrid;
+        gridBehaviorSubject.onNext(this.grid);
     }
 }

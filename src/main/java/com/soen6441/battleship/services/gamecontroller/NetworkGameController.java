@@ -103,10 +103,14 @@ public class NetworkGameController implements IGameController {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        logger.info("Player grid update...");
-                        logger.info("Player -> " + dataSnapshot.getKey());
-                        Grid grid = dataSnapshot.getValue(Grid.class);
-                        player.getGameGrid().updateGrid(grid);
+                        try {
+                            logger.info("Player grid update...");
+                            logger.info("Player -> " + dataSnapshot.getKey());
+                            Grid grid = dataSnapshot.getValue(Grid.class);
+                            player.getGameGrid().updateGrid(grid);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -122,10 +126,14 @@ public class NetworkGameController implements IGameController {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        logger.info("Enemy grid update...");
-                        logger.info("Enemy -> " + dataSnapshot.getKey());
-                        Grid grid = dataSnapshot.getValue(Grid.class);
-                        enemy.getGameGrid().updateGrid(grid);
+                        try {
+                            logger.info("Enemy grid update...");
+                            logger.info("Enemy -> " + dataSnapshot.getKey());
+                            Grid grid = dataSnapshot.getValue(Grid.class);
+                            enemy.getGameGrid().updateGrid(grid);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
