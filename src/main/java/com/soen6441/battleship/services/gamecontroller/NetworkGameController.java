@@ -115,7 +115,7 @@ public class NetworkGameController implements IGameController {
                     }
                 });
 
-        String enemyPlayerName = GameConfig.getsInstance().getFBPlayerName();
+        String enemyPlayerName = GameConfig.getsInstance().getFBEnemyName();
         FirebaseDatabase.getInstance().getReference("games")
                 .child(room)
                 .child(enemyPlayerName)
