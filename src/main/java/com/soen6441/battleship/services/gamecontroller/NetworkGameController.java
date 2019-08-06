@@ -377,10 +377,10 @@ public class NetworkGameController implements IGameController {
         String enemyName = GameConfig.getsInstance().getFBEnemyName();
 
         logger.info(playerName);
-        FirebaseDatabase.getInstance().getReference("games")
-                .child(roomName)
-                .child(playerName)
-                .setValueAsync(player.getGameGrid().getGrid());
+//        FirebaseDatabase.getInstance().getReference("games")
+//                .child(roomName)
+//                .child(playerName)
+//                .setValueAsync(player.getGameGrid().getGrid());
 
         logger.info(enemyName);
         FirebaseDatabase.getInstance().getReference("games")
