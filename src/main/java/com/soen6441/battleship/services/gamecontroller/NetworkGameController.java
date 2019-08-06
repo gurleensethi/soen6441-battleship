@@ -108,7 +108,9 @@ public class NetworkGameController implements IGameController {
                             logger.info("Player grid update...");
                             logger.info("Player -> " + dataSnapshot.getKey());
                             Grid grid = dataSnapshot.getValue(Grid.class);
-                            player.getGameGrid().updateGrid(grid);
+                            if (grid != null) {
+                                player.getGameGrid().updateGrid(grid);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -131,7 +133,9 @@ public class NetworkGameController implements IGameController {
                             logger.info("Enemy grid update...");
                             logger.info("Enemy -> " + dataSnapshot.getKey());
                             Grid grid = dataSnapshot.getValue(Grid.class);
-                            enemy.getGameGrid().updateGrid(grid);
+                            if (grid != null) {
+                                enemy.getGameGrid().updateGrid(grid);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

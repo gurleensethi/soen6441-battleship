@@ -408,7 +408,8 @@ public class GameGrid implements IGameGrid, Serializable {
 
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
-                if (newGrid.getCellInfo(new Coordinate(i, j)).getShip() != null) {
+                if (newGrid.getCellInfo(new Coordinate(i, j)) != null
+                        && newGrid.getCellInfo(new Coordinate(i, j)).getShip() != null) {
                     int shipLength = newGrid.getCellInfo(new Coordinate(i, j)).getShip().getLength();
                     for (Ship ship : ships) {
                         if (shipLength == ship.getLength()) {
