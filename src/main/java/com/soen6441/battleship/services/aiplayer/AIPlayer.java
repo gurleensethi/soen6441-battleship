@@ -141,6 +141,8 @@ public class AIPlayer extends GamePlayer implements IAIPlayer {
     }
 
     /**
+     * Generates random hit coordinates.
+     *
      * @return random coordinates to hit.
      */
     private Coordinate getRandomHitCords() {
