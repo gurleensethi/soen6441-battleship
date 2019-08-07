@@ -88,4 +88,6 @@ public interface IGameGrid {
      * @param state New state of the cell.
      */
     void updateCellState(Coordinate coordinate, CellState state);
+
+    public void updateGrid(Grid grid);
 }

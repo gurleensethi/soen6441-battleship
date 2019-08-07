@@ -40,7 +40,7 @@ public class GameLoaderTest {
         gameInfo.setPlayerGrid(playerGrid);
 
         gameLoader.saveGame(TEST_FILE, gameInfo);
-        File savedFiled = new File("output_test/output/gamecontroller.txt");
+        File savedFiled = new File("output_test/output/test_file");
         assertTrue(savedFiled.exists());
     }
 
@@ -50,7 +50,7 @@ public class GameLoaderTest {
         gameInfo.setStoreDate(123);
         gameInfo.setPlayerGrid(playerGrid);
         gameLoader.saveGame(TEST_FILE, gameInfo);
-        File savedFiled = new File("output_test/output/gamecontroller.txt");
+        File savedFiled = new File("output_test/output/test_file");
         FileInputStream fileInputStream = new FileInputStream(savedFiled);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
         GameControllerInfo gameInfoFromFile = (GameControllerInfo) objectInputStream.readObject();

@@ -39,4 +39,12 @@ public class GameOverInfo {
     public boolean isGameOver() {
         return isGameOver;
     }
+
+    @Override
+    public String toString() {
+        return "GameOverInfo{" +
+                "isGameOver=" + isGameOver +
+                ", didPlayerWin=" + didPlayerWin +
+                '}';
+    }
 }
