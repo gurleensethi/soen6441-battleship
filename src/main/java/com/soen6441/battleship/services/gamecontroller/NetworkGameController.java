@@ -170,7 +170,6 @@ public class NetworkGameController implements IGameController {
                     }
                 });
 
-
         FirebaseDatabase.getInstance().getReference("games")
                 .child(room)
                 .child("playerTurn")
@@ -202,7 +201,9 @@ public class NetworkGameController implements IGameController {
                         try {
                             GenericTypeIndicator<HashMap<String, Object>> t = new GenericTypeIndicator<HashMap<String, Object>>() {
                             };
+
                             HashMap<String, Object> map = dataSnapshot.getValue(t);
+
                             if (map.containsKey("isGameOver")) {
                                 if (((Boolean) map.get("isGameOver"))) {
                                     String playerWhoWon = (String) map.get("playerWon");
