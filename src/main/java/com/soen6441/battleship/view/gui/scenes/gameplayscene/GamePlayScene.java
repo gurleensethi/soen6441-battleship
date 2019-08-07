@@ -1,5 +1,6 @@
 package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
+import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.utils.TimerUtil;
 import com.soen6441.battleship.view.gui.scenes.IScene;
@@ -19,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Logger;
 
 /**
  * This class Game Play scene is the screen which updates the GUI after each move when players
@@ -26,6 +28,7 @@ import java.util.concurrent.ExecutorService;
  * The type Game play scene.
  */
 public class GamePlayScene implements IScene {
+    private Logger logger = Logger.getLogger(GamePlayer.class.getName());
     private IGameViewModel gameViewModel;
 
     /**
@@ -61,6 +64,7 @@ public class GamePlayScene implements IScene {
         Node sideBar = buildSideBar();
 
         gameViewModel.isGameOver().subscribe(gameOverInfo -> {
+            logger.info("GameOverInfo ---> " + gameOverInfo.toString());
             if (gameOverInfo.isGameOver()) {
                 String winnerText = "";
 
