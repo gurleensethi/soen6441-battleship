@@ -246,9 +246,16 @@ public class ShipPlacementScene implements IScene {
 
     }
 
+    /**
+     * Create ship button
+     *
+     * @param imageURL - ship image
+     * @param shipSize - ship size
+     * @param shipId - unique ID for the ship
+     * @return
+     */
     private Button createShipButtons(String imageURL, int shipSize, String shipId) {
 
-        //TODO: Utilize shipSize
 
         Button shipButton = new Button();
         shipButton.setStyle(ButtonStyle.SHIP_PLACEMENT);

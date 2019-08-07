@@ -24,6 +24,10 @@ import javafx.scene.layout.GridPane;
 import java.util.*;
 import java.util.logging.Logger;
 
+
+/**
+ * The type Ship placement grid.
+ */
 class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
     private static final Logger logger = Logger.getLogger(ShipPlacementGrid.class.getName());
     private static final String GRID_BUTTON = "GridButton:";
@@ -46,6 +50,12 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
 
     private final IShipPlacementViewModel shipPlacementViewModel;
 
+    /**
+     * Instantiates a new Ship placement grid.
+     *
+     * @param shipPlacementViewModel the ship placement view model
+     * @param gridObservable         the grid observable
+     */
     ShipPlacementGrid(IShipPlacementViewModel shipPlacementViewModel, Observable<Grid> gridObservable) {
         this.shipPlacementViewModel = shipPlacementViewModel;
         this.gridObservable = gridObservable;
@@ -56,6 +66,9 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
         initGridObservable();
     }
 
+    /**
+     * Add observer on the grid.
+     */
     private void initGridObservable() {
         this.gridObservable.subscribe(grid -> {
             shipButtonsIds.clear();
@@ -70,14 +83,29 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
         });
     }
 
+    /**
+     * Gets ship selection observable.
+     *
+     * @return the ship selection observable
+     */
     Observable<Boolean> getShipSelectionObservable() {
         return this.isSelectingShipSubject;
     }
 
+    /**
+     * Gets selected ship count observable.
+     *
+     * @return the selected ship count observable
+     */
     Observable<Integer> getSelectedShipCountObservable() {
         return this.numShipPlacedSubject;
     }
 
+    /**
+     * Gets ship added observable.
+     *
+     * @return the ship added observable
+     */
     Observable<Ship> getShipAddedObservable() {
         return this.shipAddedPublishSubject;
     }
@@ -230,6 +258,15 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
             }
         }
     }
+
+    /**
+     * Place Ships on the grid.
+     *
+     * @param shipDirection - direction of the ship
+     * @param shipLength - length of the ship
+     * @param coordinate - start and end coordinate of the ship
+     * @return
+     */
 
     private boolean placeShip(ShipDirection shipDirection, int shipLength, Coordinate coordinate) {
         int shipEndX = shipDirection == ShipDirection.HORIZONTAL ? coordinate.getX() + shipLength - 1 : coordinate.getX();
@@ -404,6 +441,10 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
                 coordinate.getY() < gridSize;
     }
 
+    /**
+     * Enable buttons on the given coordinate
+     * @param coordinate
+     */
     private void enableButtonsOnAxisOfCoordinate(Coordinate coordinate) {
         // Check if top coordinate can be enabled
         Coordinate topCoordinates = new Coordinate(coordinate.getX(), coordinate.getY() - currentShipLength + 1);
@@ -482,6 +523,9 @@ class ShipPlacementGrid extends GridPane implements EventHandler<ActionEvent> {
         return GRID_BUTTON + coordinate.getX() + " " + coordinate.getY();
     }
 
+    /**
+     * Cancel ship selection.
+     */
     public void cancelShipSelection() {
         this.isSelectingShip = false;
         this.isSelectingShipSubject.onNext(this.isSelectingShip);

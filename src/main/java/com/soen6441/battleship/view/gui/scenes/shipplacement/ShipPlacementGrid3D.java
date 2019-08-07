@@ -34,6 +34,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+/**
+ * The type Ship placement grid 3 d.
+ */
 public class ShipPlacementGrid3D extends HBox {
     private static final Logger logger = Logger.getLogger(ShipPlacementGrid.class.getName());
     private static final String GRID_BOX = "GridButton:";
@@ -57,6 +60,12 @@ public class ShipPlacementGrid3D extends HBox {
 
     private final IShipPlacementViewModel shipPlacementViewModel;
 
+    /**
+     * Instantiates a new Ship placement grid 3 d.
+     *
+     * @param shipPlacementViewModel the ship placement view model
+     * @param gridObservable         the grid observable
+     */
     public ShipPlacementGrid3D(IShipPlacementViewModel shipPlacementViewModel, Observable<Grid> gridObservable) {
         this.shipPlacementViewModel = shipPlacementViewModel;
         this.gridObservable = gridObservable;
@@ -119,7 +128,7 @@ public class ShipPlacementGrid3D extends HBox {
                 box.setMaterial(new PhongMaterial(Color.SKYBLUE));
                 root.getChildren().add(box);
                 box.getTransforms().addAll(new Translate(x * 11, y * 11, 0));
-                //animateSphere(box, x * 11, y * 11, x * 200);
+                //animateBox(box, x * 11, y * 11, x * 200);
 
                 String id = buildBoxId(x, y);
                 box.setId(id);
@@ -221,7 +230,8 @@ public class ShipPlacementGrid3D extends HBox {
         this.getChildren().addAll(group);
     }
 
-    private static void animateSphere(Box box, int x, int y, int millis) {
+
+    private static void animateBox(Box box, int x, int y, int millis) {
         Translate radiusTranslate = new Translate(x, y, 0);
         Translate zMovement = new Translate();
 
@@ -240,6 +250,12 @@ public class ShipPlacementGrid3D extends HBox {
         tl.play();
     }
 
+    /**
+     * Highlight the box on drag over.
+     * @param shipDirection
+     * @param shipLength
+     * @param coordinate
+     */
     private void highlightHoveringBoxes(ShipDirection shipDirection, int shipLength, Coordinate coordinate) {
         int shipEndX = shipDirection == ShipDirection.HORIZONTAL ? coordinate.getX() + shipLength - 1 : coordinate.getX();
         int shipEndY = shipDirection == ShipDirection.HORIZONTAL ? coordinate.getY() : coordinate.getY() + shipLength - 1;
@@ -286,6 +302,13 @@ public class ShipPlacementGrid3D extends HBox {
         }
     }
 
+    /**
+     * Place ship on the grid
+     * @param shipDirection - direction of the ship
+     * @param shipLength - length of the ship
+     * @param coordinate - coordinate on which ship has to be placed
+     * @return
+     */
     private boolean placeShip(ShipDirection shipDirection, int shipLength, Coordinate coordinate) {
         int shipEndX = shipDirection == ShipDirection.HORIZONTAL ? coordinate.getX() + shipLength - 1 : coordinate.getX();
         int shipEndY = shipDirection == ShipDirection.HORIZONTAL ? coordinate.getY() : coordinate.getY() + shipLength - 1;
