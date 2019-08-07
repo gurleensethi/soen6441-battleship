@@ -207,10 +207,10 @@ public class NetworkGameController implements IGameController {
                             if (map.containsKey("isGameOver")) {
                                 if (((Boolean) map.get("isGameOver"))) {
                                     String playerWhoWon = (String) map.get("playerWon");
-                                    logger.info("Game is over, winning player: " + playerWhoWon);
 
-                                    if (!isGameOver) {
-                                        isGameOver = true;
+                                    if (!playerWhoWon.equals("empty")) {
+                                        logger.info("Game is over, winning player: " + playerWhoWon);
+
                                         Platform.runLater(() -> {
                                             showAlert(playerWhoWon.equals(fbPlayerName));
                                         });
@@ -262,7 +262,6 @@ public class NetworkGameController implements IGameController {
 
         // Return if game is over
         if (isGameOver) {
-            handleIsGameOver();
             return;
         }
 
