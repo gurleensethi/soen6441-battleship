@@ -1,5 +1,6 @@
 package com.soen6441.battleship.utils;
 
+import com.soen6441.battleship.data.model.Grid;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
@@ -9,6 +10,9 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Utility functions to control timers in the game.
+ */
 public class TimerUtil {
     private boolean isRunning = false;
     private long startTime = 0;
