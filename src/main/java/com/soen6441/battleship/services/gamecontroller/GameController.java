@@ -74,9 +74,12 @@ public class GameController implements IGameController {
      *
      * @return The instance of GameController.
      */
-    public static GameController getInstance() {
+    public static IGameController getInstance() {
         if (sGameController == null) {
             sGameController = new GameController();
+        }
+        if (GameConfig.getsInstance().isNetworkPlay()) {
+            return NetworkGameController.getInstance();
         }
         return sGameController;
     }
@@ -262,8 +265,17 @@ public class GameController implements IGameController {
         offlineGameInfo.setEnemyShips(enemy.getGameGrid().getShips());
         offlineGameInfo.setUnSunkPlayerShips(player.getGameGrid().getUnSunkShips());
         offlineGameInfo.setUnSunkEnemyShips(enemy.getGameGrid().getUnSunkShips());
-        offlineGameInfo.setGameTime(this.gameTimer.getTime());
-        offlineGameInfo.setTurnTime(this.turnTimer.getTime());
+        if (this.gameTimer.isRunning()) {
+            offlineGameInfo.setGameTime(this.gameTimer.getTime());
+        } else {
+            offlineGameInfo.setGameTime(0);
+        }
+
+        if (this.turnTimer.isRunning()) {
+            offlineGameInfo.setTurnTime(this.turnTimer.getTime());
+        } else {
+            offlineGameInfo.setTurnTime(0);
+        }
         if (turnStrategy instanceof SalvaTurnStrategy) {
             offlineGameInfo.setPlayerSalvaCoordinates(((SalvaTurnStrategy) turnStrategy).getPlayerCoordinateHits());
             offlineGameInfo.setPlayerSalvaTurns(((SalvaTurnStrategy) turnStrategy).getPlayerTurns());

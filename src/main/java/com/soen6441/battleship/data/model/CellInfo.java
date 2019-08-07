@@ -23,6 +23,8 @@ public class CellInfo implements Serializable {
      */
     private Ship ship;
 
+    public CellInfo() {}
+
     public CellInfo(CellState state, Ship ship) {
         this.state = state;
         this.ship = ship;

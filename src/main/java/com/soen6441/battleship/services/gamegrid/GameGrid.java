@@ -39,7 +39,7 @@ public class GameGrid implements IGameGrid, Serializable {
     /**
      * Grid Model
      */
-    private final Grid grid;
+    private Grid grid;
 
     /**
      * List of all the ships successfully added to the grid.
@@ -400,5 +400,29 @@ public class GameGrid implements IGameGrid, Serializable {
                 "grid=" + grid +
                 ", ships=" + ships +
                 '}';
+    }
+
+    @Override
+    public void updateGrid(Grid newGrid) {
+        int gridSize = GameConfig.getsInstance().getGridSize();
+
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                if (newGrid.getCellInfo(new Coordinate(i, j)) != null
+                        && newGrid.getCellInfo(new Coordinate(i, j)).getShip() != null) {
+                    int shipLength = newGrid.getCellInfo(new Coordinate(i, j)).getShip().getLength();
+                    for (Ship ship : ships) {
+                        if (shipLength == ship.getLength()) {
+                            logger.info("breaking ship at " + i + " " + j);
+                            newGrid.getCellInfo(new Coordinate(i, j)).setShip(ship);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        this.grid = newGrid;
+        gridBehaviorSubject.onNext(this.grid);
     }
 }

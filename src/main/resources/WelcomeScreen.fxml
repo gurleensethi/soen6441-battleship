@@ -31,7 +31,7 @@
     </columnConstraints>
 
     <!-- Add Header Label -->
-    <Label text="Welcome to the Game of Battleship" GridPane.columnIndex="0"
+    <Label text="Battleship Game" GridPane.columnIndex="0"
            GridPane.rowIndex="0" GridPane.columnSpan="2"
            GridPane.rowSpan="1" GridPane.halignment="CENTER">
         <font>
@@ -85,12 +85,49 @@
     </HBox>
 
     <!-- Add Button Start Button -->
-    <Button fx:id="StartGameButton" text="Start Game"
-            prefWidth="100" prefHeight="40" defaultButton="true"
-            GridPane.columnIndex="0" GridPane.rowIndex="6"
+    <Button fx:id="StartGameButton" text="Start Game with AI"
+            prefWidth="200" prefHeight="40" defaultButton="true"
+            GridPane.columnIndex="0" GridPane.rowIndex="4"
             GridPane.columnSpan="2" GridPane.rowSpan="1"
             GridPane.halignment="CENTER"
             onAction="#startAction">
+        <GridPane.margin>
+            <Insets top="20" right="0" bottom="20" left="0"></Insets>
+        </GridPane.margin>
+    </Button>
+
+    <Label text="Online Mode" GridPane.columnIndex="0"
+           GridPane.rowIndex="6">
+        <font>
+            <Font name="Arial" size="16"></Font>
+        </font>
+    </Label>
+
+    <Label text="Room Name: " GridPane.columnIndex="0"
+           GridPane.rowIndex="7">
+    </Label>
+
+    <TextField fx:id="roomTextField" prefWidth="5" prefHeight="10"
+               GridPane.columnIndex="1" GridPane.rowIndex="7"
+               onAction="#startAction"/>
+
+    <Button fx:id="startGameServerButton" text="Server"
+            prefWidth="100" prefHeight="40" defaultButton="true"
+            GridPane.columnIndex="2" GridPane.rowIndex="7"
+            GridPane.rowSpan="1"
+            GridPane.halignment="CENTER"
+            onAction="#startGameServer">
+        <GridPane.margin>
+            <Insets top="20" right="0" bottom="20" left="0"></Insets>
+        </GridPane.margin>
+    </Button>
+
+    <Button fx:id="connectGameServerButton" text="Client"
+            prefWidth="100" prefHeight="40" defaultButton="true"
+            GridPane.columnIndex="3" GridPane.rowIndex="7"
+            GridPane.rowSpan="1"
+            GridPane.halignment="CENTER"
+            onAction="#connectGameServer">
         <GridPane.margin>
             <Insets top="20" right="0" bottom="20" left="0"></Insets>
         </GridPane.margin>

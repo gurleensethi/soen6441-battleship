@@ -1,11 +1,13 @@
 package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
+import com.soen6441.battleship.data.model.GamePlayer;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
 import com.soen6441.battleship.utils.TimerUtil;
 import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
 import com.sun.javafx.scene.layout.region.Margins;
 import io.reactivex.schedulers.Schedulers;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -19,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Logger;
 
 /**
  * This class Game Play scene is the screen which updates the GUI after each move when players
@@ -26,6 +29,7 @@ import java.util.concurrent.ExecutorService;
  * The type Game play scene.
  */
 public class GamePlayScene implements IScene {
+    private Logger logger = Logger.getLogger(GamePlayer.class.getName());
     private IGameViewModel gameViewModel;
 
     /**
@@ -44,9 +48,15 @@ public class GamePlayScene implements IScene {
 
         GameGridPane3D gameGridPane3D = new GameGridPane3D();
 
-        gameViewModel.getPlayerGrid().subscribe(gameGridPane3D::updatePlayerGrid);
+        gameViewModel.getPlayerGrid().subscribe(grid -> {
+            Platform.runLater(() -> {
+                gameGridPane3D.updatePlayerGrid(grid);
+            });
+        });
         gameViewModel.getEnemyGrid().subscribe(grid -> {
-            gameGridPane3D.updateEnemyGrid(grid);
+            Platform.runLater(() -> {
+                gameGridPane3D.updateEnemyGrid(grid);
+            });
         }, error -> {
             error.printStackTrace();
         });
@@ -61,20 +71,23 @@ public class GamePlayScene implements IScene {
         Node sideBar = buildSideBar();
 
         gameViewModel.isGameOver().subscribe(gameOverInfo -> {
-            if (gameOverInfo.isGameOver()) {
-                String winnerText = "";
+            Platform.runLater(() -> {
+                logger.info("GameOverInfo ---> " + gameOverInfo.toString());
+                if (gameOverInfo.isGameOver()) {
+                    String winnerText = "";
 
-                if (gameOverInfo.didPlayerWin()) {
-                    winnerText = "YOU WON :D";
-                } else {
-                    winnerText = "YOU LOST :(";
+                    if (gameOverInfo.didPlayerWin()) {
+                        winnerText = "YOU WON :D";
+                    } else {
+                        winnerText = "YOU LOST :(";
+                    }
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setHeaderText("Game Over!");
+                    alert.setContentText(winnerText + "\nScore: " + gameViewModel.getFinalScore());
+                    alert.show();
                 }
-
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setHeaderText("Game Over!");
-                alert.setContentText(winnerText + "\nScore: " + gameViewModel.getFinalScore());
-                alert.show();
-            }
+            });
         });
 
         HBox root = new HBox();
@@ -102,7 +115,11 @@ public class GamePlayScene implements IScene {
         enemyGameGrid.setOnCoordinateHit(coordinate -> gameViewModel.sendHit(coordinate.getX(), coordinate.getY()));
         enemyBoardVBox.getChildren().addAll(enemyTitleText, enemyGameGrid);
 
-        gameViewModel.getEnemyGrid().subscribe(enemyGameGrid::updateGrid);
+        gameViewModel.getEnemyGrid().subscribe(grid -> {
+            Platform.runLater(() -> {
+                enemyGameGrid.updateGrid(grid);
+            });
+        });
 
         return enemyBoardVBox;
     }
@@ -137,20 +154,44 @@ public class GamePlayScene implements IScene {
         turnTimerText.setFont(new Font(24));
 
         gameViewModel.turnTimer().subscribe(time -> {
-            turnTimerText.setText("Turn Timer: \n" + TimerUtil.printableTime(time));
+            Platform.runLater(() -> {
+                turnTimerText.setText("Turn Timer: \n" + TimerUtil.printableTime(time));
+            });
         });
 
         Text gameTimerText = new Text();
         gameTimerText.setFont(new Font(24));
 
         gameViewModel.gameTimer().subscribe(time -> {
-            gameTimerText.setText("Game Timer: \n" + TimerUtil.printableTime(time));
+            Platform.runLater(() -> {
+                gameTimerText.setText("Game Timer: \n" + TimerUtil.printableTime(time));
+            });
         });
 
         root.getChildren().addAll(
                 gameTimerText,
                 turnTimerText
         );
+
+        if (GameConfig.getsInstance().isNetworkPlay()) {
+            Text turnText = new Text();
+            turnText.setFont(new Font(24));
+            turnText.setStyle("-fx-font-weight: bold");
+
+            gameViewModel.playerTurnChange().subscribe(player -> {
+                Platform.runLater(() -> {
+                    if (player.equals("player")) {
+                        turnText.setText("Your turn...");
+                        turnText.setFill(Color.GREEN);
+                    } else {
+                        turnText.setText("Enemy's Turn!");
+                        turnText.setFill(Color.RED);
+                    }
+                });
+            });
+
+            root.getChildren().addAll(turnText);
+        }
 
         String gameModeText;
 
