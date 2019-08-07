@@ -5,27 +5,19 @@ import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.data.model.Grid;
 import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
-import com.soen6441.battleship.view.gui.scenes.IScene;
-import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.*;
-import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.DrawMode;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
@@ -33,7 +25,11 @@ import javafx.util.Duration;
 import java.util.*;
 import java.util.logging.Logger;
 
-
+/**
+ * The type Game grid pane for 3D model.
+ * This class GameGridPane3D is main frame of GUI for 3D model where when player makes any hot or enemy makes a move
+ * is updated on GUI by changing the colors of the buttons in the gridPane. It responds to the mouse clicks or events,
+ */
 
 public class GameGridPane3D extends HBox implements EventHandler<MouseEvent> {
     private static final Logger logger = Logger.getLogger(GameGridPane3D.class.getName());
@@ -49,11 +45,20 @@ public class GameGridPane3D extends HBox implements EventHandler<MouseEvent> {
     private Map<String, Coordinate> boxCoordinates = new HashMap<>();
     private Set<String> shipBoxIds = new HashSet<>();
 
+    /**
+     * Instantiates a new Game 3D grid pane.
+     */
     public GameGridPane3D() {
         this.gridSize = GameConfig.getsInstance().getGridSize();
         initUI();
     }
 
+
+    /**
+     * This method initUI adds overlay functionality to the grid,
+     * when player one has played its move then the player one's grid will be locked until player two
+     * has made its move.
+     */
 
     private void initUI() {
         Box testBox = new Box(5, 5, 5);
@@ -101,7 +106,7 @@ public class GameGridPane3D extends HBox implements EventHandler<MouseEvent> {
                 });
                 root.getChildren().add(box);
                 box.getTransforms().addAll(new Translate(x * 11, y * 11, 0));
-                animateSphere(box, x * 11, y * 11, x * 200);
+                animateCube(box, x * 11, y * 11, x * 200);
 
                 boxes.put(id, box);
 
@@ -121,7 +126,7 @@ public class GameGridPane3D extends HBox implements EventHandler<MouseEvent> {
                 });
                 root.getChildren().add(box);
                 box.getTransforms().addAll(new Translate(x * BOX_PADDING, y * BOX_PADDING, 0));
-                animateSphere(box, x * BOX_PADDING, y * BOX_PADDING, x * 200);
+                animateCube(box, x * BOX_PADDING, y * BOX_PADDING, x * 200);
 
                 boxes.put(id, box);
 
@@ -149,7 +154,16 @@ public class GameGridPane3D extends HBox implements EventHandler<MouseEvent> {
         this.getChildren().addAll(group);
     }
 
-    private static void animateSphere(Box box, int x, int y, int millis) {
+    /**
+     * Add animation effect to boxes.
+     *
+     * @param box - the box object to be animated
+     * @param x - x translation towards z axis
+     * @param y - y translation towards z axis
+     * @param millis - duration of animation
+     */
+
+    private static void animateCube(Box box, int x, int y, int millis) {
         Translate radiusTranslate = new Translate(x, y, 0);
         Translate zMovement = new Translate();
 
@@ -168,6 +182,16 @@ public class GameGridPane3D extends HBox implements EventHandler<MouseEvent> {
         tl.play();
     }
 
+
+    /**
+     * This method buildEnemyBoxId takes coordinates and and returns a string for to be split and make a button with the
+     * coordinates associated.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+
     private String buildEnemyBoxId(int x, int y) {
         return GRID_BOX + x + " " + y;
     }
@@ -176,6 +200,14 @@ public class GameGridPane3D extends HBox implements EventHandler<MouseEvent> {
         return GRID_BOX + coordinate.getX() + " " + coordinate.getY();
     }
 
+    /**
+     * This method buildPlayerBoxId takes coordinates and and returns a string for to be split and make a button with the
+     * coordinates associated.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     private String buildPlayerBoxId(int x, int y) {
         return GRID_BOX + (x) + " " + (y + BOX_PADDING);
     }

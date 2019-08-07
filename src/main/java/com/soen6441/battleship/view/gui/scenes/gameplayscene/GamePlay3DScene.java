@@ -2,31 +2,30 @@ package com.soen6441.battleship.view.gui.scenes.gameplayscene;
 
 import com.soen6441.battleship.data.model.Coordinate;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
-import com.soen6441.battleship.view.gui.scenes.IScene;
-import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.event.EventHandler;
 import javafx.scene.*;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.DrawMode;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
 import java.util.*;
+
+/**
+ * This class Game Play 3D scene is the screen which updates the 3D GUI after each move when players
+ * makes moves. It displays the two boards and refresh the cells/buttons on every event.
+ * The type Game play scene.
+ */
 
 public class GamePlay3DScene extends HBox {
     private static final String GRID_BOX = "GridBox:";
@@ -41,11 +40,16 @@ public class GamePlay3DScene extends HBox {
     private Map<String, Coordinate> boxCoordinates = new HashMap<>();
     private Set<String> shipBoxIds = new HashSet<>();
 
+    /**
+     * Configures the size of the 3D grid.
+     */
     public GamePlay3DScene() {
         this.gridSize = GameConfig.getsInstance().getGridSize();
     }
 
-
+    /**
+     * Generate grid for player and enemy.
+     */
     private void initUI() {
         Box testBox = new Box(5, 5, 5);
 
@@ -91,7 +95,7 @@ public class GamePlay3DScene extends HBox {
                 });
                 root.getChildren().add(box);
                 box.getTransforms().addAll(new Translate(x * 11, y * 11, 0));
-                animateSphere(box, x * 11, y * 11, x * 200);
+                animateBox(box, x * 11, y * 11, x * 200);
             }
         }
 
@@ -103,7 +107,7 @@ public class GamePlay3DScene extends HBox {
                 });
                 root.getChildren().add(box);
                 box.getTransforms().addAll(new Translate(x * BOX_PADDING, y * BOX_PADDING, 0));
-                animateSphere(box, x * BOX_PADDING, y * BOX_PADDING, x * 200);
+                animateBox(box, x * BOX_PADDING, y * BOX_PADDING, x * 200);
             }
         }
 
@@ -126,7 +130,16 @@ public class GamePlay3DScene extends HBox {
         this.getChildren().addAll(group, new Text("this is a test for 2d"));
     }
 
-    private static void animateSphere(Box box, int x, int y, int millis) {
+    /**
+     * Add animation effect to boxes.
+     *
+     * @param box - the box object to be animated
+     * @param x - x translation towards z axis
+     * @param y - y translation towards z axis
+     * @param millis - duration of animation
+     */
+
+    private static void animateBox(Box box, int x, int y, int millis) {
         Translate radiusTranslate = new Translate(x, y, 0);
         Translate zMovement = new Translate();
 
@@ -149,10 +162,26 @@ public class GamePlay3DScene extends HBox {
         return GRID_BOX + x + " " + y;
     }
 
+    /**
+     * This method buildEnemyBoxId takes coordinates and and returns a string for to be split and make a button with the
+     * coordinates associated.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     private String buildEnemyBoxId(Coordinate coordinate) {
         return GRID_BOX + coordinate.getX() + " " + coordinate.getY();
     }
 
+    /**
+     * This method buildPlayerBoxId takes coordinates and and returns a string for to be split and make a button with the
+     * coordinates associated.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     private String buildPlayerBoxId(int x, int y) {
         return GRID_BOX + (x + BOX_PADDING) + " " + (y + BOX_PADDING);
     }
