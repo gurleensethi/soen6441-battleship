@@ -211,6 +211,8 @@ public class NetworkGameController implements IGameController {
                                     if (!playerWhoWon.equals("empty")) {
                                         logger.info("Game is over, winning player: " + playerWhoWon);
 
+                                        isGameOver = true;
+
                                         Platform.runLater(() -> {
                                             showAlert(playerWhoWon.equals(fbPlayerName));
                                         });
