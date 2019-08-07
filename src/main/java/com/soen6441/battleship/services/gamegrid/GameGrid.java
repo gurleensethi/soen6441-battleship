@@ -48,11 +48,20 @@ public class GameGrid implements IGameGrid, Serializable {
 
     private final BehaviorSubject<Grid> gridBehaviorSubject = BehaviorSubject.create();
 
+    /**
+     * Constructor to create a new grid
+     * @param gridSize - size of grid
+     */
     public GameGrid(int gridSize) {
         this.grid = new Grid(gridSize);
         gridBehaviorSubject.onNext(this.grid);
         logger.info(() -> String.format("Grid created successfully: %s", grid));
     }
+
+    /**
+     * Constructor to load a saved gird object.
+     * @param grid - Saved grid object
+     */
 
     public GameGrid(Grid grid) {
         this.grid = grid;
@@ -104,14 +113,14 @@ public class GameGrid implements IGameGrid, Serializable {
             result = HitResult.ALREADY_HIT;
         } else if (state == CellState.SHIP
                 || (state == CellState.TO_BE_PLACED && grid.getCellInfo(x, y).getShip() != null)) {  // If there is no hit, but there is ship.
-            // TODO: Move this logic to a ship service
+
             grid.updateCellStatus(x, y, CellState.SHIP_WITH_HIT);
 
             Ship shipToHit = grid.getCellInfo(x, y).getShip();
             shipToHit.setHits(shipToHit.getHits() + 1);
 
             if (shipToHit.isSunk()) {
-                // TODO: Move this logic to a ship service
+
                 if (shipToHit.getDirection() == ShipDirection.HORIZONTAL) {
                     for (int shipX = shipToHit.getStartX(); shipX <= shipToHit.getEndX(); shipX++) {
                         grid.updateCellStatus(shipX, shipToHit.getStartY(), CellState.DESTROYED_SHIP);
@@ -132,6 +141,14 @@ public class GameGrid implements IGameGrid, Serializable {
         gridBehaviorSubject.onNext(this.grid);
         return result;
     }
+
+    /**
+     * Peek to check a cell state
+     *
+     * @param coordinate Coordinate to hit.
+     * @return
+     * @throws CoordinatesOutOfBoundsException if coordinates are out of grid bounds.
+     */
 
     @Override
     public HitResult peekHit(Coordinate coordinate) throws CoordinatesOutOfBoundsException {
@@ -217,6 +234,12 @@ public class GameGrid implements IGameGrid, Serializable {
         GridUtils.printGrid(this.grid);
     }
 
+    /**
+     * Check to verify that the ship can be placed on selected coordinates.
+     *
+     * @param ship The ship to be placed.
+     * @return
+     */
     @Override
     public boolean canPlaceShip(Ship ship) {
         try {
@@ -248,6 +271,11 @@ public class GameGrid implements IGameGrid, Serializable {
         return true;
     }
 
+    /**
+     * Check if all the player ships have been destroyed.
+     *
+     * @return true if all ships have been destroyed.
+     */
     @Override
     public boolean areAllShipsDestroyed() {
         // If no ships then all are are destroyed
@@ -380,6 +408,13 @@ public class GameGrid implements IGameGrid, Serializable {
         }
         logger.info("Ship validity check complete!");
     }
+
+    /**
+     *
+     * @param x - x coordinate for ship
+     * @param y - y coordinate for ship
+     * @throws InvalidShipPlacementException - if ship cannot be place at the cell
+     */
 
     private void checkValidAndThrow(int x, int y) throws InvalidShipPlacementException {
         if (isValidCell(x, y) && (grid.getCellState(x, y) == CellState.SHIP)) {

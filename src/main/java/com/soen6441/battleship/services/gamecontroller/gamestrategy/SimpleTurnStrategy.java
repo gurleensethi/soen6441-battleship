@@ -18,6 +18,14 @@ public class SimpleTurnStrategy implements ITurnStrategy {
     public SimpleTurnStrategy() {
     }
 
+
+    /**
+     * Get turn of next player, depending on hit made.
+     * @param player - current player object
+     * @param enemy - other player object
+     * @param result Result of previous hit
+     * @return Player to which the turn should be switched.
+     */
     @Override
     public GamePlayer getNextTurn(GamePlayer player, GamePlayer enemy, HitResult result) {
         if (this.player == null || this.enemy == null) {
@@ -33,11 +41,21 @@ public class SimpleTurnStrategy implements ITurnStrategy {
         return currentPlayer;
     }
 
+    /**
+     * Get he hit result on a cell.
+     * @param player - player type
+     * @param coordinate - cell coordinates on which hit has been made
+     * @throws CoordinatesOutOfBoundsException
+     */
+
     @Override
     public HitResult hit(GamePlayer player, Coordinate coordinate) throws CoordinatesOutOfBoundsException {
         return player.getGameGrid().hit(coordinate.getX(), coordinate.getY());
     }
 
+    /**
+     * Method to switch turns between players.
+     */
     private void switchCurrentPlayer() {
         logger.info(() -> " " + (currentPlayer == player));
         if (currentPlayer == player) {

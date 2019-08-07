@@ -38,15 +38,25 @@ public class GUIView extends Application implements IView {
 
     }
 
+    /**
+     * Application class default start method.
+     */
+
     @Override
     public void start() {
         launch();
     }
 
+    /**
+     * Application class default start method.
+     *
+     * @param primaryStage stage object.
+     */
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         SceneNavigator.init(primaryStage);
-        // TODO: Initialise routes somewhere else
+
         SceneNavigator.getInstance().registerRoute(SceneRoutes.INITIAL_USER_INPUT, InitialUserInputScene::new);
         SceneNavigator.getInstance().registerRoute(SceneRoutes.SHIP_PLACEMENT,
                 () -> new ShipPlacementScene(new ShipPlacementViewModel(GameController.getInstance())));
@@ -58,11 +68,17 @@ public class GUIView extends Application implements IView {
 //            return new GamePlay3DScene();
 //        });
 
-        // TODO: Get ShipPlacementViewModel from somewhere else, ideally use DI to inject it.
+
         primaryStage.show();
 
         SceneNavigator.getInstance().navigate(SceneRoutes.INITIAL_USER_INPUT);
     }
+
+    /**
+     * Application class default stop method.
+     *
+     * @throws Exception
+     */
 
     @Override
     public void stop() throws Exception {

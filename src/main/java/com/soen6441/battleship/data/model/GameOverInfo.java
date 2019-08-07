@@ -5,15 +5,17 @@ package com.soen6441.battleship.data.model;
  * Plain Data Class.
  */
 public class GameOverInfo {
-    /**
-     * Is the game over i.e. someone has won.
-     */
-    private final boolean isGameOver;
 
     /**
      * Did the player playing the game won or was the enemy victorious.
      */
     private final boolean didPlayerWin;
+
+    /**
+     * Is the game over i.e. someone has won.
+     */
+    private final boolean isGameOver;
+
 
     /**
      * @param isGameOver   Is the game finished.
@@ -25,17 +27,17 @@ public class GameOverInfo {
     }
 
     /**
-     * @return Is the game over.
-     */
-    public boolean isGameOver() {
-        return isGameOver;
-    }
-
-    /**
      * @return Did player win the game.
      */
     public boolean didPlayerWin() {
         return didPlayerWin;
+    }
+
+    /**
+     * @return Is the game over.
+     */
+    public boolean isGameOver() {
+        return isGameOver;
     }
 
     @Override

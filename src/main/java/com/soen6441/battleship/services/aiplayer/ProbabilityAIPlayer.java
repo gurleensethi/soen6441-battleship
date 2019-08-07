@@ -127,12 +127,23 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
         }
     }
 
+    /**
+     * On successful hit the near cells to find the ship.
+     * @param coordinate
+     */
+
     private void updateStackWithCoordinates(Coordinate coordinate) {
 
-        // TOP
+        // Top
         Coordinate topCoordinates = new Coordinate(coordinate.getX(), coordinate.getY() - 1);
         if (canHit(topCoordinates) && !isSurroundedByDestroyedShip(topCoordinates)) {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
+        }
+
+        // Right
+        Coordinate rightCoordinates = new Coordinate(coordinate.getX() + 1, coordinate.getY());
+        if (canHit(rightCoordinates) && !isSurroundedByDestroyedShip(rightCoordinates)) {
+            this.coordinatesToHit.add(new Coordinate(coordinate.getX() + 1, coordinate.getY()));
         }
 
         // Bottom
@@ -147,12 +158,13 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
             this.coordinatesToHit.add(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
         }
 
-        // Right
-        Coordinate rightCoordinates = new Coordinate(coordinate.getX() + 1, coordinate.getY());
-        if (canHit(rightCoordinates) && !isSurroundedByDestroyedShip(rightCoordinates)) {
-            this.coordinatesToHit.add(new Coordinate(coordinate.getX() + 1, coordinate.getY()));
-        }
+
     }
+
+    /**
+     * During a gameplay, check if hitting a valid cell.
+     * @param coordinate - coordinates of the cell.
+     */
 
     private boolean canHit(Coordinate coordinate) {
         int gridSize = GameConfig.getsInstance().getGridSize();
@@ -186,6 +198,10 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
         Random random = new Random();
         return new Coordinate(random.nextInt(gridSize), random.nextInt(gridSize));
     }
+
+    /**
+     * The method the calculate the most probable location of a ship based on superposition of all possible locations of an enemy ship.
+     */
 
     private void calculateDistributions() {
         resetDistributions();
@@ -258,6 +274,10 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
         printDistributions();
     }
 
+    /**
+     * Reset distributions created based on past data.
+     */
+
     private void resetDistributions() {
         for (int i = 0; i < this.cellDistributions.length; i++) {
             for (int j = 0; j < this.cellDistributions.length; j++) {
@@ -277,6 +297,10 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
         logger.info(stringBuffer.toString());
     }
 
+    /**
+     * Get the cell coordinate with the best possible probability of ship.
+     * @return - coordinates of the cell.
+     */
     private Coordinate getHittableCoordinate() {
         int largestValue = 0;
         Coordinate coordinate = new Coordinate(0, 0);
@@ -298,6 +322,12 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
 
         return coordinate;
     }
+
+    /**
+     * Check if a cell is a neighbour of a destroyed ship.
+     * @param coordinate - get cell coordinates.
+     *
+     */
 
     private boolean isSurroundedByDestroyedShip(Coordinate coordinate) {
         Grid grid = player.getGameGrid().getGrid();
@@ -353,6 +383,12 @@ public class ProbabilityAIPlayer extends GamePlayer implements IAIPlayer {
         return false;
     }
 
+
+    /**
+     * Cell coordinate within the grids.
+     * @param x - x coordinate
+     * @param y - y coordinate
+     */
     private boolean isValidCell(int x, int y) {
         return x >= 0
                 && x < gridSize

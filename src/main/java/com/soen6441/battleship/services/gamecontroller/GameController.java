@@ -235,22 +235,40 @@ public class GameController implements IGameController {
         return this.isGameOverBehaviourSubject;
     }
 
+    /**
+     * Observer method to update turnTimer
+     *
+     * @return - Observer object
+     */
     @Override
     public Observable<Long> turnTimer() {
         return turnTimer.asObservable();
     }
 
+    /**
+     * Observer method to update the gameTimer
+     *
+     * @return - Observer object
+     */
     @Override
     public Observable<Long> gameTimer() {
         return gameTimer.asObservable();
     }
 
+
+    /**
+     *
+     * @return - return the final score of the player
+     */
     @Override
     public Long getFinalScore() {
         boolean didPlayerWin = this.enemy.getGameGrid().getUnSunkShips() == 0;
         return new ScoreCalculator().calculateScore(this.player.getTurnTimes(), didPlayerWin, enemy.getGameGrid().getUnSunkShips());
     }
 
+    /**
+     * Save the state of the game in an offline mode.
+     */
     @Override
     public void saveGame() {
         GameControllerInfo offlineGameInfo = new GameControllerInfo();
@@ -284,6 +302,9 @@ public class GameController implements IGameController {
         gameLoader.saveGame(GameConfig.getsInstance().getPlayerName(), offlineGameInfo);
     }
 
+    /**
+     * Load and resume the offline saved game.
+     */
     @Override
     public void loadOfflineGame() {
         GameLoader gameLoader = new GameLoader();
@@ -321,6 +342,10 @@ public class GameController implements IGameController {
         this.gameTimer.setTimeElapsed(offlineGameInfo.getGameTime());
     }
 
+    /**
+     *
+     * @return game status.
+     */
     @Override
     public boolean isGameComplete() {
         return this.isGameOver;

@@ -39,13 +39,24 @@ public interface IGameController {
 
     /**
      * Observer method to check if game is over
+     *
      * @return - Observer object
      */
     Observable<GameOverInfo> isGameOver();
 
-    Observable<Long> turnTimer();
-
+    /**
+     * Observer method to update the gameTimer
+     *
+     * @return - Observer object
+     */
     Observable<Long> gameTimer();
+
+    /**
+     * Observer method to update turnTimer
+     *
+     * @return - Observer object
+     */
+    Observable<Long> turnTimer();
 
     Long getFinalScore();
 

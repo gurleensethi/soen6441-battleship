@@ -1,5 +1,9 @@
 package com.soen6441.battleship.services.gameconfig;
 
+/**
+ * Class type GameConfig configures the properties based on user selection.
+ */
+
 public class GameConfig {
     private static GameConfig sInstance;
     private String playerName = "Player";
@@ -12,6 +16,10 @@ public class GameConfig {
     private GameConfig() {
     }
 
+    /**
+     * Create GameConfig instance.
+     * @return gameConfig instance.
+     */
     public static GameConfig getsInstance() {
         if (sInstance == null) {
             sInstance = new GameConfig();

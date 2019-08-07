@@ -3,6 +3,10 @@ package com.soen6441.battleship.data.model;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * The type Game player is the class to instantiate the GameController which sets and gets the status of the game in play.
+ */
+
 public class GameControllerInfo implements Serializable {
     private long storeDate;
     private Grid playerGrid;
