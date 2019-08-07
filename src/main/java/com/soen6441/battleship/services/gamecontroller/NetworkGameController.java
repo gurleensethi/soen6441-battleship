@@ -348,6 +348,12 @@ public class NetworkGameController implements IGameController {
                     .child("gameStatus")
                     .child("playerWon")
                     .setValueAsync(playerWhoWon);
+        } else {
+            FirebaseDatabase.getInstance().getReference("games")
+                    .child(room)
+                    .child("gameStatus")
+                    .child("playerWon")
+                    .setValueAsync("empty");
         }
     }
 
