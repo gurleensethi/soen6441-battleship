@@ -467,8 +467,7 @@ public class NetworkGameController implements IGameController {
         offlineGameInfo.setEnemyShips(enemy.getGameGrid().getShips());
         offlineGameInfo.setUnSunkPlayerShips(player.getGameGrid().getUnSunkShips());
         offlineGameInfo.setUnSunkEnemyShips(enemy.getGameGrid().getUnSunkShips());
-        offlineGameInfo.setGameTime(this.gameTimer.getTime());
-        offlineGameInfo.setTurnTime(this.turnTimer.getTime());
+
         if (turnStrategy instanceof SalvaTurnStrategy) {
             offlineGameInfo.setPlayerSalvaCoordinates(((SalvaTurnStrategy) turnStrategy).getPlayerCoordinateHits());
             offlineGameInfo.setPlayerSalvaTurns(((SalvaTurnStrategy) turnStrategy).getPlayerTurns());

@@ -265,8 +265,17 @@ public class GameController implements IGameController {
         offlineGameInfo.setEnemyShips(enemy.getGameGrid().getShips());
         offlineGameInfo.setUnSunkPlayerShips(player.getGameGrid().getUnSunkShips());
         offlineGameInfo.setUnSunkEnemyShips(enemy.getGameGrid().getUnSunkShips());
-        offlineGameInfo.setGameTime(this.gameTimer.getTime());
-        offlineGameInfo.setTurnTime(this.turnTimer.getTime());
+        if (this.gameTimer.isRunning()) {
+            offlineGameInfo.setGameTime(this.gameTimer.getTime());
+        } else {
+            offlineGameInfo.setGameTime(0);
+        }
+
+        if (this.turnTimer.isRunning()) {
+            offlineGameInfo.setTurnTime(this.turnTimer.getTime());
+        } else {
+            offlineGameInfo.setTurnTime(0);
+        }
         if (turnStrategy instanceof SalvaTurnStrategy) {
             offlineGameInfo.setPlayerSalvaCoordinates(((SalvaTurnStrategy) turnStrategy).getPlayerCoordinateHits());
             offlineGameInfo.setPlayerSalvaTurns(((SalvaTurnStrategy) turnStrategy).getPlayerTurns());
