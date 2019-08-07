@@ -129,10 +129,18 @@ public class UserInputSceneController {
             GameConfig.getsInstance().setNetworkPlay(true);
             GameConfig.getsInstance().setServer(true);
 
-            FirebaseDatabase.getInstance().getReference("games")
-                    .child(room)
-                    .child("playerTurn")
-                    .setValueAsync(GameConfig.getsInstance().getFBPlayerName());
+            try {
+                FirebaseDatabase.getInstance().getReference("games")
+                        .child(room)
+                        .removeValueAsync().get();
+
+                FirebaseDatabase.getInstance().getReference("games")
+                        .child(room)
+                        .child("playerTurn")
+                        .setValueAsync(GameConfig.getsInstance().getFBPlayerName()).get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             SceneNavigator.getInstance().navigate(SceneRoutes.SHIP_PLACEMENT);
         }
