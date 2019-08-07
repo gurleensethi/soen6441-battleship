@@ -2,7 +2,9 @@ package com.soen6441.battleship.services.gamecontroller;
 
 import com.google.firebase.database.*;
 import com.soen6441.battleship.data.model.*;
+import com.soen6441.battleship.enums.CellState;
 import com.soen6441.battleship.enums.HitResult;
+import com.soen6441.battleship.enums.ShipDirection;
 import com.soen6441.battleship.exceptions.CoordinatesOutOfBoundsException;
 import com.soen6441.battleship.services.aiplayer.ProbabilityAIPlayer;
 import com.soen6441.battleship.services.boardgenerator.RandomShipPlacer;
@@ -18,6 +20,7 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import javafx.application.Platform;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +60,9 @@ public class NetworkGameController implements IGameController {
     private String room = GameConfig.getsInstance().getRoomName();
 
     private GameConfig gameConfig = GameConfig.getsInstance();
+
+    private int salvaTurns = 5;
+    private List<Coordinate> salvaCoordinates = new ArrayList<>();
 
     /**
      * Generates(if null) and returns GameController instance.
@@ -112,6 +118,28 @@ public class NetworkGameController implements IGameController {
                             Grid grid = dataSnapshot.getValue(Grid.class);
                             if (grid != null) {
                                 player.getGameGrid().updateGrid(grid);
+
+                                salvaTurns = 5;
+
+                                for (Ship ship : player.getGameGrid().getShips()) {
+                                    if (ship.getDirection() == ShipDirection.VERTICAL) {
+                                        for (int y = ship.getStartY(); y <= ship.getEndY(); y++) {
+                                            if (player.getGameGrid().getGrid().getCellState(
+                                                    ship.getStartX(), y) == CellState.DESTROYED_SHIP) {
+                                                salvaTurns--;
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        for (int x = ship.getStartX(); x <= ship.getEndX(); x++) {
+                                            if (player.getGameGrid().getGrid().getCellState(
+                                                    x, ship.getStartY()) == CellState.DESTROYED_SHIP) {
+                                                salvaTurns--;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -270,32 +298,41 @@ public class NetworkGameController implements IGameController {
         logger.info(() -> String.format("%s has sent a hit on x: %d, y: %d", this.currentPlayerName, x, y));
 
         try {
+            if (GameConfig.getsInstance().isSalvaVariation()) {
+                salvaTurns--;
+                salvaCoordinates.add(new Coordinate(x, y));
+                HitResult result = turnStrategy.hit(enemy, new Coordinate(x, y));
+                enemy.getGameGrid().getGrid().updateCellStatus(x, y, CellState.TO_BE_PLACED);
 
+                if (salvaTurns == 0) {
+                    for (Coordinate coordinate : salvaCoordinates) {
+                        enemy.getGameGrid().hit(coordinate.getX(), coordinate.getY());
+                    }
 
-            HitResult result = enemy.getGameGrid().hit(x, y);
+                    salvaCoordinates.clear();
 
-            updatePlayerAndEnemyGrid();
+                    FirebaseDatabase.getInstance().getReference("games")
+                            .child(room)
+                            .child("playerTurn")
+                            .setValueAsync(GameConfig.getsInstance().getFBEnemyName());
+                }
 
-            handleIsGameOver();
+                updatePlayerAndEnemyGrid();
+                handleIsGameOver();
 
-            //HitResult result = this.turnStrategy.hit(playerToHit, new Coordinate(x, y));
-
-//            GamePlayer playerToSwitchTurnTo = this.turnStrategy.getNextTurn(player, enemy, result);
-//
-//            if (playerToSwitchTurnTo == player) {
-//                currentPlayerName = "player";
-//            } else {
-//                currentPlayerName = "enemy";
-//            }
-
-            if (result != HitResult.HIT) {
-                FirebaseDatabase.getInstance().getReference("games")
-                        .child(room)
-                        .child("playerTurn")
-                        .setValueAsync(GameConfig.getsInstance().getFBEnemyName());
+                turnChangeBehaviourSubject.onNext(this.currentPlayerName);
+            } else {
+                HitResult result = enemy.getGameGrid().hit(x, y);
+                updatePlayerAndEnemyGrid();
+                handleIsGameOver();
+                if (result != HitResult.HIT) {
+                    FirebaseDatabase.getInstance().getReference("games")
+                            .child(room)
+                            .child("playerTurn")
+                            .setValueAsync(GameConfig.getsInstance().getFBEnemyName());
+                }
+                turnChangeBehaviourSubject.onNext(this.currentPlayerName);
             }
-
-            turnChangeBehaviourSubject.onNext(this.currentPlayerName);
         } catch (CoordinatesOutOfBoundsException e) {
             e.printStackTrace();
         }
