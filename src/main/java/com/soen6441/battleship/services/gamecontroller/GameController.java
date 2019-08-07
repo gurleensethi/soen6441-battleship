@@ -105,6 +105,10 @@ public class GameController implements IGameController {
         randomShipPlacer.placeRandomShips(enemy.getGameGrid());
     }
 
+    /**
+     *  Setup the game with the user selected strategy.
+     *
+     */
     @Override
     public void startGame() {
         turnTimer.start();
