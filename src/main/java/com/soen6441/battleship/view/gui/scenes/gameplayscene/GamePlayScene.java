@@ -7,6 +7,7 @@ import com.soen6441.battleship.view.gui.scenes.IScene;
 import com.soen6441.battleship.viewmodels.gameviewmodel.IGameViewModel;
 import com.sun.javafx.scene.layout.region.Margins;
 import io.reactivex.schedulers.Schedulers;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -155,6 +156,26 @@ public class GamePlayScene implements IScene {
                 gameTimerText,
                 turnTimerText
         );
+
+        if (GameConfig.getsInstance().isNetworkPlay()) {
+            Text turnText = new Text();
+            turnText.setFont(new Font(24));
+            turnText.setStyle("-fx-font-weight: bold");
+
+            gameViewModel.playerTurnChange().subscribe(player -> {
+                Platform.runLater(() -> {
+                    if (player.equals("player")) {
+                        turnText.setText("Your turn...");
+                        turnText.setFill(Color.GREEN);
+                    } else {
+                        turnText.setText("Enemy's Turn!");
+                        turnText.setFill(Color.RED);
+                    }
+                });
+            });
+
+            root.getChildren().addAll(turnText);
+        }
 
         String gameModeText;
 

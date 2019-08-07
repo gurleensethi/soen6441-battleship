@@ -31,6 +31,8 @@ public class UserInputSceneController {
     @FXML
     private TextField nameField;
     @FXML
+    private TextField roomTextField;
+    @FXML
     private RadioButton salvaNoRadioButton;
     @FXML
     private RadioButton salvaYesRadioButton;
@@ -103,6 +105,12 @@ public class UserInputSceneController {
     @FXML
     void startGameServer(ActionEvent event) {
         //Alert message for the invalid inputs
+        String room = roomTextField.getText();
+        if (room == null || room.isEmpty()) {
+            return;
+        }
+        GameConfig.getsInstance().setRoomName(room);
+
         Alert alert = new Alert(Alert.AlertType.WARNING);
         if (nameField.getText().trim().isEmpty()
                 || nameField.getText() == null
@@ -127,6 +135,12 @@ public class UserInputSceneController {
 
     @FXML
     void connectGameServer(ActionEvent event) {
+        String room = roomTextField.getText();
+        if (room == null || room.isEmpty()) {
+            return;
+        }
+        GameConfig.getsInstance().setRoomName(room);
+
         //Alert message for the invalid inputs
         Alert alert = new Alert(Alert.AlertType.WARNING);
         if (nameField.getText().trim().isEmpty()

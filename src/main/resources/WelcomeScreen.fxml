@@ -100,7 +100,7 @@
            GridPane.rowIndex="7">
     </Label>
 
-    <TextField fx:id="roomName" prefWidth="5" prefHeight="10"
+    <TextField fx:id="roomTextField" prefWidth="5" prefHeight="10"
                GridPane.columnIndex="1" GridPane.rowIndex="7"
                onAction="#startAction"/>
 
