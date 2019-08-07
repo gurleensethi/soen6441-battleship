@@ -1,5 +1,6 @@
 package com.soen6441.battleship.view.gui.scenes.initialuserinputscene;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.soen6441.battleship.common.SceneRoutes;
 import com.soen6441.battleship.data.model.OfflineGameInfo;
 import com.soen6441.battleship.services.gameconfig.GameConfig;
@@ -127,8 +128,12 @@ public class UserInputSceneController {
 
             GameConfig.getsInstance().setNetworkPlay(true);
             GameConfig.getsInstance().setServer(true);
-            //NetworkServer.getInstance();
-            //NetworkClient.getInstance().init(NetworkEvent.Players.PLAYER1, playerName);
+
+            FirebaseDatabase.getInstance().getReference("games")
+                    .child(room)
+                    .child("playerTurn")
+                    .setValueAsync(GameConfig.getsInstance().getFBPlayerName());
+
             SceneNavigator.getInstance().navigate(SceneRoutes.SHIP_PLACEMENT);
         }
     }

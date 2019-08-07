@@ -48,9 +48,15 @@ public class GamePlayScene implements IScene {
 
         GameGridPane3D gameGridPane3D = new GameGridPane3D();
 
-        gameViewModel.getPlayerGrid().subscribe(gameGridPane3D::updatePlayerGrid);
+        gameViewModel.getPlayerGrid().subscribe(grid -> {
+            Platform.runLater(() -> {
+                gameGridPane3D.updatePlayerGrid(grid);
+            });
+        });
         gameViewModel.getEnemyGrid().subscribe(grid -> {
-            gameGridPane3D.updateEnemyGrid(grid);
+            Platform.runLater(() -> {
+                gameGridPane3D.updateEnemyGrid(grid);
+            });
         }, error -> {
             error.printStackTrace();
         });
@@ -65,21 +71,23 @@ public class GamePlayScene implements IScene {
         Node sideBar = buildSideBar();
 
         gameViewModel.isGameOver().subscribe(gameOverInfo -> {
-            logger.info("GameOverInfo ---> " + gameOverInfo.toString());
-            if (gameOverInfo.isGameOver()) {
-                String winnerText = "";
+            Platform.runLater(() -> {
+                logger.info("GameOverInfo ---> " + gameOverInfo.toString());
+                if (gameOverInfo.isGameOver()) {
+                    String winnerText = "";
 
-                if (gameOverInfo.didPlayerWin()) {
-                    winnerText = "YOU WON :D";
-                } else {
-                    winnerText = "YOU LOST :(";
+                    if (gameOverInfo.didPlayerWin()) {
+                        winnerText = "YOU WON :D";
+                    } else {
+                        winnerText = "YOU LOST :(";
+                    }
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setHeaderText("Game Over!");
+                    alert.setContentText(winnerText + "\nScore: " + gameViewModel.getFinalScore());
+                    alert.show();
                 }
-
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setHeaderText("Game Over!");
-                alert.setContentText(winnerText + "\nScore: " + gameViewModel.getFinalScore());
-                alert.show();
-            }
+            });
         });
 
         HBox root = new HBox();
@@ -107,7 +115,11 @@ public class GamePlayScene implements IScene {
         enemyGameGrid.setOnCoordinateHit(coordinate -> gameViewModel.sendHit(coordinate.getX(), coordinate.getY()));
         enemyBoardVBox.getChildren().addAll(enemyTitleText, enemyGameGrid);
 
-        gameViewModel.getEnemyGrid().subscribe(enemyGameGrid::updateGrid);
+        gameViewModel.getEnemyGrid().subscribe(grid -> {
+            Platform.runLater(() -> {
+                enemyGameGrid.updateGrid(grid);
+            });
+        });
 
         return enemyBoardVBox;
     }
@@ -142,14 +154,18 @@ public class GamePlayScene implements IScene {
         turnTimerText.setFont(new Font(24));
 
         gameViewModel.turnTimer().subscribe(time -> {
-            turnTimerText.setText("Turn Timer: \n" + TimerUtil.printableTime(time));
+            Platform.runLater(() -> {
+                turnTimerText.setText("Turn Timer: \n" + TimerUtil.printableTime(time));
+            });
         });
 
         Text gameTimerText = new Text();
         gameTimerText.setFont(new Font(24));
 
         gameViewModel.gameTimer().subscribe(time -> {
-            gameTimerText.setText("Game Timer: \n" + TimerUtil.printableTime(time));
+            Platform.runLater(() -> {
+                gameTimerText.setText("Game Timer: \n" + TimerUtil.printableTime(time));
+            });
         });
 
         root.getChildren().addAll(
