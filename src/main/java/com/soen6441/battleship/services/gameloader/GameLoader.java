@@ -5,12 +5,20 @@ import com.soen6441.battleship.data.model.OfflineGameInfo;
 
 import java.io.*;
 
+/**
+ *  The type GameLoader class resumes saved games.
+ */
+
 public class GameLoader {
     private String folderPrefix = "";
 
     public GameLoader() {
     }
 
+    /**
+     * Constructor of type GameLoader.
+     * @param folderPrefix - file address of saved game.
+     */
     public GameLoader(String folderPrefix) {
         this.folderPrefix = folderPrefix;
 
@@ -28,6 +36,11 @@ public class GameLoader {
         }
     }
 
+    /**
+     * Method to save game to a specified folder location.
+     * @param fileName
+     * @param gameInfo - game information to be stored.
+     */
     public void saveGame(String fileName, GameControllerInfo gameInfo) {
         storeAsSerializable(fileName, gameInfo);
     }
@@ -36,6 +49,11 @@ public class GameLoader {
         return readOfflineFile(fileName);
     }
 
+    /**
+     * Check to see if a game exists.
+     * @param fileName
+     * @return
+     */
     public boolean doesFileExist(String fileName) {
         File file = new File(folderPrefix + "output/" + fileName);
         return file.exists();
@@ -46,6 +64,10 @@ public class GameLoader {
         file.delete();
     }
 
+    /**
+     * Delete game from a file.
+     * @param fileName
+     */
     public void deleteGameFiles(String fileName) {
         File controllerFile = new File(folderPrefix + "output/" + fileName);
         File gameInfoFile = new File(folderPrefix + "output/" + fileName + "_gameinfo");
@@ -53,6 +75,11 @@ public class GameLoader {
         gameInfoFile.delete();
     }
 
+    /**
+     * Serialize data to store in a file
+     * @param fileName
+     * @param gameInfo - Game information to be stored.
+     */
     private void storeAsSerializable(String fileName, GameControllerInfo gameInfo) {
         try {
             checkAndCreateFileFolder(folderPrefix + "output/", fileName);
@@ -96,6 +123,11 @@ public class GameLoader {
         return null;
     }
 
+    /**
+     * Save game in a file when in offline mode.
+     * @param fileName
+     * @param offlineGameInfo - game information.
+     */
     public void saveOfflineGameInfo(String fileName, OfflineGameInfo offlineGameInfo) {
         try {
             checkAndCreateFileFolder(folderPrefix + "output/", fileName + "_gameinfo");

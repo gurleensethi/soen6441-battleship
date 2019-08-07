@@ -8,9 +8,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.FileInputStream;
 import java.util.logging.Logger;
 
+/**
+ * FirebaseManager class setups connection with the server.
+ *
+ */
+
 public class FirebaseManager {
     private static final Logger logger = Logger.getLogger(FirebaseManager.class.getName());
 
+    /**
+     * Connection setup class
+     */
     public void init() {
         try {
             FileInputStream serviceAccount =

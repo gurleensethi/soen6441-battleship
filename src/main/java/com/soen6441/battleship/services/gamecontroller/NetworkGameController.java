@@ -92,6 +92,11 @@ public class NetworkGameController implements IGameController {
         enemy.setIsMyTurn(enemyTurnBehaviourSubject);
     }
 
+    /**
+     *  Setup the game with the user selected strategy.
+     *  Create game reference in the server.
+     */
+
     @Override
     public void startGame() {
         turnTimer.start();
@@ -453,6 +458,10 @@ public class NetworkGameController implements IGameController {
         return new ScoreCalculator().calculateScore(this.player.getTurnTimes(), didPlayerWin, enemy.getGameGrid().getUnSunkShips());
     }
 
+    /**
+     *  Save online version of the game.
+     */
+
     @Override
     public void saveGame() {
         GameControllerInfo offlineGameInfo = new GameControllerInfo();
@@ -475,6 +484,10 @@ public class NetworkGameController implements IGameController {
         GameLoader gameLoader = new GameLoader();
         gameLoader.saveGame(GameConfig.getsInstance().getPlayerName(), offlineGameInfo);
     }
+
+    /**
+     * Load game status.
+     */
 
     @Override
     public void loadOfflineGame() {
@@ -518,6 +531,11 @@ public class NetworkGameController implements IGameController {
         return this.isGameOver;
     }
 
+    /**
+     * Server communication to update grids as player turns.
+     *
+     */
+
     private void updatePlayerAndEnemyGrid() {
         String roomName = GameConfig.getsInstance().getRoomName();
         String playerName = GameConfig.getsInstance().getFBPlayerName();
@@ -536,6 +554,12 @@ public class NetworkGameController implements IGameController {
                 .setValueAsync(enemy.getGameGrid().getGrid());
     }
 
+
+    /**
+     * Listner method to check number of remaining ships.
+     * @param gamePlayer - player name
+     * @return number of remaining ships.
+     */
     private int getRemainingShips(GamePlayer gamePlayer) {
         int shipsRemaining = 5;
         for (Ship ship : gamePlayer.getGameGrid().getShips()) {

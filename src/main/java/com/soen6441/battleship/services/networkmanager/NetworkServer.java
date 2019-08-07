@@ -19,6 +19,10 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+/**
+ * Server class for online version of the game.
+ */
+
 public class NetworkServer implements Runnable {
     private final static Logger logger = Logger.getLogger(NetworkServer.class.getName());
     private static NetworkServer sInstance;
@@ -36,6 +40,9 @@ public class NetworkServer implements Runnable {
         return sInstance;
     }
 
+    /**
+     * Setup and connect the server. Assign a player to the server.
+     */
     private void init() {
         Configuration configuration = new Configuration();
         configuration.setHostname("localhost");

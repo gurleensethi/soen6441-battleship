@@ -75,6 +75,11 @@ public class GameConfig {
         isServer = server;
     }
 
+    /**
+     * Returns enemy name.
+     *
+     * @return player with active turn
+     */
     public String getFBEnemyName() {
         if (this.isServer) {
             return "Player2";
@@ -83,8 +88,13 @@ public class GameConfig {
         }
     }
 
+    /**
+     *Returns player name.
+     *
+     * @return player with active turn
+     */
     public String getFBPlayerName() {
-        System.out.println(this.isServer);
+
         if (this.isServer) {
             return "Player1";
         } else {

@@ -9,6 +9,9 @@ import io.socket.client.Socket;
 
 import java.util.logging.Logger;
 
+/**
+ * Client class for online version of the game.
+ */
 public class NetworkClient {
     private static NetworkClient sInstance;
     private static final Logger logger = Logger.getLogger(NetworkClient.class.getName());
@@ -26,6 +29,9 @@ public class NetworkClient {
 
     }
 
+    /**
+     * Setup and connect the socket to the server.
+     */
     public void init(String playerName, String displayName) {
         this.playerName = playerName;
         this.displayName = displayName;
@@ -38,7 +44,10 @@ public class NetworkClient {
         }
     }
 
-
+    /**
+     * Add listener to setup connection.
+     * @param ioSocket - the socket object
+     */
     private void addListeners(Socket ioSocket) {
         ioSocket.on(io.socket.client.Socket.EVENT_CONNECT, args -> {
             logger.info("Connection established, sending event to server...");

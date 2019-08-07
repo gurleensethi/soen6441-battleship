@@ -9,11 +9,15 @@ import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * Class of type SimpleTurnStrategy implements coordinates turns between players.
+ */
 public class SimpleTurnStrategy implements ITurnStrategy {
     private static final Logger logger = Logger.getLogger(SimpleTurnStrategy.class.getName());
     private GamePlayer player;
     private GamePlayer enemy;
     private GamePlayer currentPlayer;
+
 
     public SimpleTurnStrategy() {
     }
