@@ -23,16 +23,16 @@ public class TimerUtil {
     }
 
     public TimerUtil() {
-//        new Timer().schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                if (isRunning) {
-//                    timerListener.onNext(new Date().getTime() - startTime);
-//                } else {
-//                    timerListener.onNext(TimerUtil.this.stopTime - TimerUtil.this.startTime);
-//                }
-//            }
-//        }, 1000, 1000);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (isRunning) {
+                    timerListener.onNext(new Date().getTime() - startTime);
+                } else {
+                    timerListener.onNext(TimerUtil.this.stopTime - TimerUtil.this.startTime);
+                }
+            }
+        }, 1000, 1000);
     }
 
     public void start() {

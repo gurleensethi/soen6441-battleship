@@ -119,23 +119,24 @@ public class NetworkGameController implements IGameController {
                             if (grid != null) {
                                 player.getGameGrid().updateGrid(grid);
 
-                                salvaTurns = 5;
-
-                                for (Ship ship : player.getGameGrid().getShips()) {
-                                    if (ship.getDirection() == ShipDirection.VERTICAL) {
-                                        for (int y = ship.getStartY(); y <= ship.getEndY(); y++) {
-                                            if (player.getGameGrid().getGrid().getCellState(
-                                                    ship.getStartX(), y) == CellState.DESTROYED_SHIP) {
-                                                salvaTurns--;
-                                                break;
+                                if (GameConfig.getsInstance().isSalvaVariation()) {
+                                    salvaTurns = 5;
+                                    for (Ship ship : player.getGameGrid().getShips()) {
+                                        if (ship.getDirection() == ShipDirection.VERTICAL) {
+                                            for (int y = ship.getStartY(); y <= ship.getEndY(); y++) {
+                                                if (player.getGameGrid().getGrid().getCellState(
+                                                        ship.getStartX(), y) == CellState.DESTROYED_SHIP) {
+                                                    salvaTurns--;
+                                                    break;
+                                                }
                                             }
-                                        }
-                                    } else {
-                                        for (int x = ship.getStartX(); x <= ship.getEndX(); x++) {
-                                            if (player.getGameGrid().getGrid().getCellState(
-                                                    x, ship.getStartY()) == CellState.DESTROYED_SHIP) {
-                                                salvaTurns--;
-                                                break;
+                                        } else {
+                                            for (int x = ship.getStartX(); x <= ship.getEndX(); x++) {
+                                                if (player.getGameGrid().getGrid().getCellState(
+                                                        x, ship.getStartY()) == CellState.DESTROYED_SHIP) {
+                                                    salvaTurns--;
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
@@ -298,6 +299,14 @@ public class NetworkGameController implements IGameController {
         logger.info(() -> String.format("%s has sent a hit on x: %d, y: %d", this.currentPlayerName, x, y));
 
         try {
+            long timeTaken = turnTimer.stop();
+
+            if (currentPlayerName.equals("player")) {
+                player.addTimeTaken(timeTaken);
+            } else {
+                enemy.addTimeTaken(timeTaken);
+            }
+
             if (GameConfig.getsInstance().isSalvaVariation()) {
                 salvaTurns--;
                 salvaCoordinates.add(new Coordinate(x, y));
@@ -365,8 +374,11 @@ public class NetworkGameController implements IGameController {
      */
     private void handleIsGameOver() {
         // Check if all ships of enemy or player are destroyed.
-        boolean areAllShipsOnEnemyHit = enemy.getGameGrid().areAllShipsDestroyed();
-        boolean areAllShipsOnPlayerHit = player.getGameGrid().areAllShipsDestroyed();
+//        boolean areAllShipsOnEnemyHit = enemy.getGameGrid().areAllShipsDestroyed();
+//        boolean areAllShipsOnPlayerHit = player.getGameGrid().areAllShipsDestroyed();
+
+        boolean areAllShipsOnEnemyHit = getRemainingShips(enemy) == 0;
+        boolean areAllShipsOnPlayerHit = getRemainingShips(player) == 0;
 
         logger.info(areAllShipsOnEnemyHit + "<-- Enemy");
         logger.info(areAllShipsOnPlayerHit + "<-- Player");
@@ -523,5 +535,29 @@ public class NetworkGameController implements IGameController {
                 .child(roomName)
                 .child(enemyName)
                 .setValueAsync(enemy.getGameGrid().getGrid());
+    }
+
+    private int getRemainingShips(GamePlayer gamePlayer) {
+        int shipsRemaining = 5;
+        for (Ship ship : gamePlayer.getGameGrid().getShips()) {
+            if (ship.getDirection() == ShipDirection.VERTICAL) {
+                for (int y = ship.getStartY(); y <= ship.getEndY(); y++) {
+                    if (gamePlayer.getGameGrid().getGrid().getCellState(
+                            ship.getStartX(), y) == CellState.DESTROYED_SHIP) {
+                        shipsRemaining--;
+                        break;
+                    }
+                }
+            } else {
+                for (int x = ship.getStartX(); x <= ship.getEndX(); x++) {
+                    if (gamePlayer.getGameGrid().getGrid().getCellState(
+                            x, ship.getStartY()) == CellState.DESTROYED_SHIP) {
+                        shipsRemaining--;
+                        break;
+                    }
+                }
+            }
+        }
+        return shipsRemaining;
     }
 }
